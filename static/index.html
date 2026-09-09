@@ -1,195 +1,438 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Patient Instruction Reader — Audio Prescription Safety</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Typography: Space Grotesk & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- GSAP & Lenis Smooth Scroll -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/lenis@1.1.9/dist/lenis.min.js"></script>
+
   <style>
-    audio { width: 100%; border-radius: 8px; }
-    .code-box { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 0.85rem; background: #0f172a; color: #f8fafc; padding: 0.75rem; border-radius: 6px; white-space: pre-wrap; word-break: break-word; }
+    :root {
+      --bg-dark: #050811;
+      --card-bg: rgba(13, 20, 36, 0.7);
+      --border-teal: rgba(0, 184, 156, 0.25);
+      --teal-accent: #00b89c;
+      --teal-glow: rgba(0, 184, 156, 0.35);
+      --font-display: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+      --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+      --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-spring: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    * { box-sizing: border-box; }
+    html, body {
+      background-color: var(--bg-dark);
+      color: #f8fafc;
+      font-family: var(--font-body);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .font-display { font-family: var(--font-display); }
+
+    /* Fluid Typography Scale */
+    .text-fluid-h1 { font-size: clamp(2rem, 4vw + 1rem, 3.75rem); letter-spacing: -0.03em; line-height: 1.05; text-wrap: balance; }
+    .text-fluid-h2 { font-size: clamp(1.25rem, 2vw + 0.75rem, 2rem); letter-spacing: -0.02em; text-wrap: balance; }
+
+    /* Glassmorphism & Liquid Glow Cards */
+    .glass-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border-teal);
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.6), inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+      transition: border-color 0.4s var(--ease-out-expo), box-shadow 0.4s var(--ease-out-expo);
+    }
+
+    .glass-card:hover {
+      border-color: rgba(0, 184, 156, 0.45);
+      box-shadow: 0 25px 50px -12px rgba(0, 184, 156, 0.15), inset 0 1px 0 0 rgba(255, 255, 255, 0.15);
+    }
+
+    .glass-card-unsafe {
+      background: rgba(28, 13, 20, 0.75);
+      border: 1px solid rgba(244, 63, 94, 0.35);
+      box-shadow: 0 20px 40px -15px rgba(244, 63, 94, 0.15);
+    }
+
+    .glass-card-safe {
+      background: rgba(8, 28, 22, 0.75);
+      border: 1px solid rgba(16, 185, 129, 0.45);
+      box-shadow: 0 20px 40px -15px rgba(16, 185, 129, 0.25);
+    }
+
+    audio {
+      width: 100%;
+      border-radius: 12px;
+      outline: none;
+      filter: invert(0.9) hue-rotate(150deg) saturate(1.5);
+    }
+
+    .code-box {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.85rem;
+      background: rgba(6, 11, 23, 0.9);
+      color: #e2e8f0;
+      padding: 0.875rem;
+      border-radius: 10px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    /* Magnetic Physics Button */
+    .btn-magnetic {
+      will-change: transform;
+      transition: transform 0.2s var(--ease-spring), box-shadow 0.3s ease;
+    }
+
+    /* WebGL Canvas Background Layer */
+    #canvas-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* Noise Texture Overlay */
+    .noise-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      opacity: 0.035;
+      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    }
+
+    /* Content Z-index */
+    .content-wrapper { position: relative; z-index: 10; }
   </style>
 </head>
-<body class="bg-slate-900 text-slate-100 min-h-screen pb-12 font-sans antialiased">
+<body class="selection:bg-teal-500 selection:text-slate-950">
 
-  <!-- TOP HEADER -->
-  <header class="bg-slate-800 border-b border-slate-700 shadow-md">
-    <div class="max-w-6xl mx-auto px-4 py-4 flex flex-wrap items-center justify-between gap-4">
-      <div class="flex items-center space-x-3">
-        <div class="bg-teal-500 text-slate-950 p-2.5 rounded-xl text-xl font-black flex items-center justify-center">
-          <i class="fa-solid fa-notes-medical"></i>
-        </div>
-        <div>
-          <h1 class="text-xl font-bold text-white tracking-tight">Patient Instruction Reader</h1>
-          <p class="text-xs text-teal-400 font-medium">Rx Audio Clarity & Medical Prosody Engine</p>
-        </div>
-      </div>
-      <div class="flex items-center space-x-2 bg-slate-900 px-3 py-1.5 rounded-full border border-slate-700 text-xs text-slate-300">
-        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-        <span>Rime TTS Engine Active (Voice: <b>Marsh</b>)</span>
-      </div>
-    </div>
-  </header>
+  <!-- PERSISTENT WEBGL CANVAS BACKGROUND LAYER -->
+  <canvas id="canvas-layer"></canvas>
+  <div class="noise-overlay"></div>
 
-  <main class="max-w-6xl mx-auto px-4 mt-6 space-y-6">
+  <!-- MAIN SCROLL CONTENT WRAPPER -->
+  <div id="scroll-content" class="content-wrapper min-h-screen flex flex-col justify-between pb-16">
 
-    <!-- HERO PRODUCT INTRO BANNER -->
-    <div class="bg-gradient-to-r from-slate-800 via-teal-950/40 to-slate-800 border border-teal-500/30 p-5 rounded-2xl shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-      <div class="space-y-1">
-        <div class="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-0.5 rounded-full bg-teal-500/20 text-teal-300 border border-teal-500/30">
-          <i class="fa-solid fa-shield-halved text-teal-400"></i> Medical Audio Safety System
-        </div>
-        <h2 class="text-lg font-bold text-slate-100">Ensure Patient Comprehension Before Generating Audio</h2>
-        <p class="text-xs text-slate-300 max-w-2xl leading-relaxed">
-          Literal TTS engines mispronounce medical abbreviations (e.g. <i>"1-0-1"</i>, <i>"625mg"</i>, <i>"BD"</i>), risking patient overdose or incorrect administration. Compare standard literal audio against <b>RimeRx Safety Tuned</b> audio.
-        </p>
-      </div>
-    </div>
-
-    <!-- PRESCRIPTION INPUT CARD -->
-    <div class="bg-slate-800 border border-slate-700 rounded-2xl p-6 shadow-xl space-y-4">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-700/60 pb-3">
-        <label class="text-sm font-semibold text-slate-200 flex items-center gap-2">
-          <i class="fa-solid fa-prescription text-teal-400"></i> Select Prescription or Enter Custom Text
-        </label>
-        <span class="text-xs text-slate-400">Indian Pharma & Delivery Tokens</span>
-      </div>
-
-      <div class="grid md:grid-cols-3 gap-4">
-        <div class="md:col-span-1">
-          <label class="block text-xs font-medium text-slate-400 mb-1">Preset Samples</label>
-          <select id="caseSelector" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 focus:ring-2 focus:ring-teal-500 focus:outline-none">
-            <option value="">Loading presets...</option>
-          </select>
-        </div>
-
-        <div class="md:col-span-2">
-          <label class="block text-xs font-medium text-slate-400 mb-1">Prescription Instruction Text</label>
-          <textarea id="prescriptionInput" rows="3" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 focus:ring-2 focus:ring-teal-500 focus:outline-none font-mono" placeholder="Paste prescription text here (e.g. Tab. Augmentin 625mg 1-0-1 x 5 days)..."></textarea>
-        </div>
-      </div>
-
-      <div class="flex justify-end pt-2">
-        <button id="listenBtn" onclick="generateBothAudio()" class="w-full sm:w-auto bg-gradient-to-r from-teal-500 to-emerald-500 hover:from-teal-400 hover:to-emerald-400 text-slate-950 font-bold px-6 py-3 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2">
-          <i class="fa-solid fa-volume-high text-lg"></i>
-          <span>Listen & Compare Safety</span>
-        </button>
-      </div>
-    </div>
-
-    <!-- AUDIO COMPARISON AREA -->
-    <div id="comparisonArea" class="grid md:grid-cols-2 gap-6 hidden">
-
-      <!-- LEFT: DEFAULT LITERAL AUDIO (UNSAFE) -->
-      <div class="bg-slate-800/90 border-2 border-rose-500/40 rounded-2xl p-6 shadow-xl relative overflow-hidden flex flex-col justify-between space-y-4">
-        <div class="absolute top-0 right-0 bg-rose-500/20 text-rose-300 border-b border-l border-rose-500/30 text-[10px] font-extrabold px-3 py-1 rounded-bl-xl uppercase tracking-wider">
-          ⚠️ High Misinterpretation Risk
-        </div>
-
-        <div class="space-y-3">
-          <div class="flex items-center space-x-2">
-            <span class="w-3 h-3 rounded-full bg-rose-500"></span>
-            <h3 class="font-bold text-rose-300 text-base">Standard TTS Reading</h3>
+    <!-- NAVIGATION HEADER -->
+    <header class="w-full border-b border-slate-800/80 bg-slate-950/60 backdrop-blur-xl sticky top-0 z-50">
+      <div class="max-w-7xl mx-auto px-6 py-4 flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center space-x-3.5 group cursor-pointer">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-teal-500 to-emerald-400 text-slate-950 flex items-center justify-center font-black text-xl shadow-lg shadow-teal-500/20 group-hover:scale-105 transition-transform duration-300">
+            <i class="fa-solid fa-prescription-bottle-medical"></i>
           </div>
-          <p class="text-xs text-slate-300">
-            Raw prescription text passed directly to standard voice engine without medical prosody tuning.
-          </p>
-
-          <div class="space-y-1">
-            <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Literal Prompt Text Sent:</span>
-            <div id="promptDefaultText" class="code-box text-rose-200/90 border border-rose-900/50"></div>
-          </div>
-
-          <div class="space-y-1 pt-2">
-            <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Generated Audio:</span>
-            <audio id="audioDefaultPlayer" controls class="mt-1"></audio>
+          <div>
+            <h1 class="font-display font-bold text-lg text-white tracking-tight leading-none">Patient Instruction Reader</h1>
+            <p class="text-[11px] text-teal-400 font-medium tracking-wide uppercase mt-1">Rx Audio Safety & Medical Prosody Engine</p>
           </div>
         </div>
 
-        <div class="bg-rose-950/40 border border-rose-800/50 rounded-xl p-3 text-xs space-y-1 text-rose-200">
-          <div class="font-bold flex items-center gap-1.5 text-rose-400">
-            <i class="fa-solid fa-triangle-exclamation"></i> Safety Hazard Identified:
+        <div class="flex items-center space-x-3">
+          <div class="flex items-center space-x-2 bg-slate-900/90 px-3.5 py-1.5 rounded-full border border-teal-500/30 text-xs text-slate-300 shadow-inner">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span class="font-mono text-[11px]">Rime TTS: <b class="text-teal-300">Marsh Engine</b></span>
           </div>
-          <p class="text-[11px] text-slate-300 leading-snug">
-            Digits like <i>"625"</i> are read as <i>"six hundred twenty-five"</i> instead of isolated dosage digits (<i>"six two five"</i>). Abbreviations like <i>"1-0-1"</i> or <i>"BD"</i> are read verbatim as dashes or missed completely.
+        </div>
+      </div>
+    </header>
+
+    <!-- MAIN BODY CONTAINER -->
+    <main class="max-w-6xl mx-auto px-6 mt-8 space-y-8 w-full flex-grow">
+
+      <!-- HERO INTRO BANNER -->
+      <section class="glass-card p-8 rounded-3xl relative overflow-hidden group">
+        <div class="absolute -right-20 -bottom-20 w-80 h-80 bg-teal-500/10 rounded-full blur-3xl group-hover:bg-teal-500/20 transition-all duration-700 pointer-events-none"></div>
+        
+        <div class="space-y-4 relative z-10">
+          <div class="inline-flex items-center gap-2 text-xs font-semibold px-3 py-1 rounded-full bg-teal-500/10 text-teal-300 border border-teal-500/30">
+            <i class="fa-solid fa-shield-heart text-teal-400"></i> Medical Audio Safety Verification System
+          </div>
+          
+          <h2 class="text-fluid-h1 font-display font-extrabold text-white tracking-tight leading-tight">
+            Prevent Medical Misinterpretation Before Audio Plays
+          </h2>
+
+          <p class="text-sm md:text-base text-slate-300 max-w-3xl leading-relaxed font-light">
+            Standard TTS engines read medical abbreviations literally (e.g. <i>"1-0-1"</i>, <i>"625mg"</i>, <i>"BD"</i>), creating critical dosage confusion. Compare raw standard audio against <b>RimeRx Safety Tuned</b> audio optimized for patient oral comprehension.
           </p>
         </div>
+      </section>
 
-        <div id="metricsDefaultBox" class="text-xs bg-slate-900/80 p-3 rounded-xl border border-slate-700 hidden"></div>
-      </div>
-
-      <!-- RIGHT: RIME RX TUNED AUDIO (SAFE) -->
-      <div class="bg-slate-800/90 border-2 border-emerald-500/60 rounded-2xl p-6 shadow-xl relative overflow-hidden flex flex-col justify-between space-y-4">
-        <div class="absolute top-0 right-0 bg-emerald-500 text-slate-950 font-black text-[10px] px-3 py-1 rounded-bl-xl uppercase tracking-wider flex items-center gap-1 shadow-md">
-          <i class="fa-solid fa-circle-check"></i> ✅ SAFE & VERIFIED PATIENT AUDIO
+      <!-- PRESCRIPTION INPUT CONTROL CARD -->
+      <section class="glass-card p-8 rounded-3xl space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-4">
+          <label class="text-base font-display font-semibold text-slate-200 flex items-center gap-2.5">
+            <i class="fa-solid fa-file-prescription text-teal-400 text-lg"></i> Select Preset Prescription or Paste Custom Text
+          </label>
+          <span class="text-xs font-mono text-slate-400">Supported: Pharmacy Rx & Delivery Tokens</span>
         </div>
 
-        <div class="space-y-3">
-          <div class="flex items-center space-x-2">
-            <span class="w-3 h-3 rounded-full bg-emerald-400 animate-ping"></span>
-            <h3 class="font-bold text-emerald-300 text-base">RimeRx Safety Tuned Reading</h3>
-          </div>
-          <p class="text-xs text-slate-300">
-            Optimized for oral comprehension using Rime <i>"Writing for the Ear"</i> rules, expanding abbreviations and pacing numbers.
-          </p>
-
-          <div class="space-y-1">
-            <span class="text-[11px] font-semibold text-teal-400 uppercase tracking-wider">Optimized Patient Instruction Text:</span>
-            <div id="promptTunedText" class="code-box text-emerald-200/90 border border-emerald-900/50"></div>
+        <div class="grid md:grid-cols-3 gap-6">
+          <div class="md:col-span-1 space-y-2">
+            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400">Sample Prescriptions</label>
+            <select id="caseSelector" class="w-full bg-slate-950/90 border border-slate-700/80 text-slate-100 text-sm rounded-xl p-3.5 focus:ring-2 focus:ring-teal-500 focus:border-transparent focus:outline-none transition-all cursor-pointer">
+              <option value="">Loading preset cases...</option>
+            </select>
           </div>
 
-          <div class="space-y-1 pt-2">
-            <span class="text-[11px] font-semibold text-teal-400 uppercase tracking-wider">Clear Patient Audio:</span>
-            <audio id="audioTunedPlayer" controls class="mt-1"></audio>
+          <div class="md:col-span-2 space-y-2">
+            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400">Prescription Instruction Text</label>
+            <textarea id="prescriptionInput" rows="3" class="w-full bg-slate-950/90 border border-slate-700/80 text-slate-100 text-sm rounded-xl p-4 focus:ring-2 focus:ring-teal-500 focus:border-transparent focus:outline-none font-mono leading-relaxed transition-all resize-y" placeholder="Paste prescription text here (e.g. Tab. Augmentin 625mg 1-0-1 x 5 days)..."></textarea>
           </div>
         </div>
 
-        <div class="bg-emerald-950/40 border border-emerald-800/50 rounded-xl p-3 text-xs space-y-1 text-emerald-200">
-          <div class="font-bold flex items-center gap-1.5 text-emerald-400">
-            <i class="fa-solid fa-shield-heart"></i> Patient Protection Enhancements Applied:
+        <div class="flex justify-end pt-2">
+          <button id="listenBtn" onclick="generateBothAudio()" class="btn-magnetic w-full sm:w-auto bg-gradient-to-r from-teal-500 via-emerald-500 to-teal-400 hover:brightness-110 text-slate-950 font-display font-bold text-sm px-8 py-4 rounded-xl shadow-xl shadow-teal-500/20 transition-all flex items-center justify-center gap-3">
+            <i class="fa-solid fa-volume-high text-lg"></i>
+            <span>Listen & Compare Safety</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- SIDE-BY-SIDE AUDIO COMPARISON AREA -->
+      <section id="comparisonArea" class="grid md:grid-cols-2 gap-8 hidden">
+
+        <!-- LEFT CARD: DEFAULT LITERAL AUDIO (UNSAFE) -->
+        <div class="glass-card glass-card-unsafe p-8 rounded-3xl relative overflow-hidden flex flex-col justify-between space-y-6">
+          <div class="absolute top-0 right-0 bg-rose-500/20 text-rose-300 border-b border-l border-rose-500/30 text-[10px] font-black px-4 py-1.5 rounded-bl-2xl uppercase tracking-widest flex items-center gap-1.5">
+            <i class="fa-solid fa-triangle-exclamation"></i> High Misinterpretation Risk
           </div>
-          <ul class="text-[11px] text-slate-300 space-y-1 list-disc list-inside">
-            <li><b>Abbreviation Expansion:</b> <i>"Tab."</i> ➔ <i>"Tablet"</i>, <i>"BD"</i> ➔ <i>"twice daily"</i></li>
-            <li><b>Digit Pacing:</b> <i>"625mg"</i> ➔ <i>"six two five m g"</i> (prevents dose confusion)</li>
-            <li><b>Prosody Breaks:</b> Inserted breathe pauses around dosage & administration times</li>
-          </ul>
+
+          <div class="space-y-4">
+            <div class="flex items-center space-x-2.5">
+              <span class="w-3 h-3 rounded-full bg-rose-500"></span>
+              <h3 class="font-display font-bold text-rose-300 text-lg">Standard Literal TTS Reading</h3>
+            </div>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              Raw prescription text passed directly to standard voice engine without medical prosody tuning.
+            </p>
+
+            <div class="space-y-1.5">
+              <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Literal Prompt Text Sent:</span>
+              <div id="promptDefaultText" class="code-box text-rose-200/90"></div>
+            </div>
+
+            <div class="space-y-1.5 pt-2">
+              <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Generated Raw Audio:</span>
+              <audio id="audioDefaultPlayer" controls class="mt-1"></audio>
+            </div>
+          </div>
+
+          <div class="bg-rose-950/40 border border-rose-800/50 rounded-2xl p-4 text-xs space-y-1.5 text-rose-200">
+            <div class="font-bold flex items-center gap-2 text-rose-400">
+              <i class="fa-solid fa-circle-exclamation"></i> Safety Hazard Identified:
+            </div>
+            <p class="text-[11px] text-slate-300 leading-normal">
+              Digits like <i>"625"</i> are read literally as <i>"six hundred twenty-five"</i> instead of isolated dosage digits (<i>"six two five"</i>). Abbreviations like <i>"1-0-1"</i> or <i>"BD"</i> are read verbatim as dashes or missed completely.
+            </p>
+          </div>
+
+          <div id="metricsDefaultBox" class="text-xs bg-slate-950/80 p-4 rounded-2xl border border-slate-800 hidden font-mono"></div>
         </div>
 
-        <div id="metricsTunedBox" class="text-xs bg-slate-900/80 p-3 rounded-xl border border-slate-700 hidden"></div>
-      </div>
+        <!-- RIGHT CARD: RIME RX TUNED AUDIO (SAFE) -->
+        <div class="glass-card glass-card-safe p-8 rounded-3xl relative overflow-hidden flex flex-col justify-between space-y-6">
+          <div class="absolute top-0 right-0 bg-emerald-500 text-slate-950 font-black text-[10px] px-4 py-1.5 rounded-bl-2xl uppercase tracking-widest flex items-center gap-1.5 shadow-lg shadow-emerald-500/20">
+            <i class="fa-solid fa-circle-check"></i> ✅ SAFE & VERIFIED PATIENT AUDIO
+          </div>
 
-    </div>
+          <div class="space-y-4">
+            <div class="flex items-center space-x-2.5">
+              <span class="w-3 h-3 rounded-full bg-emerald-400 animate-ping"></span>
+              <h3 class="font-display font-bold text-emerald-300 text-lg">RimeRx Safety Tuned Reading</h3>
+            </div>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              Optimized for oral comprehension using Rime <i>"Writing for the Ear"</i> rules, expanding abbreviations and pacing numbers.
+            </p>
 
-    <!-- SAFETY VERIFICATION & WHISPER ASR DRAWER -->
-    <div id="verificationDrawer" class="bg-slate-800 border border-slate-700 rounded-2xl p-6 shadow-xl hidden space-y-4">
-      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-slate-700 pb-3">
-        <div>
-          <h3 class="font-bold text-slate-100 flex items-center gap-2">
-            <i class="fa-solid fa-microchip text-teal-400"></i> GPU Whisper ASR Acoustic Verification
-          </h3>
-          <p class="text-xs text-slate-400">Verify actual audio pronunciation using faster-whisper (int8 CUDA on RTX 2050)</p>
+            <div class="space-y-1.5">
+              <span class="text-[11px] font-semibold text-teal-400 uppercase tracking-wider">Optimized Patient Instruction Text:</span>
+              <div id="promptTunedText" class="code-box text-emerald-200/90"></div>
+            </div>
+
+            <div class="space-y-1.5 pt-2">
+              <span class="text-[11px] font-semibold text-teal-400 uppercase tracking-wider">Clear Patient Audio:</span>
+              <audio id="audioTunedPlayer" controls class="mt-1"></audio>
+            </div>
+          </div>
+
+          <div class="bg-emerald-950/40 border border-emerald-800/50 rounded-2xl p-4 text-xs space-y-1.5 text-emerald-200">
+            <div class="font-bold flex items-center gap-2 text-emerald-400">
+              <i class="fa-solid fa-shield-heart"></i> Patient Protection Enhancements Applied:
+            </div>
+            <ul class="text-[11px] text-slate-300 space-y-1 list-disc list-inside leading-normal">
+              <li><b>Abbreviation Expansion:</b> <i>"Tab."</i> ➔ <i>"Tablet"</i>, <i>"BD"</i> ➔ <i>"twice daily"</i></li>
+              <li><b>Digit Pacing:</b> <i>"625mg"</i> ➔ <i>"six two five m g"</i> (prevents dose confusion)</li>
+              <li><b>Prosody Breaks:</b> Inserted breathe pauses around dosage & administration times</li>
+            </ul>
+          </div>
+
+          <div id="metricsTunedBox" class="text-xs bg-slate-950/80 p-4 rounded-2xl border border-slate-800 hidden font-mono"></div>
         </div>
-        <button id="asrBtn" onclick="runWhisperASR()" class="bg-slate-700 hover:bg-slate-600 text-teal-300 text-xs font-semibold px-4 py-2 rounded-xl transition-all border border-slate-600 flex items-center gap-2">
-          <i class="fa-solid fa-play"></i> Run ASR Verification
-        </button>
-      </div>
 
-      <div id="asrResultBox" class="hidden grid md:grid-cols-2 gap-4 text-xs font-mono">
-        <div class="bg-slate-900 p-3 rounded-xl border border-slate-700 space-y-1">
-          <span class="text-rose-400 font-bold">Standard Audio ASR WER:</span>
-          <div id="asrDefaultRes" class="text-slate-300"></div>
+      </section>
+
+      <!-- SAFETY VERIFICATION & WHISPER ASR DRAWER -->
+      <section id="verificationDrawer" class="glass-card p-8 rounded-3xl hidden space-y-6">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+          <div>
+            <h3 class="font-display font-bold text-slate-100 text-base flex items-center gap-2.5">
+              <i class="fa-solid fa-microchip text-teal-400 text-lg"></i> GPU Whisper ASR Acoustic Verification
+            </h3>
+            <p class="text-xs text-slate-400 mt-1">Verify actual audio pronunciation accuracy using faster-whisper (int8 CUDA on RTX 2050)</p>
+          </div>
+          <button id="asrBtn" onclick="runWhisperASR()" class="btn-magnetic bg-slate-800 hover:bg-slate-700 text-teal-300 text-xs font-semibold px-5 py-3 rounded-xl transition-all border border-slate-700 flex items-center gap-2">
+            <i class="fa-solid fa-play"></i> Run ASR Verification
+          </button>
         </div>
-        <div class="bg-slate-900 p-3 rounded-xl border border-slate-700 space-y-1">
-          <span class="text-emerald-400 font-bold">Safe Tuned Audio ASR WER:</span>
-          <div id="asrTunedRes" class="text-slate-300"></div>
+
+        <div id="asrResultBox" class="hidden grid md:grid-cols-2 gap-6 text-xs font-mono">
+          <div class="bg-slate-950/80 p-4 rounded-2xl border border-rose-900/40 space-y-2">
+            <span class="text-rose-400 font-bold flex items-center gap-1.5"><i class="fa-solid fa-chart-simple"></i> Standard Audio ASR Transcript:</span>
+            <div id="asrDefaultRes" class="text-slate-300 leading-relaxed"></div>
+          </div>
+          <div class="bg-slate-950/80 p-4 rounded-2xl border border-emerald-900/40 space-y-2">
+            <span class="text-emerald-400 font-bold flex items-center gap-1.5"><i class="fa-solid fa-chart-simple"></i> Safe Tuned Audio ASR Transcript:</span>
+            <div id="asrTunedRes" class="text-slate-300 leading-relaxed"></div>
+          </div>
         </div>
-      </div>
-    </div>
+      </section>
 
-  </main>
+    </main>
 
+    <!-- FOOTER -->
+    <footer class="max-w-6xl mx-auto px-6 mt-12 text-center text-xs text-slate-400">
+      <p>RimeRx Patient Instruction Reader — Built for Rime TTS "Writing for the Ear" Audio Benchmark.</p>
+    </footer>
+
+  </div>
+
+  <!-- APPLICATION LOGIC & ANIMATION INTERACTION SCRIPT -->
   <script>
+    // --- 1. PERSISTENT WEBGL / CANVAS BACKGROUND ANIMATION ---
+    (function initCanvasShader() {
+      const canvas = document.getElementById('canvas-layer');
+      const ctx = canvas.getContext('2d');
+      let width, height;
+      let mouseX = 0, mouseY = 0;
+      let targetMouseX = 0, targetMouseY = 0;
+
+      function resize() {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+      }
+
+      window.addEventListener('resize', resize);
+      resize();
+
+      window.addEventListener('mousemove', (e) => {
+        targetMouseX = e.clientX;
+        targetMouseY = e.clientY;
+      });
+
+      // Flow-field liquid gradient nodes
+      const nodes = Array.from({ length: 5 }, (_, i) => ({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        vx: (Math.random() - 0.5) * 0.4,
+        vy: (Math.random() - 0.5) * 0.4,
+        radius: Math.random() * 300 + 200,
+        hue: i % 2 === 0 ? 170 : 160 // Teal / Emerald tones
+      }));
+
+      function render(time) {
+        mouseX += (targetMouseX - mouseX) * 0.05;
+        mouseY += (targetMouseY - mouseY) * 0.05;
+
+        ctx.clearRect(0, 0, width, height);
+        ctx.fillStyle = '#050811';
+        ctx.fillRect(0, 0, width, height);
+
+        nodes.forEach((node, i) => {
+          node.x += node.vx;
+          node.y += node.vy;
+
+          if (node.x < -100) node.x = width + 100;
+          if (node.x > width + 100) node.x = -100;
+          if (node.y < -100) node.y = height + 100;
+          if (node.y > height + 100) node.y = -100;
+
+          const dx = mouseX - node.x;
+          const dy = mouseY - node.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          const grad = ctx.createRadialGradient(
+            node.x + (dx / dist || 0) * 30,
+            node.y + (dy / dist || 0) * 30,
+            0,
+            node.x,
+            node.y,
+            node.radius
+          );
+
+          grad.addColorStop(0, `hsla(${node.hue}, 80%, 45%, 0.12)`);
+          grad.addColorStop(0.5, `hsla(${node.hue}, 70%, 35%, 0.04)`);
+          grad.addColorStop(1, 'transparent');
+
+          ctx.fillStyle = grad;
+          ctx.fillRect(0, 0, width, height);
+        });
+
+        requestAnimationFrame(render);
+      }
+
+      requestAnimationFrame(render);
+    })();
+
+    // --- 2. LENIS SMOOTH SCROLLING & GSAP TRIGGER INTEGRATION ---
+    let lenis;
+    if (typeof Lenis !== 'undefined' && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      lenis = new Lenis({
+        duration: 1.2,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        smoothWheel: true,
+        wheelMultiplier: 0.9
+      });
+
+      if (typeof ScrollTrigger !== 'undefined') {
+        lenis.on('scroll', ScrollTrigger.update);
+        gsap.ticker.add((time) => lenis.raf(time * 1000));
+        gsap.ticker.lagSmoothing(0);
+      }
+    }
+
+    // --- 3. MAGNETIC PHYSICS FOR BUTTONS ---
+    document.querySelectorAll('.btn-magnetic').forEach(btn => {
+      btn.addEventListener('mousemove', (e) => {
+        const rect = btn.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+        btn.style.transform = `translate3d(${x * 0.25}px, ${y * 0.25}px, 0)`;
+      });
+      btn.addEventListener('mouseleave', () => {
+        btn.style.transform = 'translate3d(0, 0, 0)';
+      });
+    });
+
+    // --- 4. PRESERVED API BUSINESS LOGIC ---
     let cases = [];
     let currentCaseId = null;
 
@@ -202,7 +445,6 @@
           cases.map(c => `<option value="${c.id}">[${c.domain}] ${c.text.slice(0, 55)}...</option>`).join('');
 
         sel.onchange = onSelectChange;
-        // Default to first case
         if (cases.length > 0) {
           sel.value = cases[0].id;
           onSelectChange();
@@ -237,16 +479,23 @@
       }
 
       btn.disabled = true;
-      btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> <span>Synthesizing Audio...</span>`;
+      btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin text-lg"></i> <span>Synthesizing Audio...</span>`;
 
-      document.getElementById('comparisonArea').classList.remove('hidden');
-      document.getElementById('verificationDrawer').classList.remove('hidden');
+      const compArea = document.getElementById('comparisonArea');
+      const verDrawer = document.getElementById('verificationDrawer');
+
+      compArea.classList.remove('hidden');
+      verDrawer.classList.remove('hidden');
+
+      // GSAP smooth reveal
+      if (typeof gsap !== 'undefined') {
+        gsap.fromTo([compArea, verDrawer], { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8, ease: "power3.out", stagger: 0.2 });
+      }
 
       const payloadDefault = currentCaseId ? { case_id: currentCaseId, prompt_type: 'default' } : { custom_text: text, prompt_type: 'default' };
       const payloadTuned = currentCaseId ? { case_id: currentCaseId, prompt_type: 'tuned' } : { custom_text: text, prompt_type: 'tuned' };
 
       try {
-        // Parallel synthesis
         const [resDef, resTun] = await Promise.all([
           fetch('/api/render', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payloadDefault) }),
           fetch('/api/render', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payloadTuned) })
@@ -261,13 +510,12 @@
         document.getElementById('audioTunedPlayer').src = dataTun.audio_url;
         document.getElementById('promptTunedText').textContent = dataTun.prompt_used;
 
-        // Fetch Phonemic Safety Metrics
         fetchMetrics('default', payloadDefault);
         fetchMetrics('tuned', payloadTuned);
 
       } catch (err) {
         alert("Audio Generation Error: " + err.message);
-      } font-bold {
+      } finally {
         btn.disabled = false;
         btn.innerHTML = `<i class="fa-solid fa-volume-high text-lg"></i> <span>Listen & Compare Safety</span>`;
       }
@@ -279,11 +527,11 @@
         const data = await res.json();
         const box = document.getElementById(`metrics${type.charAt(0).toUpperCase() + type.slice(1)}Box`);
         box.classList.remove('hidden');
-        box.innerHTML = `<div class="flex justify-between font-bold border-b border-slate-700 pb-1 mb-1">
-          <span>Phoneme Alignment PER: ${data.PER}%</span>
-          <span>CER: ${data.CER}%</span>
+        box.innerHTML = `<div class="flex justify-between font-bold border-b border-slate-800 pb-1.5 mb-1.5 text-slate-200">
+          <span>Phoneme PER Distance: <b class="text-teal-400">${data.PER}%</b></span>
+          <span>CER: <b class="text-teal-400">${data.CER}%</b></span>
         </div>
-        <div class="text-[10px] text-slate-400">Target IPA Phonemes: <span class="text-slate-200">${data.ref_phonemes}</span></div>`;
+        <div class="text-[11px] text-slate-400">Target Phonemes: <span class="text-slate-200">${data.ref_phonemes}</span></div>`;
       } catch (e) {
         console.error("Metric error:", e);
       }
@@ -293,7 +541,7 @@
       const btn = document.getElementById('asrBtn');
       const text = document.getElementById('prescriptionInput').value.trim();
       btn.disabled = true;
-      btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> GPU Transcribing...`;
+      btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin text-sm"></i> GPU Transcribing...`;
       document.getElementById('asrResultBox').classList.remove('hidden');
 
       const payloadDef = currentCaseId ? { case_id: currentCaseId, prompt_type: 'default' } : { custom_text: text, prompt_type: 'default' };
