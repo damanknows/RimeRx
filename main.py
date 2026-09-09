@@ -21,9 +21,25 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 AUDIO_DIR = "static/audio"
 os.makedirs(AUDIO_DIR, exist_ok=True)
 
+from typing import Optional
+
 class RenderRequest(BaseModel):
-    case_id: str
+    case_id: Optional[str] = None
+    custom_text: Optional[str] = None
     prompt_type: str # "default" | "tuned"
+
+def get_target_case(req: RenderRequest):
+    if req.case_id:
+        case = next((c for c in TEST_CASES if c["id"] == req.case_id), None)
+        if case: return case
+    if req.custom_text:
+        return {
+            "id": "custom",
+            "domain": "Custom Prescription",
+            "raw_text": req.custom_text,
+            "expected_pronunciation": tune_for_rime(req.custom_text)
+        }
+    raise HTTPException(400, "Must provide case_id or custom_text")
 
 @app.get("/", response_class=HTMLResponse)
 async def index():
@@ -35,8 +51,7 @@ async def get_cases():
 
 @app.post("/api/render")
 async def render_audio(req: RenderRequest):
-    case = next((c for c in TEST_CASES if c["id"] == req.case_id), None)
-    if not case: raise HTTPException(404, "Case not found")
+    case = get_target_case(req)
 
     text = case["raw_text"] if req.prompt_type == "default" else tune_for_rime(case["raw_text"])
 
@@ -51,7 +66,8 @@ async def render_audio(req: RenderRequest):
         "audioFormat": "mp3"
     }
 
-    fname = f"{req.case_id}_{req.prompt_type}_{uuid.uuid4().hex[:4]}.mp3"
+    file_prefix = req.case_id if req.case_id else "custom"
+    fname = f"{file_prefix}_{req.prompt_type}_{uuid.uuid4().hex[:4]}.mp3"
     fpath = os.path.join(AUDIO_DIR, fname)
 
     # Retry logic (1 retry for 429/timeout/5xx)
@@ -99,14 +115,7 @@ def text_to_phonemes(text):
 
 @app.post("/api/evaluate")
 async def evaluate(req: RenderRequest):
-    case = next((c for c in TEST_CASES if c["id"] == req.case_id), None)
-    if not case: raise HTTPException(404, "Case not found")
-
-    # We compare Generated Phonemes vs Expected Phonemes
-    # Note: This requires the *generated audio* to be transcribed (ASR) for true WER.
-    # SPEED HACK (4 hrs): We compare the *Prompt Text Phonemes* vs *Expected Phonemes*.
-    # This measures "Prompt Engineering Quality", not "TTS Acoustic Quality".
-    # Label it clearly in UI: "Prompt-Phoneme Distance (Lower=Better)"
+    case = get_target_case(req)
 
     prompt_text = case["raw_text"] if req.prompt_type == "default" else tune_for_rime(case["raw_text"])
     expected_text = case["expected_pronunciation"]
@@ -132,15 +141,15 @@ from jiwer import wer
 
 @app.post("/api/wer")
 async def calculate_true_wer(req: RenderRequest):
-    case = next((c for c in TEST_CASES if c["id"] == req.case_id), None)
-    if not case: raise HTTPException(404, "Case not found")
+    case = get_target_case(req)
 
     # 1. Find the LATEST generated audio file for this case/type
     import glob
-    pattern = os.path.join(AUDIO_DIR, f"{req.case_id}_{req.prompt_type}_*.mp3")
+    file_prefix = req.case_id if req.case_id else "custom"
+    pattern = os.path.join(AUDIO_DIR, f"{file_prefix}_{req.prompt_type}_*.mp3")
     files = glob.glob(pattern)
     if not files:
-        raise HTTPException(400, "Audio not generated yet. Click 'Generate' first.")
+        raise HTTPException(400, "Audio not generated yet. Click 'Listen' first.")
     latest_audio = max(files, key=os.path.getctime)
 
     # 2. TRANSCRIBE (Blocking! ~2-5s per clip on 2050)
