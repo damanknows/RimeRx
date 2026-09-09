@@ -8,7 +8,11 @@ from dotenv import load_dotenv
 import uvicorn
 
 load_dotenv()
-RIME_API_KEY = os.getenv("RIME_API_KEY", "LGalOxBRAhzEctoceMBFmC92gSmppxEM-9WsB9ohqS0")
+
+RIME_API_KEY = os.getenv("RIME_API_KEY")
+if not RIME_API_KEY:
+    raise RuntimeError("RIME_API_KEY environment variable is missing or empty. Please set it in .env")
+
 RIME_URL = os.getenv("RIME_URL", "https://users.rime.ai/v1/rime-tts")
 HEADERS = {
     "Authorization": f"Bearer {RIME_API_KEY}",
@@ -45,9 +49,26 @@ def get_target_case(req: RenderRequest):
 async def index():
     with open("static/index.html") as f: return f.read()
 
+@app.get("/api/config")
+async def get_config():
+    return {
+        "per_threshold": 5.0,
+        "model_id": "mist/v1",
+        "voice": "marsh",
+        "language": "en-IN"
+    }
+
 @app.get("/api/cases")
 async def get_cases():
-    return [{"id": c["id"], "domain": c["domain"], "text": c["raw_text"]} for c in TEST_CASES]
+    return [
+        {
+            "id": c["id"],
+            "domain": c["domain"],
+            "text": c["raw_text"],
+            "is_edge_case": c.get("is_edge_case", False)
+        }
+        for c in TEST_CASES
+    ]
 
 @app.post("/api/render")
 async def render_audio(req: RenderRequest):

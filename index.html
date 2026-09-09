@@ -373,7 +373,7 @@
         </span>
       </div>
       <div class="hidden sm:flex items-center gap-3 text-zinc-500">
-        <span class="px-2 py-0.5 rounded bg-zinc-800/50 text-zinc-400 border border-white/5">PER Threshold: 5.0 pts</span>
+        <span id="thresholdBadge" class="px-2 py-0.5 rounded bg-zinc-800/50 text-zinc-400 border border-white/5">PER Threshold: 5.0 pts</span>
       </div>
     </div>
   </footer>
@@ -384,28 +384,17 @@
     <span id="toastMessage">Notification message</span>
   </div>
 
-  <!-- JAVASCRIPT LOGIC (WITH EXACT renderDelta & countUpOnce PATTERN) -->
+  <!-- JAVASCRIPT LOGIC (CLEAN PIPELINE WITHOUT CLAMPING OR FABRICATED VALUES) -->
   <script>
-    // --- CONFIGURATION CONSTANTS ---
-    const PER_THRESHOLD = 5.0; // Minimum PER improvement threshold (in points) for green safety badge
-
-    // --- APPLICATION STATE ---
+    // --- CONFIGURATION STATE ---
+    let PER_THRESHOLD = 5.0; // Fetched dynamically from GET /api/config
     let preloadedCases = [];
     let currentCase = null;
     let sessionLogs = [];
 
-    // Preloaded Edge Case Definition (Triggers amber low-confidence badge instantly)
-    const EDGE_CASE = {
-      id: "edge_001",
-      domain: "Pharmacy (Edge Case)",
-      isEdgeCase: true,
-      raw_text: "Take Paracetamol 500 mg orally every 6 hours as needed for fever.",
-      expected_pronunciation: "Take Paracetamol five hundred milligram orally every six hours as needed for fever"
-    };
-
     /**
      * countUpOnce — animates a number from 0 to a target, triggered once when element enters viewport.
-     * Guarantees final value is always displayed correctly.
+     * Guarantees exact final value is always displayed correctly.
      */
     function countUpOnce(el, { duration = 700 } = {}) {
       const target = parseFloat(el.dataset.target);
@@ -444,7 +433,7 @@
         if (progress < 1) {
           requestAnimationFrame(tick);
         } else {
-          setFinal(); // guarantees exact final value
+          setFinal();
         }
       }
 
@@ -476,7 +465,7 @@
     function renderDelta(el, deltaValue) {
       if (!el) return;
       el.dataset.target = deltaValue;
-      el.dataset.animated = "false"; // allow re-animating for a new result
+      el.dataset.animated = "false";
       countUpOnce(el);
     }
 
@@ -488,6 +477,22 @@
     });
 
     async function initApp() {
+      // 1. Fetch Dynamic Backend Configuration (/api/config)
+      try {
+        const configResp = await fetch("/api/config");
+        if (configResp.ok) {
+          const config = await configResp.json();
+          if (typeof config.per_threshold === "number") {
+            PER_THRESHOLD = config.per_threshold;
+            document.getElementById("thresholdBadge").textContent = `PER Threshold: ${PER_THRESHOLD.toFixed(1)} pts`;
+          }
+          updateTrustBadge(config);
+        }
+      } catch (err) {
+        console.warn("Could not load /api/config:", err);
+      }
+
+      // 2. Fetch Backend Cases (/api/cases)
       try {
         const resp = await fetch("/api/cases");
         if (!resp.ok) throw new Error(`HTTP ${resp.status}: Failed to fetch cases`);
@@ -509,6 +514,12 @@
             id: "rx_002",
             domain: "Pharmacy",
             text: "Syp. Azithral 200mg/5ml - 5ml BD. Mfg: Alembic. Exp: 03/26."
+          },
+          {
+            id: "edge_001",
+            domain: "Pharmacy (Edge Case)",
+            is_edge_case: true,
+            text: "Take Paracetamol 500 mg orally every 6 hours as needed for fever."
           }
         ];
       }
@@ -567,27 +578,28 @@
 
       preloadedCases.forEach(c => {
         const chip = document.createElement("button");
-        chip.className = "case-chip px-3.5 py-2 rounded-lg border border-white/10 bg-[#0d0d0f] hover:bg-zinc-800 hover:border-teal-500/40 text-zinc-300 font-mono text-xs transition-all flex items-center gap-2 cursor-pointer";
-        chip.dataset.caseId = c.id;
-        
-        const isRx = c.domain === "Pharmacy";
-        chip.innerHTML = `
-          <i class="${isRx ? 'fa-solid fa-capsules text-teal-400' : 'fa-solid fa-location-dot text-indigo-400'} text-[11px]"></i>
-          <span>${c.id.toUpperCase()}: ${c.domain}</span>
-        `;
+        const isEdge = c.is_edge_case || c.id === "edge_001";
+
+        if (isEdge) {
+          chip.className = "case-chip px-3.5 py-2 rounded-lg border-l-4 border-l-amber-500 border-t border-r border-b border-amber-500/30 bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 font-mono text-xs transition-all flex items-center gap-2 cursor-pointer";
+          chip.dataset.caseId = c.id;
+          chip.innerHTML = `
+            <span class="px-1.5 py-0.5 rounded bg-amber-500 text-zinc-950 font-bold text-[10px] uppercase">Edge Case</span>
+            <span>${c.text.substring(0, 26)}...</span>
+          `;
+        } else {
+          chip.className = "case-chip px-3.5 py-2 rounded-lg border border-white/10 bg-[#0d0d0f] hover:bg-zinc-800 hover:border-teal-500/40 text-zinc-300 font-mono text-xs transition-all flex items-center gap-2 cursor-pointer";
+          chip.dataset.caseId = c.id;
+          const isRx = c.domain && c.domain.includes("Pharmacy");
+          chip.innerHTML = `
+            <i class="${isRx ? 'fa-solid fa-capsules text-teal-400' : 'fa-solid fa-location-dot text-indigo-400'} text-[11px]"></i>
+            <span>${c.id.toUpperCase()}: ${c.domain}</span>
+          `;
+        }
+
         chip.addEventListener("click", () => selectCase(c.id));
         container.appendChild(chip);
       });
-
-      const edgeChip = document.createElement("button");
-      edgeChip.className = "case-chip px-3.5 py-2 rounded-lg border-l-4 border-l-amber-500 border-t border-r border-b border-amber-500/30 bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 font-mono text-xs transition-all flex items-center gap-2 cursor-pointer";
-      edgeChip.dataset.caseId = EDGE_CASE.id;
-      edgeChip.innerHTML = `
-        <span class="px-1.5 py-0.5 rounded bg-amber-500 text-zinc-950 font-bold text-[10px] uppercase">Edge Case</span>
-        <span>${EDGE_CASE.raw_text.substring(0, 26)}...</span>
-      `;
-      edgeChip.addEventListener("click", () => selectEdgeCase());
-      container.appendChild(edgeChip);
     }
 
     function deselectAllChips() {
@@ -608,20 +620,11 @@
 
       const chip = document.querySelector(`.case-chip[data-case-id="${caseId}"]`);
       if (chip) {
-        chip.classList.add("ring-1", "ring-teal-400", "bg-teal-500/10", "border-teal-500/50");
-      }
-    }
-
-    function selectEdgeCase() {
-      deselectAllChips();
-      currentCase = EDGE_CASE;
-      const textarea = document.getElementById("rawTextInput");
-      textarea.value = EDGE_CASE.raw_text;
-      updateCharCount(EDGE_CASE.raw_text);
-
-      const chip = document.querySelector(`.case-chip[data-case-id="${EDGE_CASE.id}"]`);
-      if (chip) {
-        chip.classList.add("ring-1", "ring-amber-400");
+        if (targetCase.is_edge_case || caseId === "edge_001") {
+          chip.classList.add("ring-1", "ring-amber-400");
+        } else {
+          chip.classList.add("ring-1", "ring-teal-400", "bg-teal-500/10", "border-teal-500/50");
+        }
       }
     }
 
@@ -655,11 +658,11 @@
       document.getElementById("deltaSubText").textContent = "Executing parallel Rime TTS render & G2P metric evaluation...";
 
       try {
-        const payloadDefault = (currentCase && currentCase.id && currentCase.id !== "custom" && currentCase.id !== "edge_001") 
+        const payloadDefault = (currentCase && currentCase.id && currentCase.id !== "custom") 
           ? { case_id: currentCase.id, prompt_type: "default" }
           : { custom_text: text, prompt_type: "default" };
 
-        const payloadTuned = (currentCase && currentCase.id && currentCase.id !== "custom" && currentCase.id !== "edge_001") 
+        const payloadTuned = (currentCase && currentCase.id && currentCase.id !== "custom") 
           ? { case_id: currentCase.id, prompt_type: "tuned" }
           : { custom_text: text, prompt_type: "tuned" };
 
@@ -670,7 +673,7 @@
           fetchAPI("/api/evaluate", payloadTuned)
         ]);
 
-        // 1. INSTANT AUDIO PLAYER DISPLAY (No delay, no fade gating clickability)
+        // 1. Instant Audio Player Display
         const audioDef = document.getElementById("audioDefault");
         audioDef.src = resRenderDef.audio_url;
         document.getElementById("promptDefaultText").textContent = resRenderDef.prompt_used;
@@ -679,33 +682,20 @@
         audioTuned.src = resRenderTuned.audio_url;
         document.getElementById("promptTunedText").textContent = resRenderTuned.prompt_used;
 
-        // 2. Metric Scores Calculation
-        let defaultPER, tunedPER, delta;
+        // 2. Metric Scores Calculation (PURE REAL VALUES — NO CLAMPING, NO FABRICATED FALLBACKS)
+        const defaultPER = typeof resEvalDef.PER === "number" ? resEvalDef.PER : 0;
+        const tunedPER = typeof resEvalTuned.PER === "number" ? resEvalTuned.PER : 0;
+        const delta = Math.round((defaultPER - tunedPER) * 10) / 10;
 
-        if (currentCase && currentCase.id === "edge_001") {
-          defaultPER = 16.2;
-          tunedPER = 14.5;
-          delta = 1.7;
-        } else {
-          defaultPER = typeof resEvalDef.PER === "number" ? Math.max(resEvalDef.PER, 34.0) : 38.5;
-          tunedPER = typeof resEvalTuned.PER === "number" ? Math.min(resEvalTuned.PER, 6.8) : 4.1;
-          
-          if (defaultPER <= tunedPER) {
-            defaultPER = 32.5;
-            tunedPER = 4.2;
-          }
-          delta = Math.round((defaultPER - tunedPER) * 10) / 10;
-        }
-
-        // 3. RENDER PER METRICS USING renderDelta EXACT PATTERN
+        // 3. Render PER Metrics via renderDelta exact pattern
         renderDelta(perDefEl, defaultPER);
         renderDelta(perTunedEl, tunedPER);
         
-        // 4. UPDATE DELTA BADGE ACCORDING TO THRESHOLD
+        // 4. Update Delta Badge strictly according to real delta & PER_THRESHOLD
         const isSafe = delta >= PER_THRESHOLD;
         updateDeltaBadge(delta, isSafe);
 
-        // 5. INSTANT TRUST BADGE UPDATE
+        // 5. Update Trust Badge dynamically
         updateTrustBadge(resRenderTuned);
 
         // 6. Update Transformation Diff Box
@@ -747,24 +737,23 @@
       const subText = document.getElementById("deltaSubText");
 
       if (isSafe) {
-        // GREEN SUCCESS BADGE (>= 5 points improvement)
+        // GREEN SUCCESS BADGE (>= PER_THRESHOLD)
         container.className = "w-full rounded-2xl p-8 sm:p-10 border border-teal-500/40 text-center transition-all duration-300 bg-teal-500/10 shadow-xl shadow-teal-500/5";
         mainText.className = "text-4xl sm:text-6xl font-black font-grotesk tracking-tight my-2 text-teal-400 flex items-center justify-center gap-3";
         
-        // Construct element and pass directly to renderDelta
         mainText.innerHTML = `<i class="fa-solid fa-shield-check text-teal-400"></i> <span id="deltaStatVal" class="stat" data-prefix="&darr; " data-target="${delta}" data-suffix=" points clearer" data-decimals="1">--</span>`;
         renderDelta(document.getElementById("deltaStatVal"), delta);
         
         subText.className = "text-sm font-mono text-teal-300/80 max-w-xl mx-auto";
         subText.textContent = `SAFETY VERIFIED: Speech clarity improvement exceeds safety threshold (+${delta.toFixed(1)} pts clarity gain). Safe for patient playback.`;
       } else {
-        // AMBER WARNING BADGE (< 5 points improvement / Edge Case) — APPEARS INSTANTLY
+        // AMBER WARNING BADGE (< PER_THRESHOLD or negative delta) — APPEARS INSTANTLY
         container.className = "w-full rounded-2xl p-8 sm:p-10 border border-amber-500/40 text-center transition-all duration-300 bg-amber-500/10 shadow-xl shadow-amber-500/5";
         mainText.className = "text-2xl sm:text-4xl font-extrabold font-grotesk tracking-tight my-2 text-amber-400 flex items-center justify-center gap-3";
         mainText.innerHTML = `<span>&#9888;&#65039; Limited tuning confidence &mdash; verify manually</span>`;
         
         subText.className = "text-sm font-mono text-amber-300/80 max-w-xl mx-auto";
-        subText.textContent = `LOW CONFIDENCE: Tuning improvement (${delta.toFixed(1)} pts delta) is below the 5.0 pt threshold. Potential edge case — manual pharmacist verification required.`;
+        subText.textContent = `LOW CONFIDENCE: Tuning improvement (${delta.toFixed(1)} pts delta) is below the ${PER_THRESHOLD.toFixed(1)} pt threshold. Potential edge case — manual pharmacist verification required.`;
       }
     }
 
@@ -802,7 +791,7 @@
         <td class="p-3 font-sans font-medium text-zinc-200">${escapeHtml(snippet)}</td>
         <td class="p-3 text-right text-zinc-400">${defPer.toFixed(1)}%</td>
         <td class="p-3 text-right font-bold text-teal-400">${tunedPer.toFixed(1)}%</td>
-        <td class="p-3 text-right font-bold ${isSafe ? 'text-teal-400' : 'text-amber-400'}">&darr; ${delta.toFixed(1)} pts</td>
+        <td class="p-3 text-right font-bold ${isSafe ? 'text-teal-400' : 'text-amber-400'}">${delta >= 0 ? '&darr; ' : '&uarr; '}${Math.abs(delta).toFixed(1)} pts</td>
         <td class="p-3 text-center">
           <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${isSafe ? 'bg-teal-500/10 text-teal-400 border border-teal-500/30' : 'bg-amber-500/10 text-amber-400 border border-amber-500/30'}">
             ${isSafe ? 'VERIFIED' : 'WARNING'}

@@ -2,8 +2,11 @@ import os, httpx
 from dotenv import load_dotenv
 
 load_dotenv()
-RIME_API_KEY = os.getenv("RIME_API_KEY", "LGalOxBRAhzEctoceMBFmC92gSmppxEM-9WsB9ohqS0")
-RIME_URL = "https://users.rime.ai/v1/rime-tts"
+RIME_API_KEY = os.getenv("RIME_API_KEY")
+if not RIME_API_KEY:
+    raise RuntimeError("RIME_API_KEY environment variable is missing or empty. Please set it in .env")
+
+RIME_URL = os.getenv("RIME_URL", "https://users.rime.ai/v1/rime-tts")
 
 HEADERS = {
     "Authorization": f"Bearer {RIME_API_KEY}",

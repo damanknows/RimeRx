@@ -26,11 +26,18 @@ pip install -r requirements.txt
 ```
 
 ### 2. Configure Environment Variables
-Copy `.env.example` to `.env` (or set `RIME_API_KEY`):
-```env
-RIME_API_KEY="your_rime_api_key_here"
-RIME_URL="https://users.rime.ai/v1/rime-tts"
+Copy `.env.example` to `.env` and set your credentials:
+```bash
+cp .env.example .env
 ```
+Edit `.env` and configure your API keys:
+```env
+RIME_API_KEY="your_actual_rime_api_key_here"
+RIME_URL="https://users.rime.ai/v1/rime-tts"
+OPENAI_API_KEY="your_openai_api_key_here"
+ELEVENLABS_API_KEY="your_elevenlabs_api_key_here"
+```
+> **Note:** `RIME_API_KEY` is required for the application to start. If it is missing or empty, `main.py` will raise a `RuntimeError`.
 
 ### 3. Run Application Server
 ```bash
