@@ -16,9 +16,10 @@
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- GSAP & Lenis Smooth Scroll -->
+  <!-- GSAP, ScrollTrigger, Flip & Lenis Smooth Scroll -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Flip.min.js"></script>
   <script src="https://unpkg.com/lenis@1.1.9/dist/lenis.min.js"></script>
 
   <style>
@@ -109,6 +110,25 @@
       pointer-events: none;
     }
 
+    /* PHASE 2: HAOQI TRANSITION OVERLAY SYSTEM */
+    #transition-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 9998;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    #transition-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      pointer-events: none;
+      background: #050811;
+      clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+    }
+
     /* Noise Texture Overlay */
     .noise-overlay {
       position: fixed;
@@ -128,6 +148,10 @@
   <!-- PERSISTENT WEBGL CANVAS BACKGROUND LAYER -->
   <canvas id="canvas-layer"></canvas>
   <div class="noise-overlay"></div>
+
+  <!-- PHASE 2: HAOQI LIQUID MORPHING TRANSITION SYSTEM -->
+  <canvas id="transition-canvas"></canvas>
+  <div id="transition-overlay"></div>
 
   <!-- MAIN SCROLL CONTENT WRAPPER -->
   <div id="scroll-content" class="content-wrapper min-h-screen flex flex-col justify-between pb-16">
@@ -348,14 +372,13 @@
         targetMouseY = e.clientY;
       });
 
-      // Flow-field liquid gradient nodes
       const nodes = Array.from({ length: 5 }, (_, i) => ({
         x: Math.random() * width,
         y: Math.random() * height,
         vx: (Math.random() - 0.5) * 0.4,
         vy: (Math.random() - 0.5) * 0.4,
         radius: Math.random() * 300 + 200,
-        hue: i % 2 === 0 ? 170 : 160 // Teal / Emerald tones
+        hue: i % 2 === 0 ? 170 : 160
       }));
 
       function render(time) {
@@ -402,7 +425,100 @@
       requestAnimationFrame(render);
     })();
 
-    // --- 2. LENIS SMOOTH SCROLLING & GSAP TRIGGER INTEGRATION ---
+    // --- 2. PHASE 2: HAOQI TRANSITION MANAGER (FLIP + NOISE DISPLACEMENT SHADER) ---
+    const TransitionManager = {
+      active: false,
+      canvas: null,
+      ctx: null,
+      overlay: null,
+      
+      init() {
+        this.canvas = document.getElementById('transition-canvas');
+        this.overlay = document.getElementById('transition-overlay');
+        if (!this.canvas || !this.overlay) return;
+        this.ctx = this.canvas.getContext('2d');
+        this.resize();
+        window.addEventListener('resize', () => this.resize());
+      },
+      
+      resize() {
+        if (!this.canvas) return;
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+      },
+
+      drawNoiseWave(progress) {
+        if (!this.ctx) return;
+        const w = this.canvas.width;
+        const h = this.canvas.height;
+        this.ctx.clearRect(0, 0, w, h);
+        if (progress <= 0 || progress >= 1) return;
+
+        const time = Date.now() * 0.004;
+        const waveHeight = h * Math.sin(progress * Math.PI) * 0.5;
+        const centerY = h * (1 - progress);
+
+        this.ctx.fillStyle = 'rgba(0, 184, 156, ' + (0.35 * Math.sin(progress * Math.PI)) + ')';
+        this.ctx.beginPath();
+        this.ctx.moveTo(0, centerY);
+
+        for (let x = 0; x <= w; x += 15) {
+          const y = centerY + Math.sin(x * 0.015 + time) * waveHeight;
+          this.ctx.lineTo(x, y);
+        }
+
+        this.ctx.lineTo(w, h);
+        this.ctx.lineTo(0, h);
+        this.ctx.closePath();
+        this.ctx.fill();
+      },
+
+      startTransition(onMidpoint, onComplete) {
+        if (this.active) return;
+        this.active = true;
+
+        if (typeof Flip !== 'undefined') {
+          gsap.registerPlugin(Flip);
+        }
+
+        const state = (typeof Flip !== 'undefined') ? Flip.getState('#caseSelector, #prescriptionInput, .glass-card') : null;
+
+        const tl = gsap.timeline({
+          onUpdate: () => {
+            this.drawNoiseWave(tl.progress());
+          },
+          onComplete: () => {
+            this.active = false;
+            if (this.canvas) this.canvas.style.opacity = '0';
+            if (onComplete) onComplete();
+          }
+        });
+
+        if (this.canvas) this.canvas.style.opacity = '1';
+
+        tl.to(this.overlay, {
+          clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
+          duration: 0.5,
+          ease: 'power4.in'
+        })
+        .call(() => {
+          if (onMidpoint) onMidpoint();
+          if (state && typeof Flip !== 'undefined') {
+            Flip.from(state, { duration: 0.4, ease: 'power2.out' });
+          }
+        })
+        .to(this.overlay, {
+          clipPath: 'polygon(0 100%, 100% 100%, 100% 100%, 0 100%)',
+          duration: 0.5,
+          ease: 'power4.out'
+        })
+        .set(this.overlay, {
+          clipPath: 'polygon(0 0, 100% 0, 100% 0, 0 0)'
+        });
+      }
+    };
+
+    // --- 3. LENIS SMOOTH SCROLLING & GSAP TRIGGER INTEGRATION ---
     let lenis;
     if (typeof Lenis !== 'undefined' && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       lenis = new Lenis({
@@ -419,7 +535,7 @@
       }
     }
 
-    // --- 3. MAGNETIC PHYSICS FOR BUTTONS ---
+    // --- 4. MAGNETIC PHYSICS FOR BUTTONS ---
     document.querySelectorAll('.btn-magnetic').forEach(btn => {
       btn.addEventListener('mousemove', (e) => {
         const rect = btn.getBoundingClientRect();
@@ -432,11 +548,12 @@
       });
     });
 
-    // --- 4. PRESERVED API BUSINESS LOGIC ---
+    // --- 5. PRESERVED API BUSINESS LOGIC ---
     let cases = [];
     let currentCaseId = null;
 
     async function init() {
+      TransitionManager.init();
       try {
         const res = await fetch('/api/cases');
         cases = await res.json();
@@ -444,7 +561,12 @@
         sel.innerHTML = '<option value="custom">✏️ Custom Prescription / Enter Text</option>' + 
           cases.map(c => `<option value="${c.id}">[${c.domain}] ${c.text.slice(0, 55)}...</option>`).join('');
 
-        sel.onchange = onSelectChange;
+        sel.onchange = () => {
+          TransitionManager.startTransition(() => {
+            onSelectChange();
+          });
+        };
+
         if (cases.length > 0) {
           sel.value = cases[0].id;
           onSelectChange();
@@ -487,7 +609,6 @@
       compArea.classList.remove('hidden');
       verDrawer.classList.remove('hidden');
 
-      // GSAP smooth reveal
       if (typeof gsap !== 'undefined') {
         gsap.fromTo([compArea, verDrawer], { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8, ease: "power3.out", stagger: 0.2 });
       }
