@@ -1,0 +1,143 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8"><title>RimeRx: Prompt Tuning Bench</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style> audio { width: 100%; } .phoneme-box { font-family: monospace; font-size: 0.8rem; background: #f3f4f6;
+padding: 0.5rem; border-radius: 4px; white-space: pre-wrap; } </style>
+</head><body class="bg-gray-50 min-h-screen p-4 md:p-8">
+<div class="max-4xl mx-auto space-y-6">
+  <header class="text-center"><h1 class="text-3xl font-bold text-indigo-700">RimeRx</h1><p
+class="text-gray-600">Benchmarking Rime "Writing for the Ear" on Indian Pharma/Logistics</p></header>
+
+  <div id="case-selector" class="bg-white p-4 rounded-lg shadow">
+    <label class="block mb-2 font-medium">Select Test Case:</label>
+    <select id="caseId" class="w-full border p-2 rounded"><option value="">Loading...</option></select>
+    <div id="raw-text" class="mt-3 p-3 bg-gray-50 rounded text-sm font-mono whitespace-pre-wrap"></div>
+  </div>
+
+  <div class="grid md:grid-cols-2 gap-6" id="compare-area" style="display:none;">
+    <!-- COLUMN A: DEFAULT -->
+    <div class="bg-white p-4 rounded-lg shadow border-2 border-gray-200">
+      <h3 class="text-lg font-semibold text-gray-700 flex items-center gap-2">🎛 Default Prompt <span
+class="text-xs bg-gray-100 px-1 rounded">Raw Text</span></h3>
+      <div class="phoneme-box text-xs text-gray-500 mt-1" id="prompt-default"></div>
+      <audio id="audio-default" controls class="mt-3"></audio>
+      <button onclick="render('default')" class="mt-3 w-full bg-gray-200 hover:bg-gray-300 py-2 rounded
+font-medium">Generate & Play</button>
+      <div id="metrics-default" class="mt-3 text-sm text-gray-600 hidden"></div>
+    </div>
+
+    <!-- COLUMN B: TUNED -->
+    <div class="bg-white p-4 rounded-lg shadow border-2 border-indigo-500">
+      <h3 class="text-lg font-semibold text-indigo-700 flex items-center gap-2">✨ Tuned Prompt <span
+class="text-xs bg-indigo-100 px-1 rounded">Rime Optimized</span></h3>
+      <div class="phoneme-box text-xs text-indigo-900 mt-1" id="prompt-tuned"></div>
+      <audio id="audio-tuned" controls class="mt-3"></audio>
+      <button onclick="render('tuned')" class="mt-3 w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2
+rounded font-medium">Generate & Play</button>
+      <div id="metrics-tuned" class="mt-3 text-sm text-gray-600 hidden"></div>
+    </div>
+  </div>
+
+  <!-- HUMAN EVAL RUBRIC -->
+  <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-r-lg" id="human-eval" style="display:none;">
+    <h3 class="font-bold text-yellow-800 mb-2">👂 Human Intelligibility Rubric (MOS Style)</h3>
+    <p class="text-sm text-yellow-700 mb-3">Play both. Rate <b>Intelligibility</b> (Could a delivery agent/patient
+understand the name/dose?) & <b>Naturalness</b>.</p>
+    <div class="grid md:grid-cols-2 gap-4">
+      <div><b>Default:</b> Intelligibility <select id="hum-def-int" class="border p-1
+ml-2"><option>5</option><option>4</option><option selected>3</option><option>2</option><option>1</option></select>
+Naturalness <select id="hum-def-nat" class="border p-1 ml-2"><option>5</option><option>4</option><option
+selected>3</option><option>2</option><option>1</option></select></div>
+      <div><b>Tuned:</b> Intelligibility <select id="hum-tun-int" class="border p-1
+ml-2"><option>5</option><option>4</option><option selected>3</option><option>2</option><option>1</option></select>
+Naturalness <select id="hum-tun-nat" class="border p-1 ml-2"><option>5</option><option>4</option><option
+selected>3</option><option>2</option><option>1</option></select></div>
+    </div>
+    <button onclick="saveHumanEval()" class="mt-3 bg-yellow-600 text-white px-4 py-2 rounded">Log
+Evaluation</button>
+    <pre id="eval-log" class="mt-3 text-xs bg-white p-2 rounded"></pre>
+  </div>
+</div>
+
+<script>
+const API = '';
+let currentCase = null;
+
+async function loadCases() {
+  const res = await fetch('/api/cases');
+  const cases = await res.json();
+  const sel = document.getElementById('caseId');
+  sel.innerHTML = cases.map(c => `<option value="${c.id}">[${c.domain}]
+${c.text.slice(0,60)}...</option>`).join('');
+  sel.onchange = onCaseChange;
+  onCaseChange();
+}
+
+async function onCaseChange() {
+  const id = document.getElementById('caseId').value;
+  if (!id) return;
+  const res = await fetch('/api/cases');
+  const cases = await res.json();
+  currentCase = cases.find(c => c.id === id);
+  document.getElementById('raw-text').textContent = currentCase.text;
+  document.getElementById('compare-area').style.display = 'grid';
+  document.getElementById('human-eval').style.display = 'block';
+  document.getElementById('audio-default').src = ''; document.getElementById('audio-tuned').src = '';
+  document.getElementById('metrics-default').classList.add('hidden');
+  document.getElementById('metrics-tuned').classList.add('hidden');
+}
+
+async function render(type) {
+  const btn = event.target; btn.disabled = true; btn.textContent = 'Generating...';
+  const res = await fetch('/api/render', { method: 'POST', headers: {'Content-Type':'application/json'}, body:
+JSON.stringify({case_id: currentCase.id, prompt_type: type}) });
+  const data = await res.json();
+  document.getElementById(`audio-${type}`).src = data.audio_url;
+  document.getElementById(`prompt-${type}`).textContent = data.prompt_used;
+
+  // Fetch Metrics
+  const mRes = await fetch('/api/evaluate', { method: 'POST', headers: {'Content-Type':'application/json'}, body:
+JSON.stringify({case_id: currentCase.id, prompt_type: type}) });
+  const mData = await mRes.json();
+  const el = document.getElementById(`metrics-${type}`);
+  el.innerHTML = `<b>PER:</b> ${mData.PER}% | <b>CER:</b> ${mData.CER}%<br><b>Prompt Phonemes:</b><div
+class="phoneme-box mt-1">${mData.pred_phonemes}</div><b>Target Phonemes:</b><div class="phoneme-box
+mt-1">${mData.ref_phonemes}</div>`;
+  el.classList.remove('hidden');
+  btn.disabled = false; btn.textContent = 'Regenerate';
+}
+
+function saveHumanEval() {
+  const log = `Case: ${currentCase.id}\nDefault: Int=${document.getElementById('hum-def-int').value}
+Nat=${document.getElementById('hum-def-nat').value}\nTuned:   Int=${document.getElementById('hum-tun-int').value}
+Nat=${document.getElementById('hum-tun-nat').value}\n---\n`;
+  document.getElementById('eval-log').textContent += log;
+  alert("Logged! Check console for CSV export.");
+  console.log("EVAL_LOG_CSV:",
+`"${currentCase.id}",${document.getElementById('hum-def-int').value},${document.getElementById('hum-def-nat').value`"${currentCase.id}",${document.getElementById('hum-def-int').value},${document.getEementById('hum-def-nat').value},${document.getElementById('hum-tun-int').value},${document.getElementById('hum-tun-nat').value}`);
+}
+
+loadCases();
+</script>
+</body></html>
+!-- Add under the Generate button -->
+<button onclick="calcWER('default')" class="mt-2 w-full bg-blue-600 hover:bg-blue-700 text-white
+py-2 rounded text-sm" id="wer-btn-default">🧮 Calc True WER (ASR)</button>
+<div id="wer-result-default" class="mt-2 text-xs text-gray-700 hidden"></div>
+
+<script>
+async function calcWER(type) {
+  const btn = document.getElementById(`wer-btn-${type}`);
+  const resEl = document.getElementById(`wer-result-${type}`);
+  btn.disabled = true; btn.textContent = "Transcribing on GPU...";
+resEl.classList.add('hidden');
+
+  const r = await fetch('/api/wer', {method:'POST', headers:{'Content-Type':'application/json'},
+body:JSON.stringify({case_id: currentCase.id, prompt_type: type})});
+  const d = await r.json();
+
+  resEl.innerHTML = `WER: ${d.WER}%<br>Ref: ${d.reference.slice(0,80)}...<br>Hyp:
+${d.hypothesis.slice(0,80)}...`;
+  resEl.classList.remove('hidden');
+  btn.disabled = false; btn.textContent = "Recalc WER";
+}
+</script>
