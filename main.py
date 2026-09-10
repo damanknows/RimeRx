@@ -15,18 +15,21 @@ from dotenv import load_dotenv
 import uvicorn
 import jiwer
 from asr import transcribe_audio, verify_critical_entities, MODEL_SIZE, COMPUTE_TYPE, EVAL_BEAM_SIZE
-from epitran import Epitran
-
 load_dotenv()
 
 RIME_API_KEY = os.getenv("RIME_API_KEY")
 if not RIME_API_KEY:
-    raise RuntimeError("RIME_API_KEY environment variable is missing or empty. Please set it in .env")
+    print("[WARNING] RIME_API_KEY environment variable is missing or empty. Please configure it in Render/environment variables.", flush=True)
 
 app = FastAPI(title="RimeRx Voice Safety API")
 app.mount("/static", StaticFiles(directory="static"), name="static")
 AUDIO_DIR = "static/audio"
 os.makedirs(AUDIO_DIR, exist_ok=True)
+
+@app.get("/health")
+@app.get("/healthz")
+async def health_check():
+    return {"status": "ok", "service": "RimeRx"}
 
 # --- STARTUP CLEANUP: KEEP ONLY LAST 50 AUDIO CLIPS ---
 def cleanup_audio_dir(directory: str = AUDIO_DIR, max_files: int = 50):

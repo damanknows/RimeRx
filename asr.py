@@ -1,5 +1,11 @@
-from faster_whisper import WhisperModel
-import torch
+try:
+    import torch
+    HAS_TORCH = True
+except ImportError:
+    torch = None
+    HAS_TORCH = False
+
+import ctranslate2
 import sys
 import numpy as np
 
@@ -13,30 +19,47 @@ COMPUTE_TYPE = "int8"
 BEAM_SIZE = 1
 EVAL_BEAM_SIZE = 5
 
-def load_asr_model():
-    if torch.cuda.is_available():
+_asr_model = None
+
+def get_asr_model():
+    global _asr_model
+    if _asr_model is not None:
+        return _asr_model
+
+    cuda_available = False
+    if HAS_TORCH and torch is not None:
+        cuda_available = torch.cuda.is_available()
+    else:
         try:
-            print(f"[ASR] Testing CUDA device: {torch.cuda.get_device_name(0)}...", flush=True)
+            cuda_available = ctranslate2.get_cuda_device_count() > 0
+        except Exception:
+            cuda_available = False
+
+    if cuda_available:
+        try:
+            print("[ASR] Testing CUDA device...", flush=True)
             m = WhisperModel(MODEL_SIZE, device="cuda", compute_type=COMPUTE_TYPE)
-            # Test dummy encode to verify cublas DLL is present
             dummy_features = np.zeros((80, 3000), dtype=np.float32)
             m.encode(dummy_features)
             print("[ASR] CUDA device verified & loaded successfully.", flush=True)
-            return m
+            _asr_model = m
+            return _asr_model
         except Exception as e:
             print(f"[ASR] CUDA initialization/test failed ({e}), falling back to CPU...", flush=True)
 
     print(f"[ASR] Loading {MODEL_SIZE} ({COMPUTE_TYPE}) on CPU...", flush=True)
-    m = WhisperModel(MODEL_SIZE, device="cpu", compute_type=COMPUTE_TYPE)
+    _asr_model = WhisperModel(MODEL_SIZE, device="cpu", compute_type=COMPUTE_TYPE)
     print("[ASR] Loaded WhisperModel on CPU.", flush=True)
-    return m
+    return _asr_model
 
-model = load_asr_model()
+# Lazy alias for backwards compatibility
+model = None
 
 def transcribe_audio(filepath: str, beam_size: int = EVAL_BEAM_SIZE) -> str:
-    global model
+    global _asr_model
+    asr_inst = get_asr_model()
     try:
-        segments, _ = model.transcribe(
+        segments, _ = asr_inst.transcribe(
             filepath,
             beam_size=beam_size,
             language="en",
@@ -47,8 +70,8 @@ def transcribe_audio(filepath: str, beam_size: int = EVAL_BEAM_SIZE) -> str:
     except Exception as e:
         if "cublas" in str(e).lower() or "cuda" in str(e).lower():
             print(f"[ASR] CUDA runtime error encountered ({e}), switching to CPU fallback...", flush=True)
-            model = WhisperModel(MODEL_SIZE, device="cpu", compute_type=COMPUTE_TYPE)
-            segments, _ = model.transcribe(
+            _asr_model = WhisperModel(MODEL_SIZE, device="cpu", compute_type=COMPUTE_TYPE)
+            segments, _ = _asr_model.transcribe(
                 filepath,
                 beam_size=beam_size,
                 language="en",
@@ -57,6 +80,8 @@ def transcribe_audio(filepath: str, beam_size: int = EVAL_BEAM_SIZE) -> str:
             )
             return " ".join(s.text for s in segments).strip()
         raise
+
+
 
 def verify_critical_entities(raw_entities: dict, asr_transcript: str) -> dict:
     """
