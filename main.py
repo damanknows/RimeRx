@@ -1,4 +1,6 @@
-import os, asyncio, uuid, glob, random
+import os
+os.environ["PYTHONUTF8"] = "1"
+import asyncio, uuid, glob, random
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import HTMLResponse, Response
 from fastapi.staticfiles import StaticFiles
@@ -241,14 +243,21 @@ async def export_mos_ratings():
     )
 
 # --- METRICS ENDPOINT ---
-epi = Epitran('eng-Latn') # English G2P
+_epi_instance = None
+
+def get_epitran():
+    global _epi_instance
+    if _epi_instance is None:
+        _epi_instance = Epitran('eng-Latn')
+    return _epi_instance
 
 def text_to_phonemes(text):
     words = text.lower().split()
     phonemes = []
+    epi_obj = get_epitran()
     for w in words:
         try:
-            p = epi.transliterate(w)
+            p = epi_obj.transliterate(w)
             phonemes.append(p if p else w)
         except Exception:
             phonemes.append(w)
