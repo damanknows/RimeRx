@@ -29,13 +29,17 @@ RimeRx reduces pronunciation and intelligibility errors in critical medication i
 
 ## Empirical Results Summary
 
+Results from reproducible corpus evaluation benchmark (`results/summary.md`, `results/metrics/metrics.json`):
+
 | Metric / Pillar | Untuned Default Input | Safety-Tuned RimeRx Input | Absolute Improvement |
 | :--- | :--- | :--- | :--- |
-| **Critical Entity Recall Accuracy** | 72.4% | **98.2%** | **+25.8% accuracy gain** |
-| **Mean Phoneme Error Rate (PER)** | 21.8% | **5.4%** | **-16.4 pts error reduction** |
-| **Mean Word Error Rate (WER)** | 34.2% | **11.5%** | **-22.7 pts error reduction** |
-| **Dosage Schedule Error Rate (1-0-1)**| High (misread as "101") | **0.0% (pronounced "one zero one")** | **100% dosage clarity** |
-| **Numeric Semantic Integrity** | 81.0% | **100.0%** | **Zero digit loss / corruption** |
+| **Critical Entity Recall Accuracy** | 96.0% | **96.0%** | **High baseline accuracy preserved** |
+| **Mean Word Error Rate (WER)** | 68.15% | **48.24%** | **-19.91 pts error reduction** |
+| **Mean Phoneme Error Rate (PER)** | 67.28% | **0.0%** | **-67.28 pts error reduction** |
+| **Drug Names Mean WER** | 87.50% | **56.25%** | **-31.25 pts error reduction** |
+| **Dosage Schedule Mean WER (`1-0-1`)** | 73.22% | **50.59%** | **-22.63 pts error reduction** |
+| **Strengths Mean WER (`625mg`)** | 53.42% | **41.88%** | **-11.54 pts error reduction** |
+| **Synthesis Reliability Rate** | 100.0% | **100.0%** | **Zero HTTP failure rate across Rime runs** |
 
 ## Known Limitations
 1. **ASR Ceiling Effect**: Commercial ASR engines (including Whisper `small.en`) occasionally misrecognize niche Indian brand names (*Augmentin*, *Pantocid*) even when synthesized audio is phonetically clear.

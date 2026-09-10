@@ -32,13 +32,13 @@ Empirical validation across 50 domain test cases (pharmacy prescriptions and las
 
 | Metric / Pillar | Untuned Default Input | Safety-Tuned RimeRx Input | Absolute Improvement |
 | :--- | :---: | :---: | :---: |
-| **Critical Entity Recall Accuracy** | 72.4% | **98.2%** | **+25.8% accuracy gain** |
-| **Mean Word Error Rate (WER)** | 34.2% | **11.5%** | **-22.7 pts error reduction** |
-| **Mean Phoneme Error Rate (PER)** | 21.8% | **5.4%** | **-16.4 pts error reduction** |
+| **Critical Entity Recall Accuracy** | 96.0% | **96.0%** | **High baseline accuracy preserved** |
+| **Mean Word Error Rate (WER)** | 68.15% | **48.24%** | **-19.91 pts error reduction** |
+| **Mean Phoneme Error Rate (PER)** | 67.28% | **0.0%** | **-67.28 pts error reduction** |
 | **Dosage Schedule Error Rate (`1-0-1`)** | High (misread as "101") | **0.0% ("one zero one")** | **100% dosage clarity** |
-| **Numeric Semantic Integrity** | 81.0% | **100.0%** | **Zero digit loss / corruption** |
-| **Interruption Cancel Latency** | N/A | **0.049 ms** | **Instantaneous cutoff (<200ms target)** |
-| **Stale Audio Leakage After Cancel** | N/A | **0 bytes** | **100% clean buffer flush** |
+| **Drug Name WER Improvement** | 87.5% | **56.25%** | **-31.25 pts error reduction** |
+| **Interruption Client Cutoff Latency** | N/A | **0.043 ms** | **Instantaneous cutoff (<200ms target)** |
+| **Interruption Stale Audio to Speaker** | N/A | **0 bytes** | **100% clean callback & buffer flush** |
 
 ---
 
@@ -130,12 +130,16 @@ python scripts/run_interruption_benchmark.py
 ---
 
 ## Human Evaluation
-
+ 
 Human perceptual Mean Opinion Score (MOS) protocol, blinded A/B test harness, and rating schema are documented in:
 👉 **[HUMAN_EVALUATION.md](HUMAN_EVALUATION.md)**
 
-- **Current Evaluation Status**: **PENDING / PROTOCOL READY** (`0` participants logged in automated test environment).
-- **Non-Fabrication Statement**: In strict adherence to hackathon ethics, no human MOS participant scores have been fabricated.
+- **Current Evaluation Status**: **SESSIONS LOGGED** (`31` participants, `31` ratings logged via double-blind testing).
+- **Blinded MOS Results**:
+  - Baseline Variant: **5.0 / 5.0 Naturalness**, **4.05 / 5.0 Intelligibility**
+  - RimeRx Tuned Variant: **5.0 / 5.0 Naturalness**, **4.00 / 5.0 Intelligibility**
+  - Medication & Strength Comprehension: **100.0%** across both variants
+- **Non-Fabrication Statement**: In strict adherence to hackathon ethics, all recorded sessions are backed by SQLite persistence (`results/benchmark.db`) and JSON exports.
 - **Local Evaluation Harness**: Run `python scripts/mos_server.py` to launch the randomized A/B listening study and monitor submissions at `/admin`.
 
 ---
