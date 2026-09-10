@@ -4,7 +4,7 @@ from main import app
 client = TestClient(app)
 
 def test_api_config_providers():
-    """Verify /api/config exposes PER threshold, max text length, and provider configurations."""
+    """Verify /api/config exposes PER threshold, max text length, and active Rime configuration."""
     resp = client.get("/api/config")
     assert resp.status_code == 200
     data = resp.json()
@@ -12,6 +12,12 @@ def test_api_config_providers():
     assert data["per_threshold"] == 5.0
     assert "max_text_length" in data
     assert data["max_text_length"] == 2500
+    assert "provider" in data and data["provider"] == "Rime"
+    assert "model_id" in data
+    assert "voice" in data
+    assert "language" in data
+    assert "endpoint" in data
+    assert "audio_format" in data
     assert "providers" in data
     assert "rime" in data["providers"]
     assert "openai" in data["providers"]
@@ -29,7 +35,7 @@ def test_render_default_rime_and_timing():
     data = resp.json()
     assert "audio_id" in data
     assert "audio_url" in data
-    assert data["provider"] == "rime"
+    assert data["provider"].lower() == "rime"
     assert "ttfb_ms" in data and isinstance(data["ttfb_ms"], (int, float))
     assert "total_ms" in data and isinstance(data["total_ms"], (int, float))
     assert "cold" in data and isinstance(data["cold"], bool)
@@ -145,3 +151,38 @@ def test_unknown_provider():
     resp = client.post("/api/render", json=payload)
     assert resp.status_code == 400
     assert "Unknown TTS provider" in resp.json()["detail"]
+
+def test_fallback_handling_metadata_and_visibility():
+    """Verify synthesize_with_fallback returns structured fallback metadata when Rime is unavailable."""
+    import asyncio, os
+    from tts.providers import synthesize_with_fallback, RimeProvider, OpenAIProvider
+    from fastapi import HTTPException
+
+    async def run_fallback_test():
+        os.environ["OPENAI_API_KEY"] = "mock_key_for_test"
+        
+        async def mock_rime_fail(self, text):
+            raise HTTPException(500, "Rime server error simulated")
+        
+        async def mock_openai_success(self, text):
+            return b"mock_audio_bytes", {"provider": "openai", "model": "tts-1", "voice": "alloy", "language": "en-US"}
+
+        original_rime = RimeProvider.synthesize
+        original_openai = OpenAIProvider.synthesize
+        try:
+            RimeProvider.synthesize = mock_rime_fail
+            OpenAIProvider.synthesize = mock_openai_success
+
+            bytes_out, meta = await synthesize_with_fallback("Test prescription", preferred_provider="rime")
+            assert meta["is_fallback"] is True
+            assert meta["fallback_message"] == "Rime unavailable — fallback provider active."
+            assert meta["primary_provider"] == "rime"
+            assert meta["actual_provider"] == "openai"
+            assert "request_id" in meta
+            assert "timestamp" in meta
+            assert meta["fallback_reason"] is not None
+        finally:
+            RimeProvider.synthesize = original_rime
+            OpenAIProvider.synthesize = original_openai
+
+    asyncio.run(run_fallback_test())

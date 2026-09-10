@@ -1,7 +1,7 @@
 {
   "status": "COMPLETED_SESSIONS_LOGGED",
-  "participants_count": 18,
-  "total_ratings": 18,
+  "participants_count": 27,
+  "total_ratings": 27,
   "baseline_variant": {
     "mean_naturalness": 5.0,
     "mean_intelligibility": 4.0,

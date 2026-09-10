@@ -1,4 +1,4 @@
-﻿[
+[
   {
     "id": "stress_001",
     "domain": "Pharmacy (Stress Case)",
@@ -87,6 +87,51 @@
     "difficulty": "adversarial",
     "raw_text": "Drop Ciprofloxacin 0.3% 2 drops in right ear TID x 5 days",
     "expected_pronunciation": "Drop Ciprofloxacin zero point three percent two drops in right ear three times daily times five days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark — Zero real patient data"
+  },
+  {
+    "id": "stress_011",
+    "domain": "Pharmacy (Stress Case)",
+    "category": "combination_drugs",
+    "difficulty": "adversarial",
+    "raw_text": "Tab Metformin/Glimepiride 500/2 mg 1-0-1 after food x 30 days",
+    "expected_pronunciation": "Tablet Metformin slash Glimepiride five hundred slash two milligram one zero one after food times thirty days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark — Zero real patient data"
+  },
+  {
+    "id": "stress_012",
+    "domain": "Pharmacy (Stress Case)",
+    "category": "indian_english",
+    "difficulty": "adversarial",
+    "raw_text": "Cap Deriphyllin Retard 150mg 1-0-1 x 10 days",
+    "expected_pronunciation": "Capsule Deriphyllin Retard one five zero milligram one zero one times ten days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark — Zero real patient data"
+  },
+  {
+    "id": "stress_013",
+    "domain": "Pharmacy (Stress Case)",
+    "category": "units",
+    "difficulty": "adversarial",
+    "raw_text": "Inj Insulin 10 IU SC BD before meals",
+    "expected_pronunciation": "Injection Insulin ten I U subcutaneous twice daily before meals",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark — Zero real patient data"
+  },
+  {
+    "id": "stress_014",
+    "domain": "Pharmacy (Stress Case)",
+    "category": "topical",
+    "difficulty": "hard",
+    "raw_text": "Oint Betnovate-N apply thin layer BD x 7 days",
+    "expected_pronunciation": "Ointment Betnovate N apply thin layer twice daily times seven days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark — Zero real patient data"
+  },
+  {
+    "id": "stress_015",
+    "domain": "Pharmacy (Stress Case)",
+    "category": "multi_drug",
+    "difficulty": "adversarial",
+    "raw_text": "Tab Pan-D 40/30 mg 1-0-0 + Tab Domperidone 10mg 1-1-1 before food x 5 days",
+    "expected_pronunciation": "Tablet Pan D forty slash thirty milligram one zero zero plus Tablet Domperidone ten milligram one one one before food times five days",
     "notice": "Synthetic/curated evaluation data for TTS benchmark — Zero real patient data"
   }
 ]

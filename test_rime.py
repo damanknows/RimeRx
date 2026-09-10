@@ -3,19 +3,21 @@ from dotenv import load_dotenv
 
 load_dotenv()
 RIME_API_KEY = os.getenv("RIME_API_KEY")
-if not RIME_API_KEY:
-    raise RuntimeError("RIME_API_KEY environment variable is missing or empty. Please set it in .env")
-
 RIME_URL = os.getenv("RIME_URL", "https://users.rime.ai/v1/rime-tts")
 
 HEADERS = {
-    "Authorization": f"Bearer {RIME_API_KEY}",
+    "Authorization": f"Bearer {RIME_API_KEY or ''}",
     "Content-Type": "application/json",
     "Accept": "audio/mp3"
 }
 
+
 def test_speakers():
+    if not RIME_API_KEY:
+        print("[RIME TEST] RIME_API_KEY not set; skipping live test.")
+        return None
     speakers = ["abbey", "allison", "celeste", "kendall", "marsh", "rex", "marissa", "ava", "logan"]
+
     
     for spk in speakers:
         payload = {

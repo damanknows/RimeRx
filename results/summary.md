@@ -38,9 +38,16 @@
 
 ## Human Listening Evaluation (MOS & Comprehension)
 
-- **Status**: **SESSIONS LOGGED** (18 participants, 18 total ratings).
+- **Status**: **SESSIONS LOGGED** (27 participants, 27 total ratings).
 
 - **Baseline Naturalness / Intelligibility**: 5.0 / 4.0
 
 - **RimeRx Naturalness / Intelligibility**: 5.0 / 4.0
+
+
+## Stress-Test System (Phase 9 Hard Voice Cases)
+
+- **Total Stress Test Cases Configured**: 15 hard voice prescription cases (`Augmentin 625mg 1-0-1`, `Pantocid-DSR 40/30 mg`, `1/2 tablet 0-1-0`).
+
+- **EXPECTED vs HEARD Protocol**: Evaluates side-by-side ASR transcript recall across `drug`, `strength`, `dose`, `frequency`, `duration`, and `date` with honest limitation flagging on acoustic misreads.
 

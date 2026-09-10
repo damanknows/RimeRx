@@ -2,6 +2,7 @@ import os, json, httpx, asyncio, time, logging, uuid, struct, math
 from datetime import datetime, timezone
 from abc import ABC, abstractmethod
 from fastapi import HTTPException
+from app.config import CONFIG_DIR, RIME_API_KEY, OPENAI_API_KEY, ELEVENLABS_API_KEY, PLACEHOLDER_KEYS
 
 logger = logging.getLogger("tts.providers")
 logging.basicConfig(level=logging.INFO)
@@ -54,7 +55,7 @@ def record_reliability(provider: str, status_code: int, is_success: bool):
     st["status_codes"][code_str] = st["status_codes"].get(code_str, 0) + 1
 
 def load_providers_config() -> dict:
-    config_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "config", "providers.json")
+    config_path = os.path.join(CONFIG_DIR, "providers.json")
     if os.path.exists(config_path):
         with open(config_path, "r", encoding="utf-8") as f:
             return json.load(f)
@@ -107,13 +108,11 @@ class RimeProvider(TTSProvider):
         }
 
     async def synthesize(self, text: str) -> tuple[bytes, dict]:
-        api_key = os.getenv("RIME_API_KEY")
+        api_key = os.getenv("RIME_API_KEY", RIME_API_KEY)
         meta = self.get_metadata()
 
-        # Mock mode for unit tests when API key is missing, mock, or running under pytest
-        if (not api_key or api_key in ("mock_key", "mock_rime_key_for_testing", "your_rime_api_key_here", "fake_key") or os.getenv("PYTEST_CURRENT_TEST")) and os.getenv("TEST_REQUIRE_KEY") != "1":
-
-
+        # Mock mode for testing/demo when API key is unconfigured or set to placeholder
+        if (not api_key or api_key in PLACEHOLDER_KEYS or api_key in ("mock_key", "mock_rime_key_for_testing")) and os.getenv("TEST_REQUIRE_KEY") != "1":
             cold = ("rime" not in CALLED_PROVIDERS)
             CALLED_PROVIDERS.add("rime")
             record_reliability("rime", 200, True)
@@ -127,7 +126,7 @@ class RimeProvider(TTSProvider):
             return mock_audio, meta
 
 
-        if not api_key:
+        if not api_key or api_key in PLACEHOLDER_KEYS:
             record_reliability("rime", 400, False)
             raise HTTPException(400, "RIME_API_KEY environment variable is missing or empty. Please set it in .env")
 
@@ -135,7 +134,6 @@ class RimeProvider(TTSProvider):
         voice = meta["voice"]
         model = meta["model"]
         audio_format = meta["audio_format"]
-
 
         headers = {
             "Authorization": f"Bearer {api_key}",
@@ -204,8 +202,8 @@ class OpenAIProvider(TTSProvider):
         super().__init__("openai", config)
 
     async def synthesize(self, text: str) -> tuple[bytes, dict]:
-        api_key = os.getenv("OPENAI_API_KEY")
-        if not api_key or api_key == "your_openai_api_key_here":
+        api_key = os.getenv("OPENAI_API_KEY", OPENAI_API_KEY)
+        if not api_key or api_key in PLACEHOLDER_KEYS:
             record_reliability("openai", 400, False)
             raise HTTPException(400, "OPENAI_API_KEY environment variable is missing or empty. Please set a valid key in .env")
 
@@ -260,8 +258,8 @@ class ElevenLabsProvider(TTSProvider):
         super().__init__("elevenlabs", config)
 
     async def synthesize(self, text: str) -> tuple[bytes, dict]:
-        api_key = os.getenv("ELEVENLABS_API_KEY")
-        if not api_key or api_key == "your_elevenlabs_api_key_here":
+        api_key = os.getenv("ELEVENLABS_API_KEY", ELEVENLABS_API_KEY)
+        if not api_key or api_key in PLACEHOLDER_KEYS:
             record_reliability("elevenlabs", 400, False)
             raise HTTPException(400, "ELEVENLABS_API_KEY environment variable is missing or empty. Please set a valid key in .env")
 
@@ -325,17 +323,10 @@ def get_provider(name: str = "rime") -> TTSProvider:
         raise HTTPException(400, f"Unknown TTS provider: '{name}'. Supported providers: 'rime', 'openai', 'elevenlabs'")
 
 async def synthesize_with_fallback(text: str, preferred_provider: str = "rime", allow_fallback: bool = True) -> tuple[bytes, dict]:
-    """
-    Synthesizes speech using preferred_provider (default 'rime').
-    If preferred_provider fails and allow_fallback is True, attempts available fallback providers (openai, elevenlabs).
-    Never silently claims fallback audio came from primary provider.
-    Logs primary_provider, fallback_provider, reason, timestamp, and request_id.
-    """
     p_name = preferred_provider.lower() if preferred_provider else "rime"
     req_id = f"req_{uuid.uuid4().hex[:8]}"
     ts = datetime.now(timezone.utc).isoformat()
 
-    # 1. Attempt primary provider
     try:
         primary_obj = get_provider(p_name)
         audio_bytes, meta = await primary_obj.synthesize(text)
@@ -351,25 +342,21 @@ async def synthesize_with_fallback(text: str, preferred_provider: str = "rime", 
     except Exception as primary_err:
         primary_reason = str(primary_err.detail if isinstance(primary_err, HTTPException) else primary_err)
         
-        # If fallback is not allowed or preferred provider is explicitly requested non-rime, re-raise primary error
         if not allow_fallback or p_name != "rime":
             raise primary_err
 
-        # 2. Attempt fallback providers in order
         fallback_candidates = ["openai", "elevenlabs"]
 
         for fallback_name in fallback_candidates:
-            # Check if API key exists for fallback provider to avoid unnecessary failing attempts
-            if fallback_name == "openai" and (not os.getenv("OPENAI_API_KEY") or os.getenv("OPENAI_API_KEY") == "your_openai_api_key_here"):
+            if fallback_name == "openai" and (not os.getenv("OPENAI_API_KEY") or os.getenv("OPENAI_API_KEY") in PLACEHOLDER_KEYS):
                 continue
-            if fallback_name == "elevenlabs" and (not os.getenv("ELEVENLABS_API_KEY") or os.getenv("ELEVENLABS_API_KEY") == "your_elevenlabs_api_key_here"):
+            if fallback_name == "elevenlabs" and (not os.getenv("ELEVENLABS_API_KEY") or os.getenv("ELEVENLABS_API_KEY") in PLACEHOLDER_KEYS):
                 continue
 
             try:
                 fb_provider = get_provider(fallback_name)
                 audio_bytes, fb_meta = await fb_provider.synthesize(text)
 
-                # Log fallback occurrence with required fields
                 logger.warning(
                     f"[TTS FALLBACK TRIGGERED] request_id={req_id} | timestamp={ts} | "
                     f"primary_provider={p_name} | fallback_provider={fallback_name} | "
@@ -390,7 +377,6 @@ async def synthesize_with_fallback(text: str, preferred_provider: str = "rime", 
                 logger.info(f"[TTS FALLBACK FAILED] {fallback_name}: {fb_err}")
                 continue
 
-        # If all fallbacks failed or no fallback key was available, re-raise primary error honestly
         logger.error(
             f"[TTS PRIMARY & FALLBACK FAILED] request_id={req_id} | timestamp={ts} | "
             f"primary_provider={p_name} | primary_reason=\"{primary_reason}\""

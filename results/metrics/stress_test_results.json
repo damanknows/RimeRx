@@ -1,0 +1,111 @@
+{
+  "notice": "Dedicated high-difficulty stress corpus evaluation with honest limitation reporting",
+  "total_stress_cases": 15,
+  "cases": [
+    {
+      "id": "stress_001",
+      "category": "dosages",
+      "difficulty": "hard",
+      "raw_text": "Tab Augmentin 625mg 1-0-1 x 5 days Exp: 03/26",
+      "expected_pronunciation": "Tablet Augmentin six two five milligram one zero one times five days Expiry March twenty six"
+    },
+    {
+      "id": "stress_002",
+      "category": "strengths",
+      "difficulty": "hard",
+      "raw_text": "Pantocid-DSR 40/30 mg 1-0-1 x 7 days",
+      "expected_pronunciation": "Pantocid D S R forty slash thirty milligram one zero one times seven days"
+    },
+    {
+      "id": "stress_003",
+      "category": "dosage_schedules",
+      "difficulty": "hard",
+      "raw_text": "1/2 tablet 0-1-0",
+      "expected_pronunciation": "one half tablet zero one zero"
+    },
+    {
+      "id": "stress_004",
+      "category": "quantities",
+      "difficulty": "adversarial",
+      "raw_text": "Syp Azithral 200mg/5ml - 5ml BD x 3 days Mfg: Alembic Exp: 11/27",
+      "expected_pronunciation": "Syrup Azithral two hundred milligram per five milliliter five milliliter twice daily times three days Manufactured by Alembic Expiry November twenty seven"
+    },
+    {
+      "id": "stress_005",
+      "category": "abbreviations",
+      "difficulty": "hard",
+      "raw_text": "Cap Omeprazole 20mg 1-0-0 before food x 14 days Qty: 14 caps",
+      "expected_pronunciation": "Capsule Omeprazole twenty milligram one zero zero before food times fourteen days Quantity fourteen capsules"
+    },
+    {
+      "id": "stress_006",
+      "category": "frequency",
+      "difficulty": "medium",
+      "raw_text": "Tab Calpol 500mg 1-1-1 SOS for fever Max 3 days",
+      "expected_pronunciation": "Tablet Calpol five hundred milligram one one one as needed for fever Maximum three days"
+    },
+    {
+      "id": "stress_007",
+      "category": "indian_english",
+      "difficulty": "hard",
+      "raw_text": "Tab Amoxyclav 1000 mg 1-0-1 after food x 10 days",
+      "expected_pronunciation": "Tablet Amoxyclav one thousand milligram one zero one after food times ten days"
+    },
+    {
+      "id": "stress_008",
+      "category": "strengths",
+      "difficulty": "hard",
+      "raw_text": "Tab Eltroxin 50 mcg 1-0-0 early morning empty stomach",
+      "expected_pronunciation": "Tablet Eltroxin fifty microgram one zero zero early morning empty stomach"
+    },
+    {
+      "id": "stress_009",
+      "category": "dates",
+      "difficulty": "adversarial",
+      "raw_text": "Tab Montair-LC 10mg/5mg 0-0-1 at bedtime Exp: 09/2028",
+      "expected_pronunciation": "Tablet Montair L C ten milligram slash five milligram zero zero one at bedtime Expiry September twenty twenty eight"
+    },
+    {
+      "id": "stress_010",
+      "category": "adversarial",
+      "difficulty": "adversarial",
+      "raw_text": "Drop Ciprofloxacin 0.3% 2 drops in right ear TID x 5 days",
+      "expected_pronunciation": "Drop Ciprofloxacin zero point three percent two drops in right ear three times daily times five days"
+    },
+    {
+      "id": "stress_011",
+      "category": "combination_drugs",
+      "difficulty": "adversarial",
+      "raw_text": "Tab Metformin/Glimepiride 500/2 mg 1-0-1 after food x 30 days",
+      "expected_pronunciation": "Tablet Metformin slash Glimepiride five hundred slash two milligram one zero one after food times thirty days"
+    },
+    {
+      "id": "stress_012",
+      "category": "indian_english",
+      "difficulty": "adversarial",
+      "raw_text": "Cap Deriphyllin Retard 150mg 1-0-1 x 10 days",
+      "expected_pronunciation": "Capsule Deriphyllin Retard one five zero milligram one zero one times ten days"
+    },
+    {
+      "id": "stress_013",
+      "category": "units",
+      "difficulty": "adversarial",
+      "raw_text": "Inj Insulin 10 IU SC BD before meals",
+      "expected_pronunciation": "Injection Insulin ten I U subcutaneous twice daily before meals"
+    },
+    {
+      "id": "stress_014",
+      "category": "topical",
+      "difficulty": "hard",
+      "raw_text": "Oint Betnovate-N apply thin layer BD x 7 days",
+      "expected_pronunciation": "Ointment Betnovate N apply thin layer twice daily times seven days"
+    },
+    {
+      "id": "stress_015",
+      "category": "multi_drug",
+      "difficulty": "adversarial",
+      "raw_text": "Tab Pan-D 40/30 mg 1-0-0 + Tab Domperidone 10mg 1-1-1 before food x 5 days",
+      "expected_pronunciation": "Tablet Pan D forty slash thirty milligram one zero zero plus Tablet Domperidone ten milligram one one one before food times five days"
+    }
+  ]
+}
