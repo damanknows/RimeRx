@@ -15,6 +15,10 @@ from dotenv import load_dotenv
 import uvicorn
 import jiwer
 from asr import transcribe_audio, verify_critical_entities, MODEL_SIZE, COMPUTE_TYPE, EVAL_BEAM_SIZE
+try:
+    from epitran import Epitran
+except Exception:
+    Epitran = None
 load_dotenv()
 
 RIME_API_KEY = os.getenv("RIME_API_KEY")
@@ -355,20 +359,33 @@ _epi_instance = None
 
 def get_epitran():
     global _epi_instance
-    if _epi_instance is None:
-        _epi_instance = Epitran('eng-Latn')
-    return _epi_instance
+    if _epi_instance is None and Epitran is not None:
+        try:
+            _epi_instance = Epitran('eng-Latn')
+        except Exception as e:
+            print(f"[METRICS] Epitran init warning: {e}", flush=True)
+            _epi_instance = False
+    return _epi_instance if _epi_instance is not False else None
 
 def text_to_phonemes(text):
     words = text.lower().split()
     phonemes = []
-    epi_obj = get_epitran()
-    for w in words:
-        try:
-            p = epi_obj.transliterate(w)
-            phonemes.append(p if p else w)
-        except Exception:
-            phonemes.append(w)
+    try:
+        epi_obj = get_epitran()
+    except Exception:
+        epi_obj = None
+
+    if epi_obj:
+        for w in words:
+            try:
+                p = epi_obj.transliterate(w)
+                phonemes.append(p if p else w)
+            except Exception:
+                phonemes.append(w)
+    else:
+        # Fallback to normalized space-separated tokens if Epitran G2P table is unavailable
+        phonemes = words
+
     return " ".join(phonemes)
 
 def analyze_word_errors(reference: str, hypothesis: str):
