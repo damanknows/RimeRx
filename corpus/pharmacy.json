@@ -1,177 +1,2252 @@
 [
   {
-    "id": "rx_001",
-    "domain": "Pharmacy",
-    "category": "dosages",
-    "raw_text": "Tab. Augmentin 625mg 1-0-1 x 5 days. Dr. Reddy's Lab, Hyderabad. Ph: 98765-43210",
-    "expected_pronunciation": "Tablet Augmentin six two five milligram one zero one times five days Doctor Reddys Lab Hyderabad Phone nine eight seven six five four three two one zero"
-  },
-  {
-    "id": "rx_002",
-    "domain": "Pharmacy",
-    "category": "quantities",
-    "raw_text": "Syp. Azithral 200mg/5ml - 5ml BD. Mfg: Alembic. Exp: 03/26.",
-    "expected_pronunciation": "Syrup Azithral two hundred milligram per five milliliter five milliliter twice daily Manufactured by Alembic Expiry March twenty six"
-  },
-  {
-    "id": "rx_003",
-    "domain": "Pharmacy",
-    "category": "code_switched",
-    "raw_text": "Tab. Dolo 650mg 1-1-1 x 3 days. Khane ke baad lena. Ph: 91234-56789",
-    "expected_pronunciation": "Tablet Dolo six five zero milligram one one one times three days Khane ke baad lena Phone nine one two three four five six seven eight nine"
-  },
-  {
-    "id": "rx_004",
+    "id": "rx_synth_001",
     "domain": "Pharmacy",
     "category": "drug_names",
-    "raw_text": "Cap. Pantocid 40mg OD before breakfast. Mfg: Sun Pharma. Exp: 08/27.",
-    "expected_pronunciation": "Capsule Pantocid forty milligram once daily before breakfast Manufactured by Sun Pharma Expiry August twenty seven"
+    "difficulty": "easy",
+    "raw_text": "Tab Augmentin 625mg 1-0-1 x 5 days Exp: 03/26",
+    "expected_pronunciation": "Tablet Augmentin six two five milligram one zero one times five days Expiry March twenty six",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
   },
   {
-    "id": "rx_005",
+    "id": "rx_synth_002",
     "domain": "Pharmacy",
-    "category": "dosages",
-    "raw_text": "Tab. Metformin 500mg 1-0-1 after meals. Dr. Sharma, Delhi. Ph: 99887-76655",
-    "expected_pronunciation": "Tablet Metformin five hundred milligram one zero one after meals Doctor Sharma Delhi Phone nine nine eight eight seven seven six six five five"
+    "category": "strengths",
+    "difficulty": "medium",
+    "raw_text": "Paracetamol 0.5 mg orally twice daily for 3 days",
+    "expected_pronunciation": "Paracetamol zerofive milligram orally twice daily for three days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
   },
   {
-    "id": "rx_006",
+    "id": "rx_synth_003",
     "domain": "Pharmacy",
-    "category": "quantities",
-    "raw_text": "Syp. Benadryl 100ml 1-0-1 5ml at bedtime. Exp: 11/25.",
-    "expected_pronunciation": "Syrup Benadryl one hundred milliliter one zero one five milliliter at bedtime Expiry November twenty five"
+    "category": "strengths",
+    "difficulty": "medium",
+    "raw_text": "Tab Amoxicillin 1250 mg 1-0-1 x 7 days",
+    "expected_pronunciation": "Tablet Amoxicillin one two five zero milligram one zero one times seven days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
   },
   {
-    "id": "rx_007",
+    "id": "rx_synth_004",
     "domain": "Pharmacy",
-    "category": "code_switched",
-    "raw_text": "Tab. Crocin 500mg zarurat padne par lena 1-0-1. Ph: 98111-22334",
-    "expected_pronunciation": "Tablet Crocin five hundred milligram zarurat padne par lena one zero one Phone nine eight one one one two two three three four"
+    "category": "dosage_schedules",
+    "difficulty": "easy",
+    "raw_text": "Tab Dolo 650mg 1-0-1 after meals for 3 days",
+    "expected_pronunciation": "Tablet Dolo six five zero milligram one zero one after meals for three days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
   },
   {
-    "id": "rx_008",
+    "id": "rx_synth_005",
     "domain": "Pharmacy",
-    "category": "drug_names",
-    "raw_text": "Tab. Telma 40mg 1-0-0 in morning. Dr. Patel Clinic, Ahmedabad. Ph: 97234-11223",
-    "expected_pronunciation": "Tablet Telma forty milligram one zero zero in morning Doctor Patel Clinic Ahmedabad Phone nine seven two three four one one two two three"
+    "category": "dosage_schedules",
+    "difficulty": "easy",
+    "raw_text": "Cap Pantocid 40mg 0-1-0 before meals x 14 days",
+    "expected_pronunciation": "Capsule Pantocid forty milligram zero one zero before meals times fourteen days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
   },
   {
-    "id": "rx_009",
+    "id": "rx_synth_006",
+    "domain": "Pharmacy",
+    "category": "dosage_schedules",
+    "difficulty": "easy",
+    "raw_text": "Tab Metformin 500mg 1-1-1 x 30 days",
+    "expected_pronunciation": "Tablet Metformin five hundred milligram one one one times thirty days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_007",
+    "domain": "Pharmacy",
+    "category": "dosage_schedules",
+    "difficulty": "medium",
+    "raw_text": "Take 1/2 tab Disprin 350mg SOS for headache",
+    "expected_pronunciation": "Take one slash two Tablet Disprin three five zero milligram SOS for headache",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_008",
     "domain": "Pharmacy",
     "category": "dates",
-    "raw_text": "Tab. Montair LC 10mg OD at night. Mfg: Cipla. Exp: 05/28.",
-    "expected_pronunciation": "Tablet Montair LC ten milligram once daily at night Manufactured by Cipla Expiry May twenty eight"
+    "difficulty": "medium",
+    "raw_text": "Syp Azithral 200mg/5ml Exp: 03/26 Mfg: Alembic",
+    "expected_pronunciation": "Syrup Azithral two hundred milligram per five milliliter Expiry March twenty six Manufactured by Alembic",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
   },
   {
-    "id": "rx_010",
+    "id": "rx_synth_009",
     "domain": "Pharmacy",
-    "category": "phone_numbers",
-    "raw_text": "Tab. Amlokind 5mg 1-0-0. Emergency contact Dr. Gupta. Ph: 98450-12345",
-    "expected_pronunciation": "Tablet Amlokind five milligram one zero zero Emergency contact Doctor Gupta Phone nine eight four five zero one two three four five"
+    "category": "adversarial",
+    "difficulty": "adversarial",
+    "raw_text": "Vitamin B12 1500mcg OD for 30 days Qty: 30 caps",
+    "expected_pronunciation": "Vitamin B12 1500mcg once daily for thirty days Qty thirty caps",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
   },
   {
-    "id": "rx_011",
+    "id": "rx_synth_010",
     "domain": "Pharmacy",
-    "category": "proper_nouns",
-    "raw_text": "Tab. Glycomet 850mg 1-0-1. Apollo Pharmacy, Greams Road, Chennai. Ph: 94440-55667",
-    "expected_pronunciation": "Tablet Glycomet eight five zero milligram one zero one Apollo Pharmacy Greams Road Chennai Phone nine four four four zero five five six six seven"
+    "category": "adversarial",
+    "difficulty": "adversarial",
+    "raw_text": "H1N1 vaccine 0.5ml single dose Inj Exp: 12/27",
+    "expected_pronunciation": "H1N1 vaccine zerofive milliliter single dose Injection Expiry December twenty seven",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
   },
   {
-    "id": "rx_012",
-    "domain": "Pharmacy",
-    "category": "dosages",
-    "raw_text": "Tab. Pan 40mg 1-0-0 x 14 days. Dr. Sen, Kolkata. Ph: 98300-99887",
-    "expected_pronunciation": "Tablet Pan forty milligram one zero zero times fourteen days Doctor Sen Kolkata Phone nine eight three zero zero nine nine eight eight seven"
-  },
-  {
-    "id": "rx_013",
-    "domain": "Pharmacy",
-    "category": "quantities",
-    "raw_text": "Syp. Ascoril LS 100ml 5ml TDS. Mfg: Glenmark. Exp: 12/26.",
-    "expected_pronunciation": "Syrup Ascoril LS one hundred milliliter five milliliter thrice daily Manufactured by Glenmark Expiry December twenty six"
-  },
-  {
-    "id": "rx_014",
-    "domain": "Pharmacy",
-    "category": "code_switched",
-    "raw_text": "Tab. Gelusil 1-1-1 khane ke baad chusna hai. Ph: 98990-11223",
-    "expected_pronunciation": "Tablet Gelusil one one one khane ke baad chusna hai Phone nine eight nine nine zero one one two two three"
-  },
-  {
-    "id": "rx_015",
+    "id": "rx_synth_011",
     "domain": "Pharmacy",
     "category": "drug_names",
-    "raw_text": "Tab. Thyronorm 50mg 1-0-0 subah khali pet. Mfg: Abbott. Exp: 04/27.",
-    "expected_pronunciation": "Tablet Thyronorm fifty milligram one zero zero subah khali pet Manufactured by Abbott Expiry April twenty seven"
+    "difficulty": "easy",
+    "raw_text": "Tab Disprin 500mg 0-0-1 x 5 days",
+    "expected_pronunciation": "Tablet Disprin five hundred milligram zero zero one times five days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
   },
   {
-    "id": "rx_016",
-    "domain": "Pharmacy",
-    "category": "dates",
-    "raw_text": "Cap. Becosules 1-0-0 x 30 days. Dr. Joshi, Pune. Exp: 09/27.",
-    "expected_pronunciation": "Capsule Becosules one zero zero times thirty days Doctor Joshi Pune Expiry September twenty seven"
-  },
-  {
-    "id": "rx_017",
-    "domain": "Pharmacy",
-    "category": "proper_nouns",
-    "raw_text": "Tab. Storvas 10mg 0-0-1. MedPlus Chemist, Banjara Hills, Hyderabad. Ph: 98490-88776",
-    "expected_pronunciation": "Tablet Storvas ten milligram zero zero one MedPlus Chemist Banjara Hills Hyderabad Phone nine eight four nine zero eight eight seven seven six"
-  },
-  {
-    "id": "rx_018",
-    "domain": "Pharmacy",
-    "category": "dosages",
-    "raw_text": "Tab. Shelcal 500mg 1-0-1 with milk x 15 days. Ph: 97110-44332",
-    "expected_pronunciation": "Tablet Shelcal five hundred milligram one zero one with milk times fifteen days Phone nine seven one one zero four four three three two"
-  },
-  {
-    "id": "rx_019",
-    "domain": "Pharmacy",
-    "category": "quantities",
-    "raw_text": "Syp. Multivitamin 200ml 10ml OD. Mfg: Mankind. Exp: 01/28.",
-    "expected_pronunciation": "Syrup Multivitamin two hundred milliliter ten milliliter once daily Manufactured by Mankind Expiry January twenty eight"
-  },
-  {
-    "id": "rx_020",
-    "domain": "Pharmacy",
-    "category": "code_switched",
-    "raw_text": "Tab. Disprin 1-0-1 paani mein ghol kar pina hai. Ph: 98200-55443",
-    "expected_pronunciation": "Tablet Disprin one zero one paani mein ghol kar pina hai Phone nine eight two zero zero five five four four three"
-  },
-  {
-    "id": "rx_021",
+    "id": "rx_synth_012",
     "domain": "Pharmacy",
     "category": "drug_names",
-    "raw_text": "Cap. Omeprazole 20mg 1-0-0 before food. Dr. Verma, Lucknow. Ph: 94150-66778",
-    "expected_pronunciation": "Capsule Omeprazole twenty milligram one zero zero before food Doctor Verma Lucknow Phone nine four one five zero six six seven seven eight"
+    "difficulty": "easy",
+    "raw_text": "Tab Crocin 625mg 1/2 tab BD for 7 days",
+    "expected_pronunciation": "Tablet Crocin six two five milligram one slash two Tablet twice daily for seven days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
   },
   {
-    "id": "rx_022",
+    "id": "rx_synth_013",
+    "domain": "Pharmacy",
+    "category": "drug_names",
+    "difficulty": "easy",
+    "raw_text": "Tab Combiflam 250mg 1 tab OD for 14 days",
+    "expected_pronunciation": "Tablet Combiflam two five zero milligram one Tablet once daily for fourteen days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_014",
+    "domain": "Pharmacy",
+    "category": "drug_names",
+    "difficulty": "easy",
+    "raw_text": "Tab Gelusil 100mg 1-0-1 for 1 month",
+    "expected_pronunciation": "Tablet Gelusil one hundred milligram one zero one for one month",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_015",
+    "domain": "Pharmacy",
+    "category": "drug_names",
+    "difficulty": "easy",
+    "raw_text": "Tab Digene 200mg/5ml 0-1-0 x 3 days",
+    "expected_pronunciation": "Tablet Digene two hundred milligram per five milliliter zero one zero times three days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_016",
+    "domain": "Pharmacy",
+    "category": "drug_names",
+    "difficulty": "easy",
+    "raw_text": "Tab Zinetac 10mg 1-1-1 x 5 days",
+    "expected_pronunciation": "Tablet Zinetac ten milligram one one one times five days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_017",
+    "domain": "Pharmacy",
+    "category": "drug_names",
+    "difficulty": "medium",
+    "raw_text": "Tab Pan-D 20mg 1-0-0 for 7 days",
+    "expected_pronunciation": "Tablet Pan to D twenty milligram one zero zero for seven days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_018",
+    "domain": "Pharmacy",
+    "category": "drug_names",
+    "difficulty": "medium",
+    "raw_text": "Tab Deriphyllin 40mg 0-0-1 for 14 days",
+    "expected_pronunciation": "Tablet Deriphyllin forty milligram zero zero one for fourteen days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_019",
+    "domain": "Pharmacy",
+    "category": "drug_names",
+    "difficulty": "medium",
+    "raw_text": "Tab Ibuprofen 0.5mg 1/2 tab BD for 1 month",
+    "expected_pronunciation": "Tablet Ibuprofen zerofive milligram one slash two Tablet twice daily for one month",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_020",
+    "domain": "Pharmacy",
+    "category": "drug_names",
+    "difficulty": "medium",
+    "raw_text": "Tab Aspirin 1250mg 1 tab OD x 3 days",
+    "expected_pronunciation": "Tablet Aspirin one two five zero milligram one Tablet once daily times three days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_021",
+    "domain": "Pharmacy",
+    "category": "drug_names",
+    "difficulty": "medium",
+    "raw_text": "Tab Ciprofloxacin 1500mcg 1-0-1 x 5 days",
+    "expected_pronunciation": "Tablet Ciprofloxacin 1500mcg one zero one times five days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_022",
+    "domain": "Pharmacy",
+    "category": "drug_names",
+    "difficulty": "medium",
+    "raw_text": "Tab Azithromycin 500mg 0-1-0 for 7 days",
+    "expected_pronunciation": "Tablet Azithromycin five hundred milligram zero one zero for seven days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_023",
+    "domain": "Pharmacy",
+    "category": "drug_names",
+    "difficulty": "hard",
+    "raw_text": "Tab Amoxicillin 625mg 1-1-1 for 14 days",
+    "expected_pronunciation": "Tablet Amoxicillin six two five milligram one one one for fourteen days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_024",
+    "domain": "Pharmacy",
+    "category": "drug_names",
+    "difficulty": "hard",
+    "raw_text": "Tab Augmentin 250mg 1-0-0 for 1 month",
+    "expected_pronunciation": "Tablet Augmentin two five zero milligram one zero zero for one month",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_025",
+    "domain": "Pharmacy",
+    "category": "drug_names",
+    "difficulty": "hard",
+    "raw_text": "Tab Azithral 100mg 0-0-1 x 3 days",
+    "expected_pronunciation": "Tablet Azithral one hundred milligram zero zero one times three days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_026",
+    "domain": "Pharmacy",
+    "category": "drug_names",
+    "difficulty": "hard",
+    "raw_text": "Tab Paracetamol 200mg/5ml 1/2 tab BD x 5 days",
+    "expected_pronunciation": "Tablet Paracetamol two hundred milligram per five milliliter one slash two Tablet twice daily times five days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_027",
+    "domain": "Pharmacy",
+    "category": "drug_names",
+    "difficulty": "hard",
+    "raw_text": "Tab Dolo 10mg 1 tab OD for 7 days",
+    "expected_pronunciation": "Tablet Dolo ten milligram one Tablet once daily for seven days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_028",
+    "domain": "Pharmacy",
+    "category": "drug_names",
+    "difficulty": "hard",
+    "raw_text": "Tab Pantocid 20mg 1-0-1 for 14 days",
+    "expected_pronunciation": "Tablet Pantocid twenty milligram one zero one for fourteen days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_029",
+    "domain": "Pharmacy",
+    "category": "drug_names",
+    "difficulty": "adversarial",
+    "raw_text": "Tab Amoxycillin 40mg 0-1-0 for 1 month",
+    "expected_pronunciation": "Tablet Amoxycillin forty milligram zero one zero for one month",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_030",
+    "domain": "Pharmacy",
+    "category": "drug_names",
+    "difficulty": "adversarial",
+    "raw_text": "Tab Cetirizine 0.5mg 1-1-1 x 3 days",
+    "expected_pronunciation": "Tablet Cetirizine zerofive milligram one one one times three days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_031",
+    "domain": "Pharmacy",
+    "category": "drug_names",
+    "difficulty": "adversarial",
+    "raw_text": "Tab Metformin 1250mg 1-0-0 x 5 days",
+    "expected_pronunciation": "Tablet Metformin one two five zero milligram one zero zero times five days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_032",
+    "domain": "Pharmacy",
+    "category": "drug_names",
+    "difficulty": "adversarial",
+    "raw_text": "Tab Telmisartan 1500mcg 0-0-1 for 7 days",
+    "expected_pronunciation": "Tablet Telmisartan 1500mcg zero zero one for seven days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_033",
+    "domain": "Pharmacy",
+    "category": "drug_names",
+    "difficulty": "adversarial",
+    "raw_text": "Tab Atorvastatin 500mg 1/2 tab BD for 14 days",
+    "expected_pronunciation": "Tablet Atorvastatin five hundred milligram one slash two Tablet twice daily for fourteen days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_034",
+    "domain": "Pharmacy",
+    "category": "drug_names",
+    "difficulty": "adversarial",
+    "raw_text": "Tab Omeprazole 625mg 1 tab OD for 1 month",
+    "expected_pronunciation": "Tablet Omeprazole six two five milligram one Tablet once daily for one month",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_035",
+    "domain": "Pharmacy",
+    "category": "strengths",
+    "difficulty": "easy",
+    "raw_text": "Disprin 250mg orally QID x 3 days",
+    "expected_pronunciation": "Disprin two five zero milligram orally QID times three days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_036",
+    "domain": "Pharmacy",
+    "category": "strengths",
+    "difficulty": "easy",
+    "raw_text": "Crocin 100mg orally HS x 5 days",
+    "expected_pronunciation": "Crocin one hundred milligram orally HS times five days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_037",
+    "domain": "Pharmacy",
+    "category": "strengths",
+    "difficulty": "easy",
+    "raw_text": "Combiflam 200mg/5ml orally SOS for 7 days",
+    "expected_pronunciation": "Combiflam two hundred milligram per five milliliter orally SOS for seven days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_038",
+    "domain": "Pharmacy",
+    "category": "strengths",
+    "difficulty": "easy",
+    "raw_text": "Gelusil 10mg orally every 6 hours for 14 days",
+    "expected_pronunciation": "Gelusil ten milligram orally every six hours for fourteen days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_039",
+    "domain": "Pharmacy",
+    "category": "strengths",
+    "difficulty": "easy",
+    "raw_text": "Digene 20mg orally twice daily for 1 month",
+    "expected_pronunciation": "Digene twenty milligram orally twice daily for one month",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_040",
+    "domain": "Pharmacy",
+    "category": "strengths",
+    "difficulty": "easy",
+    "raw_text": "Zinetac 40mg orally BD x 3 days",
+    "expected_pronunciation": "Zinetac forty milligram orally twice daily times three days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_041",
+    "domain": "Pharmacy",
+    "category": "strengths",
+    "difficulty": "medium",
+    "raw_text": "Pan-D 0.5mg orally OD x 5 days",
+    "expected_pronunciation": "Pan to D zerofive milligram orally once daily times five days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_042",
+    "domain": "Pharmacy",
+    "category": "strengths",
+    "difficulty": "medium",
+    "raw_text": "Deriphyllin 1250mg orally TDS for 7 days",
+    "expected_pronunciation": "Deriphyllin one two five zero milligram orally thrice daily for seven days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_043",
+    "domain": "Pharmacy",
+    "category": "strengths",
+    "difficulty": "medium",
+    "raw_text": "Ibuprofen 1500mcg orally QID for 14 days",
+    "expected_pronunciation": "Ibuprofen 1500mcg orally QID for fourteen days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_044",
+    "domain": "Pharmacy",
+    "category": "strengths",
+    "difficulty": "medium",
+    "raw_text": "Aspirin 500mg orally HS for 1 month",
+    "expected_pronunciation": "Aspirin five hundred milligram orally HS for one month",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_045",
+    "domain": "Pharmacy",
+    "category": "strengths",
+    "difficulty": "medium",
+    "raw_text": "Ciprofloxacin 625mg orally SOS x 3 days",
+    "expected_pronunciation": "Ciprofloxacin six two five milligram orally SOS times three days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_046",
+    "domain": "Pharmacy",
+    "category": "strengths",
+    "difficulty": "medium",
+    "raw_text": "Azithromycin 250mg orally every 6 hours x 5 days",
+    "expected_pronunciation": "Azithromycin two five zero milligram orally every six hours times five days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_047",
+    "domain": "Pharmacy",
+    "category": "strengths",
+    "difficulty": "hard",
+    "raw_text": "Amoxicillin 100mg orally twice daily for 7 days",
+    "expected_pronunciation": "Amoxicillin one hundred milligram orally twice daily for seven days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_048",
+    "domain": "Pharmacy",
+    "category": "strengths",
+    "difficulty": "hard",
+    "raw_text": "Augmentin 200mg/5ml orally BD for 14 days",
+    "expected_pronunciation": "Augmentin two hundred milligram per five milliliter orally twice daily for fourteen days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_049",
+    "domain": "Pharmacy",
+    "category": "strengths",
+    "difficulty": "hard",
+    "raw_text": "Azithral 10mg orally OD for 1 month",
+    "expected_pronunciation": "Azithral ten milligram orally once daily for one month",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_050",
+    "domain": "Pharmacy",
+    "category": "strengths",
+    "difficulty": "hard",
+    "raw_text": "Paracetamol 20mg orally TDS x 3 days",
+    "expected_pronunciation": "Paracetamol twenty milligram orally thrice daily times three days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_051",
+    "domain": "Pharmacy",
+    "category": "strengths",
+    "difficulty": "hard",
+    "raw_text": "Dolo 40mg orally QID x 5 days",
+    "expected_pronunciation": "Dolo forty milligram orally QID times five days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_052",
+    "domain": "Pharmacy",
+    "category": "strengths",
+    "difficulty": "hard",
+    "raw_text": "Pantocid 0.5mg orally HS for 7 days",
+    "expected_pronunciation": "Pantocid zerofive milligram orally HS for seven days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_053",
+    "domain": "Pharmacy",
+    "category": "strengths",
+    "difficulty": "adversarial",
+    "raw_text": "Amoxycillin 1250mg orally SOS for 14 days",
+    "expected_pronunciation": "Amoxycillin one two five zero milligram orally SOS for fourteen days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_054",
+    "domain": "Pharmacy",
+    "category": "strengths",
+    "difficulty": "adversarial",
+    "raw_text": "Cetirizine 1500mcg orally every 6 hours for 1 month",
+    "expected_pronunciation": "Cetirizine 1500mcg orally every six hours for one month",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_055",
+    "domain": "Pharmacy",
+    "category": "strengths",
+    "difficulty": "adversarial",
+    "raw_text": "Metformin 500mg orally twice daily x 3 days",
+    "expected_pronunciation": "Metformin five hundred milligram orally twice daily times three days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_056",
+    "domain": "Pharmacy",
+    "category": "strengths",
+    "difficulty": "adversarial",
+    "raw_text": "Telmisartan 625mg orally BD x 5 days",
+    "expected_pronunciation": "Telmisartan six two five milligram orally twice daily times five days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_057",
+    "domain": "Pharmacy",
+    "category": "strengths",
+    "difficulty": "adversarial",
+    "raw_text": "Atorvastatin 250mg orally OD for 7 days",
+    "expected_pronunciation": "Atorvastatin two five zero milligram orally once daily for seven days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_058",
+    "domain": "Pharmacy",
+    "category": "strengths",
+    "difficulty": "adversarial",
+    "raw_text": "Omeprazole 100mg orally TDS for 14 days",
+    "expected_pronunciation": "Omeprazole one hundred milligram orally thrice daily for fourteen days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_059",
+    "domain": "Pharmacy",
+    "category": "dosage_schedules",
+    "difficulty": "easy",
+    "raw_text": "Tab Disprin 200mg/5ml 1-0-0 after meals",
+    "expected_pronunciation": "Tablet Disprin two hundred milligram per five milliliter one zero zero after meals",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_060",
+    "domain": "Pharmacy",
+    "category": "dosage_schedules",
+    "difficulty": "easy",
+    "raw_text": "Tab Crocin 10mg 0-0-1 after meals",
+    "expected_pronunciation": "Tablet Crocin ten milligram zero zero one after meals",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_061",
+    "domain": "Pharmacy",
+    "category": "dosage_schedules",
+    "difficulty": "easy",
+    "raw_text": "Tab Combiflam 20mg 1/2 tab BD after meals",
+    "expected_pronunciation": "Tablet Combiflam twenty milligram one slash two Tablet twice daily after meals",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_062",
+    "domain": "Pharmacy",
+    "category": "dosage_schedules",
+    "difficulty": "easy",
+    "raw_text": "Tab Gelusil 40mg 1 tab OD after meals",
+    "expected_pronunciation": "Tablet Gelusil forty milligram one Tablet once daily after meals",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_063",
+    "domain": "Pharmacy",
+    "category": "dosage_schedules",
+    "difficulty": "easy",
+    "raw_text": "Tab Digene 0.5mg 1-0-1 after meals",
+    "expected_pronunciation": "Tablet Digene zerofive milligram one zero one after meals",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_064",
+    "domain": "Pharmacy",
+    "category": "dosage_schedules",
+    "difficulty": "easy",
+    "raw_text": "Tab Zinetac 1250mg 0-1-0 after meals",
+    "expected_pronunciation": "Tablet Zinetac one two five zero milligram zero one zero after meals",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_065",
+    "domain": "Pharmacy",
+    "category": "dosage_schedules",
+    "difficulty": "medium",
+    "raw_text": "Tab Pan-D 1500mcg 1-1-1 after meals",
+    "expected_pronunciation": "Tablet Pan to D 1500mcg one one one after meals",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_066",
+    "domain": "Pharmacy",
+    "category": "dosage_schedules",
+    "difficulty": "medium",
+    "raw_text": "Tab Deriphyllin 500mg 1-0-0 after meals",
+    "expected_pronunciation": "Tablet Deriphyllin five hundred milligram one zero zero after meals",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_067",
+    "domain": "Pharmacy",
+    "category": "dosage_schedules",
+    "difficulty": "medium",
+    "raw_text": "Tab Ibuprofen 625mg 0-0-1 after meals",
+    "expected_pronunciation": "Tablet Ibuprofen six two five milligram zero zero one after meals",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_068",
+    "domain": "Pharmacy",
+    "category": "dosage_schedules",
+    "difficulty": "medium",
+    "raw_text": "Tab Aspirin 250mg 1/2 tab BD after meals",
+    "expected_pronunciation": "Tablet Aspirin two five zero milligram one slash two Tablet twice daily after meals",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_069",
+    "domain": "Pharmacy",
+    "category": "dosage_schedules",
+    "difficulty": "medium",
+    "raw_text": "Tab Ciprofloxacin 100mg 1 tab OD after meals",
+    "expected_pronunciation": "Tablet Ciprofloxacin one hundred milligram one Tablet once daily after meals",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_070",
+    "domain": "Pharmacy",
+    "category": "dosage_schedules",
+    "difficulty": "medium",
+    "raw_text": "Tab Azithromycin 200mg/5ml 1-0-1 after meals",
+    "expected_pronunciation": "Tablet Azithromycin two hundred milligram per five milliliter one zero one after meals",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_071",
+    "domain": "Pharmacy",
+    "category": "dosage_schedules",
+    "difficulty": "hard",
+    "raw_text": "Tab Amoxicillin 10mg 0-1-0 after meals",
+    "expected_pronunciation": "Tablet Amoxicillin ten milligram zero one zero after meals",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_072",
+    "domain": "Pharmacy",
+    "category": "dosage_schedules",
+    "difficulty": "hard",
+    "raw_text": "Tab Augmentin 20mg 1-1-1 after meals",
+    "expected_pronunciation": "Tablet Augmentin twenty milligram one one one after meals",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_073",
+    "domain": "Pharmacy",
+    "category": "dosage_schedules",
+    "difficulty": "hard",
+    "raw_text": "Tab Azithral 40mg 1-0-0 after meals",
+    "expected_pronunciation": "Tablet Azithral forty milligram one zero zero after meals",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_074",
+    "domain": "Pharmacy",
+    "category": "dosage_schedules",
+    "difficulty": "hard",
+    "raw_text": "Tab Paracetamol 0.5mg 0-0-1 after meals",
+    "expected_pronunciation": "Tablet Paracetamol zerofive milligram zero zero one after meals",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_075",
+    "domain": "Pharmacy",
+    "category": "dosage_schedules",
+    "difficulty": "hard",
+    "raw_text": "Tab Dolo 1250mg 1/2 tab BD after meals",
+    "expected_pronunciation": "Tablet Dolo one two five zero milligram one slash two Tablet twice daily after meals",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_076",
+    "domain": "Pharmacy",
+    "category": "dosage_schedules",
+    "difficulty": "hard",
+    "raw_text": "Tab Pantocid 1500mcg 1 tab OD after meals",
+    "expected_pronunciation": "Tablet Pantocid 1500mcg one Tablet once daily after meals",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_077",
+    "domain": "Pharmacy",
+    "category": "dosage_schedules",
+    "difficulty": "adversarial",
+    "raw_text": "Tab Amoxycillin 500mg 1-0-1 after meals",
+    "expected_pronunciation": "Tablet Amoxycillin five hundred milligram one zero one after meals",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_078",
+    "domain": "Pharmacy",
+    "category": "dosage_schedules",
+    "difficulty": "adversarial",
+    "raw_text": "Tab Cetirizine 625mg 0-1-0 after meals",
+    "expected_pronunciation": "Tablet Cetirizine six two five milligram zero one zero after meals",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_079",
+    "domain": "Pharmacy",
+    "category": "dosage_schedules",
+    "difficulty": "adversarial",
+    "raw_text": "Tab Metformin 250mg 1-1-1 after meals",
+    "expected_pronunciation": "Tablet Metformin two five zero milligram one one one after meals",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_080",
+    "domain": "Pharmacy",
+    "category": "dosage_schedules",
+    "difficulty": "adversarial",
+    "raw_text": "Tab Telmisartan 100mg 1-0-0 after meals",
+    "expected_pronunciation": "Tablet Telmisartan one hundred milligram one zero zero after meals",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_081",
+    "domain": "Pharmacy",
+    "category": "dosage_schedules",
+    "difficulty": "adversarial",
+    "raw_text": "Tab Atorvastatin 200mg/5ml 0-0-1 after meals",
+    "expected_pronunciation": "Tablet Atorvastatin two hundred milligram per five milliliter zero zero one after meals",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_082",
+    "domain": "Pharmacy",
+    "category": "dosage_schedules",
+    "difficulty": "adversarial",
+    "raw_text": "Tab Omeprazole 10mg 1/2 tab BD after meals",
+    "expected_pronunciation": "Tablet Omeprazole ten milligram one slash two Tablet twice daily after meals",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_083",
+    "domain": "Pharmacy",
+    "category": "frequency",
+    "difficulty": "easy",
+    "raw_text": "Syp Disprin 20mg QID for 14 days",
+    "expected_pronunciation": "Syrup Disprin twenty milligram QID for fourteen days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_084",
+    "domain": "Pharmacy",
+    "category": "frequency",
+    "difficulty": "easy",
+    "raw_text": "Syp Crocin 40mg HS for 1 month",
+    "expected_pronunciation": "Syrup Crocin forty milligram HS for one month",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_085",
+    "domain": "Pharmacy",
+    "category": "frequency",
+    "difficulty": "easy",
+    "raw_text": "Syp Combiflam 0.5mg SOS x 3 days",
+    "expected_pronunciation": "Syrup Combiflam zerofive milligram SOS times three days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_086",
+    "domain": "Pharmacy",
+    "category": "frequency",
+    "difficulty": "easy",
+    "raw_text": "Syp Gelusil 1250mg every 6 hours x 5 days",
+    "expected_pronunciation": "Syrup Gelusil one two five zero milligram every six hours times five days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_087",
+    "domain": "Pharmacy",
+    "category": "frequency",
+    "difficulty": "easy",
+    "raw_text": "Syp Digene 1500mcg twice daily for 7 days",
+    "expected_pronunciation": "Syrup Digene 1500mcg twice daily for seven days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_088",
+    "domain": "Pharmacy",
+    "category": "frequency",
+    "difficulty": "easy",
+    "raw_text": "Syp Zinetac 500mg BD for 14 days",
+    "expected_pronunciation": "Syrup Zinetac five hundred milligram twice daily for fourteen days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_089",
+    "domain": "Pharmacy",
+    "category": "frequency",
+    "difficulty": "medium",
+    "raw_text": "Syp Pan-D 625mg OD for 1 month",
+    "expected_pronunciation": "Syrup Pan to D six two five milligram once daily for one month",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_090",
+    "domain": "Pharmacy",
+    "category": "frequency",
+    "difficulty": "medium",
+    "raw_text": "Syp Deriphyllin 250mg TDS x 3 days",
+    "expected_pronunciation": "Syrup Deriphyllin two five zero milligram thrice daily times three days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_091",
+    "domain": "Pharmacy",
+    "category": "frequency",
+    "difficulty": "medium",
+    "raw_text": "Syp Ibuprofen 100mg QID x 5 days",
+    "expected_pronunciation": "Syrup Ibuprofen one hundred milligram QID times five days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_092",
+    "domain": "Pharmacy",
+    "category": "frequency",
+    "difficulty": "medium",
+    "raw_text": "Syp Aspirin 200mg/5ml HS for 7 days",
+    "expected_pronunciation": "Syrup Aspirin two hundred milligram per five milliliter HS for seven days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_093",
+    "domain": "Pharmacy",
+    "category": "frequency",
+    "difficulty": "medium",
+    "raw_text": "Syp Ciprofloxacin 10mg SOS for 14 days",
+    "expected_pronunciation": "Syrup Ciprofloxacin ten milligram SOS for fourteen days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_094",
+    "domain": "Pharmacy",
+    "category": "frequency",
+    "difficulty": "medium",
+    "raw_text": "Syp Azithromycin 20mg every 6 hours for 1 month",
+    "expected_pronunciation": "Syrup Azithromycin twenty milligram every six hours for one month",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_095",
+    "domain": "Pharmacy",
+    "category": "frequency",
+    "difficulty": "hard",
+    "raw_text": "Syp Amoxicillin 40mg twice daily x 3 days",
+    "expected_pronunciation": "Syrup Amoxicillin forty milligram twice daily times three days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_096",
+    "domain": "Pharmacy",
+    "category": "frequency",
+    "difficulty": "hard",
+    "raw_text": "Syp Augmentin 0.5mg BD x 5 days",
+    "expected_pronunciation": "Syrup Augmentin zerofive milligram twice daily times five days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_097",
+    "domain": "Pharmacy",
+    "category": "frequency",
+    "difficulty": "hard",
+    "raw_text": "Syp Azithral 1250mg OD for 7 days",
+    "expected_pronunciation": "Syrup Azithral one two five zero milligram once daily for seven days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_098",
+    "domain": "Pharmacy",
+    "category": "frequency",
+    "difficulty": "hard",
+    "raw_text": "Syp Paracetamol 1500mcg TDS for 14 days",
+    "expected_pronunciation": "Syrup Paracetamol 1500mcg thrice daily for fourteen days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_099",
+    "domain": "Pharmacy",
+    "category": "frequency",
+    "difficulty": "hard",
+    "raw_text": "Syp Dolo 500mg QID for 1 month",
+    "expected_pronunciation": "Syrup Dolo five hundred milligram QID for one month",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_100",
+    "domain": "Pharmacy",
+    "category": "frequency",
+    "difficulty": "hard",
+    "raw_text": "Syp Pantocid 625mg HS x 3 days",
+    "expected_pronunciation": "Syrup Pantocid six two five milligram HS times three days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_101",
+    "domain": "Pharmacy",
+    "category": "frequency",
+    "difficulty": "adversarial",
+    "raw_text": "Syp Amoxycillin 250mg SOS x 5 days",
+    "expected_pronunciation": "Syrup Amoxycillin two five zero milligram SOS times five days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_102",
+    "domain": "Pharmacy",
+    "category": "frequency",
+    "difficulty": "adversarial",
+    "raw_text": "Syp Cetirizine 100mg every 6 hours for 7 days",
+    "expected_pronunciation": "Syrup Cetirizine one hundred milligram every six hours for seven days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_103",
+    "domain": "Pharmacy",
+    "category": "frequency",
+    "difficulty": "adversarial",
+    "raw_text": "Syp Metformin 200mg/5ml twice daily for 14 days",
+    "expected_pronunciation": "Syrup Metformin two hundred milligram per five milliliter twice daily for fourteen days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_104",
+    "domain": "Pharmacy",
+    "category": "frequency",
+    "difficulty": "adversarial",
+    "raw_text": "Syp Telmisartan 10mg BD for 1 month",
+    "expected_pronunciation": "Syrup Telmisartan ten milligram twice daily for one month",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_105",
+    "domain": "Pharmacy",
+    "category": "frequency",
+    "difficulty": "adversarial",
+    "raw_text": "Syp Atorvastatin 20mg OD x 3 days",
+    "expected_pronunciation": "Syrup Atorvastatin twenty milligram once daily times three days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_106",
+    "domain": "Pharmacy",
+    "category": "frequency",
+    "difficulty": "adversarial",
+    "raw_text": "Syp Omeprazole 40mg TDS x 5 days",
+    "expected_pronunciation": "Syrup Omeprazole forty milligram thrice daily times five days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_107",
+    "domain": "Pharmacy",
+    "category": "duration",
+    "difficulty": "easy",
+    "raw_text": "Cap Disprin 0.5mg QID for 7 days",
+    "expected_pronunciation": "Capsule Disprin zerofive milligram QID for seven days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_108",
+    "domain": "Pharmacy",
+    "category": "duration",
+    "difficulty": "easy",
+    "raw_text": "Cap Crocin 1250mg HS for 14 days",
+    "expected_pronunciation": "Capsule Crocin one two five zero milligram HS for fourteen days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_109",
+    "domain": "Pharmacy",
+    "category": "duration",
+    "difficulty": "easy",
+    "raw_text": "Cap Combiflam 1500mcg SOS for 1 month",
+    "expected_pronunciation": "Capsule Combiflam 1500mcg SOS for one month",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_110",
+    "domain": "Pharmacy",
+    "category": "duration",
+    "difficulty": "easy",
+    "raw_text": "Cap Gelusil 500mg every 6 hours x 3 days",
+    "expected_pronunciation": "Capsule Gelusil five hundred milligram every six hours times three days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_111",
+    "domain": "Pharmacy",
+    "category": "duration",
+    "difficulty": "easy",
+    "raw_text": "Cap Digene 625mg twice daily x 5 days",
+    "expected_pronunciation": "Capsule Digene six two five milligram twice daily times five days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_112",
+    "domain": "Pharmacy",
+    "category": "duration",
+    "difficulty": "easy",
+    "raw_text": "Cap Zinetac 250mg BD for 7 days",
+    "expected_pronunciation": "Capsule Zinetac two five zero milligram twice daily for seven days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_113",
+    "domain": "Pharmacy",
+    "category": "duration",
+    "difficulty": "medium",
+    "raw_text": "Cap Pan-D 100mg OD for 14 days",
+    "expected_pronunciation": "Capsule Pan to D one hundred milligram once daily for fourteen days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_114",
+    "domain": "Pharmacy",
+    "category": "duration",
+    "difficulty": "medium",
+    "raw_text": "Cap Deriphyllin 200mg/5ml TDS for 1 month",
+    "expected_pronunciation": "Capsule Deriphyllin two hundred milligram per five milliliter thrice daily for one month",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_115",
+    "domain": "Pharmacy",
+    "category": "duration",
+    "difficulty": "medium",
+    "raw_text": "Cap Ibuprofen 10mg QID x 3 days",
+    "expected_pronunciation": "Capsule Ibuprofen ten milligram QID times three days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_116",
+    "domain": "Pharmacy",
+    "category": "duration",
+    "difficulty": "medium",
+    "raw_text": "Cap Aspirin 20mg HS x 5 days",
+    "expected_pronunciation": "Capsule Aspirin twenty milligram HS times five days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_117",
+    "domain": "Pharmacy",
+    "category": "duration",
+    "difficulty": "medium",
+    "raw_text": "Cap Ciprofloxacin 40mg SOS for 7 days",
+    "expected_pronunciation": "Capsule Ciprofloxacin forty milligram SOS for seven days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_118",
+    "domain": "Pharmacy",
+    "category": "duration",
+    "difficulty": "medium",
+    "raw_text": "Cap Azithromycin 0.5mg every 6 hours for 14 days",
+    "expected_pronunciation": "Capsule Azithromycin zerofive milligram every six hours for fourteen days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_119",
+    "domain": "Pharmacy",
+    "category": "duration",
+    "difficulty": "hard",
+    "raw_text": "Cap Amoxicillin 1250mg twice daily for 1 month",
+    "expected_pronunciation": "Capsule Amoxicillin one two five zero milligram twice daily for one month",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_120",
+    "domain": "Pharmacy",
+    "category": "duration",
+    "difficulty": "hard",
+    "raw_text": "Cap Augmentin 1500mcg BD x 3 days",
+    "expected_pronunciation": "Capsule Augmentin 1500mcg twice daily times three days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_121",
+    "domain": "Pharmacy",
+    "category": "duration",
+    "difficulty": "hard",
+    "raw_text": "Cap Azithral 500mg OD x 5 days",
+    "expected_pronunciation": "Capsule Azithral five hundred milligram once daily times five days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_122",
+    "domain": "Pharmacy",
+    "category": "duration",
+    "difficulty": "hard",
+    "raw_text": "Cap Paracetamol 625mg TDS for 7 days",
+    "expected_pronunciation": "Capsule Paracetamol six two five milligram thrice daily for seven days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_123",
+    "domain": "Pharmacy",
+    "category": "duration",
+    "difficulty": "hard",
+    "raw_text": "Cap Dolo 250mg QID for 14 days",
+    "expected_pronunciation": "Capsule Dolo two five zero milligram QID for fourteen days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_124",
+    "domain": "Pharmacy",
+    "category": "duration",
+    "difficulty": "hard",
+    "raw_text": "Cap Pantocid 100mg HS for 1 month",
+    "expected_pronunciation": "Capsule Pantocid one hundred milligram HS for one month",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_125",
+    "domain": "Pharmacy",
+    "category": "duration",
+    "difficulty": "adversarial",
+    "raw_text": "Cap Amoxycillin 200mg/5ml SOS x 3 days",
+    "expected_pronunciation": "Capsule Amoxycillin two hundred milligram per five milliliter SOS times three days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_126",
+    "domain": "Pharmacy",
+    "category": "duration",
+    "difficulty": "adversarial",
+    "raw_text": "Cap Cetirizine 10mg every 6 hours x 5 days",
+    "expected_pronunciation": "Capsule Cetirizine ten milligram every six hours times five days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_127",
+    "domain": "Pharmacy",
+    "category": "duration",
+    "difficulty": "adversarial",
+    "raw_text": "Cap Metformin 20mg twice daily for 7 days",
+    "expected_pronunciation": "Capsule Metformin twenty milligram twice daily for seven days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_128",
+    "domain": "Pharmacy",
+    "category": "duration",
+    "difficulty": "adversarial",
+    "raw_text": "Cap Telmisartan 40mg BD for 14 days",
+    "expected_pronunciation": "Capsule Telmisartan forty milligram twice daily for fourteen days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_129",
+    "domain": "Pharmacy",
+    "category": "duration",
+    "difficulty": "adversarial",
+    "raw_text": "Cap Atorvastatin 0.5mg OD for 1 month",
+    "expected_pronunciation": "Capsule Atorvastatin zerofive milligram once daily for one month",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_130",
+    "domain": "Pharmacy",
+    "category": "duration",
+    "difficulty": "adversarial",
+    "raw_text": "Cap Omeprazole 1250mg TDS x 3 days",
+    "expected_pronunciation": "Capsule Omeprazole one two five zero milligram thrice daily times three days",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_131",
     "domain": "Pharmacy",
     "category": "dates",
-    "raw_text": "Tab. Zifi 200mg 1-0-1 x 5 days. Mfg: FDC. Exp: 07/26.",
-    "expected_pronunciation": "Tablet Zifi two hundred milligram one zero one times five days Manufactured by FDC Expiry July twenty six"
+    "difficulty": "easy",
+    "raw_text": "Tab Disprin 1500mcg 1/2 tab BD Exp: 12/27",
+    "expected_pronunciation": "Tablet Disprin 1500mcg one slash two Tablet twice daily Expiry December twenty seven",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
   },
   {
-    "id": "rx_023",
+    "id": "rx_synth_132",
     "domain": "Pharmacy",
-    "category": "phone_numbers",
-    "raw_text": "Tab. Atorva 20mg 0-0-1. Call Pharmacy helpline Ph: 98800-11223",
-    "expected_pronunciation": "Tablet Atorva twenty milligram zero zero one Call Pharmacy helpline Phone nine eight eight zero zero one one two two three"
+    "category": "dates",
+    "difficulty": "easy",
+    "raw_text": "Tab Crocin 500mg 1 tab OD Exp: 08/25",
+    "expected_pronunciation": "Tablet Crocin five hundred milligram one Tablet once daily Expiry August twenty five",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
   },
   {
-    "id": "rx_024",
+    "id": "rx_synth_133",
     "domain": "Pharmacy",
-    "category": "dosages",
-    "raw_text": "Tab. Allegra 120mg 1-0-0 for allergy x 7 days. Ph: 99100-33445",
-    "expected_pronunciation": "Tablet Allegra one two zero milligram one zero zero for allergy times seven days Phone nine nine one zero zero three three four four five"
+    "category": "dates",
+    "difficulty": "easy",
+    "raw_text": "Tab Combiflam 625mg 1-0-1 Exp: 10/28",
+    "expected_pronunciation": "Tablet Combiflam six two five milligram one zero one Expiry October twenty eight",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
   },
   {
-    "id": "rx_025",
+    "id": "rx_synth_134",
     "domain": "Pharmacy",
-    "category": "code_switched",
-    "raw_text": "Tab. Combiflam 1-0-1 dard hone par lena. Ph: 98310-77889",
-    "expected_pronunciation": "Tablet Combiflam one zero one dard hone par lena Phone nine eight three one zero seven seven eight eight nine"
+    "category": "dates",
+    "difficulty": "easy",
+    "raw_text": "Tab Gelusil 250mg 0-1-0 Exp: 05/26",
+    "expected_pronunciation": "Tablet Gelusil two five zero milligram zero one zero Expiry May twenty six",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_135",
+    "domain": "Pharmacy",
+    "category": "dates",
+    "difficulty": "easy",
+    "raw_text": "Tab Digene 100mg 1-1-1 Exp: 03/26",
+    "expected_pronunciation": "Tablet Digene one hundred milligram one one one Expiry March twenty six",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_136",
+    "domain": "Pharmacy",
+    "category": "dates",
+    "difficulty": "easy",
+    "raw_text": "Tab Zinetac 200mg/5ml 1-0-0 Exp: 12/27",
+    "expected_pronunciation": "Tablet Zinetac two hundred milligram per five milliliter one zero zero Expiry December twenty seven",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_137",
+    "domain": "Pharmacy",
+    "category": "dates",
+    "difficulty": "medium",
+    "raw_text": "Tab Pan-D 10mg 0-0-1 Exp: 08/25",
+    "expected_pronunciation": "Tablet Pan to D ten milligram zero zero one Expiry August twenty five",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_138",
+    "domain": "Pharmacy",
+    "category": "dates",
+    "difficulty": "medium",
+    "raw_text": "Tab Deriphyllin 20mg 1/2 tab BD Exp: 10/28",
+    "expected_pronunciation": "Tablet Deriphyllin twenty milligram one slash two Tablet twice daily Expiry October twenty eight",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_139",
+    "domain": "Pharmacy",
+    "category": "dates",
+    "difficulty": "medium",
+    "raw_text": "Tab Ibuprofen 40mg 1 tab OD Exp: 05/26",
+    "expected_pronunciation": "Tablet Ibuprofen forty milligram one Tablet once daily Expiry May twenty six",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_140",
+    "domain": "Pharmacy",
+    "category": "dates",
+    "difficulty": "medium",
+    "raw_text": "Tab Aspirin 0.5mg 1-0-1 Exp: 03/26",
+    "expected_pronunciation": "Tablet Aspirin zerofive milligram one zero one Expiry March twenty six",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_141",
+    "domain": "Pharmacy",
+    "category": "dates",
+    "difficulty": "medium",
+    "raw_text": "Tab Ciprofloxacin 1250mg 0-1-0 Exp: 12/27",
+    "expected_pronunciation": "Tablet Ciprofloxacin one two five zero milligram zero one zero Expiry December twenty seven",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_142",
+    "domain": "Pharmacy",
+    "category": "dates",
+    "difficulty": "medium",
+    "raw_text": "Tab Azithromycin 1500mcg 1-1-1 Exp: 08/25",
+    "expected_pronunciation": "Tablet Azithromycin 1500mcg one one one Expiry August twenty five",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_143",
+    "domain": "Pharmacy",
+    "category": "dates",
+    "difficulty": "hard",
+    "raw_text": "Tab Amoxicillin 500mg 1-0-0 Exp: 10/28",
+    "expected_pronunciation": "Tablet Amoxicillin five hundred milligram one zero zero Expiry October twenty eight",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_144",
+    "domain": "Pharmacy",
+    "category": "dates",
+    "difficulty": "hard",
+    "raw_text": "Tab Augmentin 625mg 0-0-1 Exp: 05/26",
+    "expected_pronunciation": "Tablet Augmentin six two five milligram zero zero one Expiry May twenty six",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_145",
+    "domain": "Pharmacy",
+    "category": "dates",
+    "difficulty": "hard",
+    "raw_text": "Tab Azithral 250mg 1/2 tab BD Exp: 03/26",
+    "expected_pronunciation": "Tablet Azithral two five zero milligram one slash two Tablet twice daily Expiry March twenty six",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_146",
+    "domain": "Pharmacy",
+    "category": "dates",
+    "difficulty": "hard",
+    "raw_text": "Tab Paracetamol 100mg 1 tab OD Exp: 12/27",
+    "expected_pronunciation": "Tablet Paracetamol one hundred milligram one Tablet once daily Expiry December twenty seven",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_147",
+    "domain": "Pharmacy",
+    "category": "dates",
+    "difficulty": "hard",
+    "raw_text": "Tab Dolo 200mg/5ml 1-0-1 Exp: 08/25",
+    "expected_pronunciation": "Tablet Dolo two hundred milligram per five milliliter one zero one Expiry August twenty five",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_148",
+    "domain": "Pharmacy",
+    "category": "dates",
+    "difficulty": "hard",
+    "raw_text": "Tab Pantocid 10mg 0-1-0 Exp: 10/28",
+    "expected_pronunciation": "Tablet Pantocid ten milligram zero one zero Expiry October twenty eight",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_149",
+    "domain": "Pharmacy",
+    "category": "dates",
+    "difficulty": "adversarial",
+    "raw_text": "Tab Amoxycillin 20mg 1-1-1 Exp: 05/26",
+    "expected_pronunciation": "Tablet Amoxycillin twenty milligram one one one Expiry May twenty six",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_150",
+    "domain": "Pharmacy",
+    "category": "dates",
+    "difficulty": "adversarial",
+    "raw_text": "Tab Cetirizine 40mg 1-0-0 Exp: 03/26",
+    "expected_pronunciation": "Tablet Cetirizine forty milligram one zero zero Expiry March twenty six",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_151",
+    "domain": "Pharmacy",
+    "category": "dates",
+    "difficulty": "adversarial",
+    "raw_text": "Tab Metformin 0.5mg 0-0-1 Exp: 12/27",
+    "expected_pronunciation": "Tablet Metformin zerofive milligram zero zero one Expiry December twenty seven",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_152",
+    "domain": "Pharmacy",
+    "category": "dates",
+    "difficulty": "adversarial",
+    "raw_text": "Tab Telmisartan 1250mg 1/2 tab BD Exp: 08/25",
+    "expected_pronunciation": "Tablet Telmisartan one two five zero milligram one slash two Tablet twice daily Expiry August twenty five",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_153",
+    "domain": "Pharmacy",
+    "category": "dates",
+    "difficulty": "adversarial",
+    "raw_text": "Tab Atorvastatin 1500mcg 1 tab OD Exp: 10/28",
+    "expected_pronunciation": "Tablet Atorvastatin 1500mcg one Tablet once daily Expiry October twenty eight",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_154",
+    "domain": "Pharmacy",
+    "category": "dates",
+    "difficulty": "adversarial",
+    "raw_text": "Tab Omeprazole 500mg 1-0-1 Exp: 05/26",
+    "expected_pronunciation": "Tablet Omeprazole five hundred milligram one zero one Expiry May twenty six",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_155",
+    "domain": "Pharmacy",
+    "category": "abbreviations",
+    "difficulty": "easy",
+    "raw_text": "Tab. Disprin 625mg BD. Mfg: Sun Pharma. Exp: 03/26",
+    "expected_pronunciation": "Tablet Disprin six two five milligram twice daily Manufactured by Sun Pharma Expiry March twenty six",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_156",
+    "domain": "Pharmacy",
+    "category": "abbreviations",
+    "difficulty": "easy",
+    "raw_text": "Tab. Crocin 250mg BD. Mfg: Sun Pharma. Exp: 12/27",
+    "expected_pronunciation": "Tablet Crocin two five zero milligram twice daily Manufactured by Sun Pharma Expiry December twenty seven",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_157",
+    "domain": "Pharmacy",
+    "category": "abbreviations",
+    "difficulty": "easy",
+    "raw_text": "Tab. Combiflam 100mg BD. Mfg: Sun Pharma. Exp: 08/25",
+    "expected_pronunciation": "Tablet Combiflam one hundred milligram twice daily Manufactured by Sun Pharma Expiry August twenty five",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_158",
+    "domain": "Pharmacy",
+    "category": "abbreviations",
+    "difficulty": "easy",
+    "raw_text": "Tab. Gelusil 200mg/5ml BD. Mfg: Sun Pharma. Exp: 10/28",
+    "expected_pronunciation": "Tablet Gelusil two hundred milligram per five milliliter twice daily Manufactured by Sun Pharma Expiry October twenty eight",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_159",
+    "domain": "Pharmacy",
+    "category": "abbreviations",
+    "difficulty": "easy",
+    "raw_text": "Tab. Digene 10mg BD. Mfg: Sun Pharma. Exp: 05/26",
+    "expected_pronunciation": "Tablet Digene ten milligram twice daily Manufactured by Sun Pharma Expiry May twenty six",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_160",
+    "domain": "Pharmacy",
+    "category": "abbreviations",
+    "difficulty": "easy",
+    "raw_text": "Tab. Zinetac 20mg BD. Mfg: Sun Pharma. Exp: 03/26",
+    "expected_pronunciation": "Tablet Zinetac twenty milligram twice daily Manufactured by Sun Pharma Expiry March twenty six",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_161",
+    "domain": "Pharmacy",
+    "category": "abbreviations",
+    "difficulty": "medium",
+    "raw_text": "Tab. Pan-D 40mg BD. Mfg: Sun Pharma. Exp: 12/27",
+    "expected_pronunciation": "Tablet Pan to D forty milligram twice daily Manufactured by Sun Pharma Expiry December twenty seven",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_162",
+    "domain": "Pharmacy",
+    "category": "abbreviations",
+    "difficulty": "medium",
+    "raw_text": "Tab. Deriphyllin 0.5mg BD. Mfg: Sun Pharma. Exp: 08/25",
+    "expected_pronunciation": "Tablet Deriphyllin zerofive milligram twice daily Manufactured by Sun Pharma Expiry August twenty five",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_163",
+    "domain": "Pharmacy",
+    "category": "abbreviations",
+    "difficulty": "medium",
+    "raw_text": "Tab. Ibuprofen 1250mg BD. Mfg: Sun Pharma. Exp: 10/28",
+    "expected_pronunciation": "Tablet Ibuprofen one two five zero milligram twice daily Manufactured by Sun Pharma Expiry October twenty eight",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_164",
+    "domain": "Pharmacy",
+    "category": "abbreviations",
+    "difficulty": "medium",
+    "raw_text": "Tab. Aspirin 1500mcg BD. Mfg: Sun Pharma. Exp: 05/26",
+    "expected_pronunciation": "Tablet Aspirin 1500mcg twice daily Manufactured by Sun Pharma Expiry May twenty six",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_165",
+    "domain": "Pharmacy",
+    "category": "abbreviations",
+    "difficulty": "medium",
+    "raw_text": "Tab. Ciprofloxacin 500mg BD. Mfg: Sun Pharma. Exp: 03/26",
+    "expected_pronunciation": "Tablet Ciprofloxacin five hundred milligram twice daily Manufactured by Sun Pharma Expiry March twenty six",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_166",
+    "domain": "Pharmacy",
+    "category": "abbreviations",
+    "difficulty": "medium",
+    "raw_text": "Tab. Azithromycin 625mg BD. Mfg: Sun Pharma. Exp: 12/27",
+    "expected_pronunciation": "Tablet Azithromycin six two five milligram twice daily Manufactured by Sun Pharma Expiry December twenty seven",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_167",
+    "domain": "Pharmacy",
+    "category": "abbreviations",
+    "difficulty": "hard",
+    "raw_text": "Tab. Amoxicillin 250mg BD. Mfg: Sun Pharma. Exp: 08/25",
+    "expected_pronunciation": "Tablet Amoxicillin two five zero milligram twice daily Manufactured by Sun Pharma Expiry August twenty five",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_168",
+    "domain": "Pharmacy",
+    "category": "abbreviations",
+    "difficulty": "hard",
+    "raw_text": "Tab. Augmentin 100mg BD. Mfg: Sun Pharma. Exp: 10/28",
+    "expected_pronunciation": "Tablet Augmentin one hundred milligram twice daily Manufactured by Sun Pharma Expiry October twenty eight",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_169",
+    "domain": "Pharmacy",
+    "category": "abbreviations",
+    "difficulty": "hard",
+    "raw_text": "Tab. Azithral 200mg/5ml BD. Mfg: Sun Pharma. Exp: 05/26",
+    "expected_pronunciation": "Tablet Azithral two hundred milligram per five milliliter twice daily Manufactured by Sun Pharma Expiry May twenty six",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_170",
+    "domain": "Pharmacy",
+    "category": "abbreviations",
+    "difficulty": "hard",
+    "raw_text": "Tab. Paracetamol 10mg BD. Mfg: Sun Pharma. Exp: 03/26",
+    "expected_pronunciation": "Tablet Paracetamol ten milligram twice daily Manufactured by Sun Pharma Expiry March twenty six",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_171",
+    "domain": "Pharmacy",
+    "category": "abbreviations",
+    "difficulty": "hard",
+    "raw_text": "Tab. Dolo 20mg BD. Mfg: Sun Pharma. Exp: 12/27",
+    "expected_pronunciation": "Tablet Dolo twenty milligram twice daily Manufactured by Sun Pharma Expiry December twenty seven",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_172",
+    "domain": "Pharmacy",
+    "category": "abbreviations",
+    "difficulty": "hard",
+    "raw_text": "Tab. Pantocid 40mg BD. Mfg: Sun Pharma. Exp: 08/25",
+    "expected_pronunciation": "Tablet Pantocid forty milligram twice daily Manufactured by Sun Pharma Expiry August twenty five",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_173",
+    "domain": "Pharmacy",
+    "category": "abbreviations",
+    "difficulty": "adversarial",
+    "raw_text": "Tab. Amoxycillin 0.5mg BD. Mfg: Sun Pharma. Exp: 10/28",
+    "expected_pronunciation": "Tablet Amoxycillin zerofive milligram twice daily Manufactured by Sun Pharma Expiry October twenty eight",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_174",
+    "domain": "Pharmacy",
+    "category": "abbreviations",
+    "difficulty": "adversarial",
+    "raw_text": "Tab. Cetirizine 1250mg BD. Mfg: Sun Pharma. Exp: 05/26",
+    "expected_pronunciation": "Tablet Cetirizine one two five zero milligram twice daily Manufactured by Sun Pharma Expiry May twenty six",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_175",
+    "domain": "Pharmacy",
+    "category": "abbreviations",
+    "difficulty": "adversarial",
+    "raw_text": "Tab. Metformin 1500mcg BD. Mfg: Sun Pharma. Exp: 03/26",
+    "expected_pronunciation": "Tablet Metformin 1500mcg twice daily Manufactured by Sun Pharma Expiry March twenty six",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_176",
+    "domain": "Pharmacy",
+    "category": "abbreviations",
+    "difficulty": "adversarial",
+    "raw_text": "Tab. Telmisartan 500mg BD. Mfg: Sun Pharma. Exp: 12/27",
+    "expected_pronunciation": "Tablet Telmisartan five hundred milligram twice daily Manufactured by Sun Pharma Expiry December twenty seven",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_177",
+    "domain": "Pharmacy",
+    "category": "abbreviations",
+    "difficulty": "adversarial",
+    "raw_text": "Tab. Atorvastatin 625mg BD. Mfg: Sun Pharma. Exp: 08/25",
+    "expected_pronunciation": "Tablet Atorvastatin six two five milligram twice daily Manufactured by Sun Pharma Expiry August twenty five",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_178",
+    "domain": "Pharmacy",
+    "category": "abbreviations",
+    "difficulty": "adversarial",
+    "raw_text": "Tab. Omeprazole 250mg BD. Mfg: Sun Pharma. Exp: 10/28",
+    "expected_pronunciation": "Tablet Omeprazole two five zero milligram twice daily Manufactured by Sun Pharma Expiry October twenty eight",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_179",
+    "domain": "Pharmacy",
+    "category": "quantities",
+    "difficulty": "easy",
+    "raw_text": "Cap Disprin 100mg QID 10 capsules",
+    "expected_pronunciation": "Capsule Disprin one hundred milligram QID ten capsules",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_180",
+    "domain": "Pharmacy",
+    "category": "quantities",
+    "difficulty": "easy",
+    "raw_text": "Cap Crocin 200mg/5ml HS Qty: 10 tabs",
+    "expected_pronunciation": "Capsule Crocin two hundred milligram per five milliliter HS Qty ten tabs",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_181",
+    "domain": "Pharmacy",
+    "category": "quantities",
+    "difficulty": "easy",
+    "raw_text": "Cap Combiflam 10mg SOS Qty: 14 caps",
+    "expected_pronunciation": "Capsule Combiflam ten milligram SOS Qty fourteen caps",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_182",
+    "domain": "Pharmacy",
+    "category": "quantities",
+    "difficulty": "easy",
+    "raw_text": "Cap Gelusil 20mg every 6 hours Qty: 30 tablets",
+    "expected_pronunciation": "Capsule Gelusil twenty milligram every six hours Qty thirty tablets",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_183",
+    "domain": "Pharmacy",
+    "category": "quantities",
+    "difficulty": "easy",
+    "raw_text": "Cap Digene 40mg twice daily 1 bottle",
+    "expected_pronunciation": "Capsule Digene forty milligram twice daily one bottle",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_184",
+    "domain": "Pharmacy",
+    "category": "quantities",
+    "difficulty": "easy",
+    "raw_text": "Cap Zinetac 0.5mg BD 10 capsules",
+    "expected_pronunciation": "Capsule Zinetac zerofive milligram twice daily ten capsules",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_185",
+    "domain": "Pharmacy",
+    "category": "quantities",
+    "difficulty": "medium",
+    "raw_text": "Cap Pan-D 1250mg OD Qty: 10 tabs",
+    "expected_pronunciation": "Capsule Pan to D one two five zero milligram once daily Qty ten tabs",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_186",
+    "domain": "Pharmacy",
+    "category": "quantities",
+    "difficulty": "medium",
+    "raw_text": "Cap Deriphyllin 1500mcg TDS Qty: 14 caps",
+    "expected_pronunciation": "Capsule Deriphyllin 1500mcg thrice daily Qty fourteen caps",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_187",
+    "domain": "Pharmacy",
+    "category": "quantities",
+    "difficulty": "medium",
+    "raw_text": "Cap Ibuprofen 500mg QID Qty: 30 tablets",
+    "expected_pronunciation": "Capsule Ibuprofen five hundred milligram QID Qty thirty tablets",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_188",
+    "domain": "Pharmacy",
+    "category": "quantities",
+    "difficulty": "medium",
+    "raw_text": "Cap Aspirin 625mg HS 1 bottle",
+    "expected_pronunciation": "Capsule Aspirin six two five milligram HS one bottle",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_189",
+    "domain": "Pharmacy",
+    "category": "quantities",
+    "difficulty": "medium",
+    "raw_text": "Cap Ciprofloxacin 250mg SOS 10 capsules",
+    "expected_pronunciation": "Capsule Ciprofloxacin two five zero milligram SOS ten capsules",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_190",
+    "domain": "Pharmacy",
+    "category": "quantities",
+    "difficulty": "medium",
+    "raw_text": "Cap Azithromycin 100mg every 6 hours Qty: 10 tabs",
+    "expected_pronunciation": "Capsule Azithromycin one hundred milligram every six hours Qty ten tabs",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_191",
+    "domain": "Pharmacy",
+    "category": "quantities",
+    "difficulty": "hard",
+    "raw_text": "Cap Amoxicillin 200mg/5ml twice daily Qty: 14 caps",
+    "expected_pronunciation": "Capsule Amoxicillin two hundred milligram per five milliliter twice daily Qty fourteen caps",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_192",
+    "domain": "Pharmacy",
+    "category": "quantities",
+    "difficulty": "hard",
+    "raw_text": "Cap Augmentin 10mg BD Qty: 30 tablets",
+    "expected_pronunciation": "Capsule Augmentin ten milligram twice daily Qty thirty tablets",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_193",
+    "domain": "Pharmacy",
+    "category": "quantities",
+    "difficulty": "hard",
+    "raw_text": "Cap Azithral 20mg OD 1 bottle",
+    "expected_pronunciation": "Capsule Azithral twenty milligram once daily one bottle",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_194",
+    "domain": "Pharmacy",
+    "category": "quantities",
+    "difficulty": "hard",
+    "raw_text": "Cap Paracetamol 40mg TDS 10 capsules",
+    "expected_pronunciation": "Capsule Paracetamol forty milligram thrice daily ten capsules",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_195",
+    "domain": "Pharmacy",
+    "category": "quantities",
+    "difficulty": "hard",
+    "raw_text": "Cap Dolo 0.5mg QID Qty: 10 tabs",
+    "expected_pronunciation": "Capsule Dolo zerofive milligram QID Qty ten tabs",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_196",
+    "domain": "Pharmacy",
+    "category": "quantities",
+    "difficulty": "hard",
+    "raw_text": "Cap Pantocid 1250mg HS Qty: 14 caps",
+    "expected_pronunciation": "Capsule Pantocid one two five zero milligram HS Qty fourteen caps",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_197",
+    "domain": "Pharmacy",
+    "category": "quantities",
+    "difficulty": "adversarial",
+    "raw_text": "Cap Amoxycillin 1500mcg SOS Qty: 30 tablets",
+    "expected_pronunciation": "Capsule Amoxycillin 1500mcg SOS Qty thirty tablets",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_198",
+    "domain": "Pharmacy",
+    "category": "quantities",
+    "difficulty": "adversarial",
+    "raw_text": "Cap Cetirizine 500mg every 6 hours 1 bottle",
+    "expected_pronunciation": "Capsule Cetirizine five hundred milligram every six hours one bottle",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_199",
+    "domain": "Pharmacy",
+    "category": "quantities",
+    "difficulty": "adversarial",
+    "raw_text": "Cap Metformin 625mg twice daily 10 capsules",
+    "expected_pronunciation": "Capsule Metformin six two five milligram twice daily ten capsules",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_200",
+    "domain": "Pharmacy",
+    "category": "quantities",
+    "difficulty": "adversarial",
+    "raw_text": "Cap Telmisartan 250mg BD Qty: 10 tabs",
+    "expected_pronunciation": "Capsule Telmisartan two five zero milligram twice daily Qty ten tabs",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_201",
+    "domain": "Pharmacy",
+    "category": "quantities",
+    "difficulty": "adversarial",
+    "raw_text": "Cap Atorvastatin 100mg OD Qty: 14 caps",
+    "expected_pronunciation": "Capsule Atorvastatin one hundred milligram once daily Qty fourteen caps",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_202",
+    "domain": "Pharmacy",
+    "category": "quantities",
+    "difficulty": "adversarial",
+    "raw_text": "Cap Omeprazole 200mg/5ml TDS Qty: 30 tablets",
+    "expected_pronunciation": "Capsule Omeprazole two hundred milligram per five milliliter thrice daily Qty thirty tablets",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_203",
+    "domain": "Pharmacy",
+    "category": "indian_english",
+    "difficulty": "easy",
+    "raw_text": "Tab Disprin 10mg 1-0-1 Khali pet",
+    "expected_pronunciation": "Tablet Disprin ten milligram one zero one Khali pet",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_204",
+    "domain": "Pharmacy",
+    "category": "indian_english",
+    "difficulty": "easy",
+    "raw_text": "Tab Crocin 20mg 0-1-0 Raat ko lene",
+    "expected_pronunciation": "Tablet Crocin twenty milligram zero one zero Raat ko lene",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_205",
+    "domain": "Pharmacy",
+    "category": "indian_english",
+    "difficulty": "easy",
+    "raw_text": "Tab Combiflam 40mg 1-1-1 Khane ke baad",
+    "expected_pronunciation": "Tablet Combiflam forty milligram one one one Khane ke baad",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_206",
+    "domain": "Pharmacy",
+    "category": "indian_english",
+    "difficulty": "easy",
+    "raw_text": "Tab Gelusil 0.5mg 1-0-0 Subah shaam",
+    "expected_pronunciation": "Tablet Gelusil zerofive milligram one zero zero Subah shaam",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_207",
+    "domain": "Pharmacy",
+    "category": "indian_english",
+    "difficulty": "easy",
+    "raw_text": "Tab Digene 1250mg 0-0-1 Paani ke saath",
+    "expected_pronunciation": "Tablet Digene one two five zero milligram zero zero one Paani ke saath",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_208",
+    "domain": "Pharmacy",
+    "category": "indian_english",
+    "difficulty": "easy",
+    "raw_text": "Tab Zinetac 1500mcg 1/2 tab BD Khali pet",
+    "expected_pronunciation": "Tablet Zinetac 1500mcg one slash two Tablet twice daily Khali pet",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_209",
+    "domain": "Pharmacy",
+    "category": "indian_english",
+    "difficulty": "medium",
+    "raw_text": "Tab Pan-D 500mg 1 tab OD Raat ko lene",
+    "expected_pronunciation": "Tablet Pan to D five hundred milligram one Tablet once daily Raat ko lene",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_210",
+    "domain": "Pharmacy",
+    "category": "indian_english",
+    "difficulty": "medium",
+    "raw_text": "Tab Deriphyllin 625mg 1-0-1 Khane ke baad",
+    "expected_pronunciation": "Tablet Deriphyllin six two five milligram one zero one Khane ke baad",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_211",
+    "domain": "Pharmacy",
+    "category": "indian_english",
+    "difficulty": "medium",
+    "raw_text": "Tab Ibuprofen 250mg 0-1-0 Subah shaam",
+    "expected_pronunciation": "Tablet Ibuprofen two five zero milligram zero one zero Subah shaam",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_212",
+    "domain": "Pharmacy",
+    "category": "indian_english",
+    "difficulty": "medium",
+    "raw_text": "Tab Aspirin 100mg 1-1-1 Paani ke saath",
+    "expected_pronunciation": "Tablet Aspirin one hundred milligram one one one Paani ke saath",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_213",
+    "domain": "Pharmacy",
+    "category": "indian_english",
+    "difficulty": "medium",
+    "raw_text": "Tab Ciprofloxacin 200mg/5ml 1-0-0 Khali pet",
+    "expected_pronunciation": "Tablet Ciprofloxacin two hundred milligram per five milliliter one zero zero Khali pet",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_214",
+    "domain": "Pharmacy",
+    "category": "indian_english",
+    "difficulty": "medium",
+    "raw_text": "Tab Azithromycin 10mg 0-0-1 Raat ko lene",
+    "expected_pronunciation": "Tablet Azithromycin ten milligram zero zero one Raat ko lene",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_215",
+    "domain": "Pharmacy",
+    "category": "indian_english",
+    "difficulty": "hard",
+    "raw_text": "Tab Amoxicillin 20mg 1/2 tab BD Khane ke baad",
+    "expected_pronunciation": "Tablet Amoxicillin twenty milligram one slash two Tablet twice daily Khane ke baad",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_216",
+    "domain": "Pharmacy",
+    "category": "indian_english",
+    "difficulty": "hard",
+    "raw_text": "Tab Augmentin 40mg 1 tab OD Subah shaam",
+    "expected_pronunciation": "Tablet Augmentin forty milligram one Tablet once daily Subah shaam",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_217",
+    "domain": "Pharmacy",
+    "category": "indian_english",
+    "difficulty": "hard",
+    "raw_text": "Tab Azithral 0.5mg 1-0-1 Paani ke saath",
+    "expected_pronunciation": "Tablet Azithral zerofive milligram one zero one Paani ke saath",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_218",
+    "domain": "Pharmacy",
+    "category": "indian_english",
+    "difficulty": "hard",
+    "raw_text": "Tab Paracetamol 1250mg 0-1-0 Khali pet",
+    "expected_pronunciation": "Tablet Paracetamol one two five zero milligram zero one zero Khali pet",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_219",
+    "domain": "Pharmacy",
+    "category": "indian_english",
+    "difficulty": "hard",
+    "raw_text": "Tab Dolo 1500mcg 1-1-1 Raat ko lene",
+    "expected_pronunciation": "Tablet Dolo 1500mcg one one one Raat ko lene",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_220",
+    "domain": "Pharmacy",
+    "category": "indian_english",
+    "difficulty": "hard",
+    "raw_text": "Tab Pantocid 500mg 1-0-0 Khane ke baad",
+    "expected_pronunciation": "Tablet Pantocid five hundred milligram one zero zero Khane ke baad",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_221",
+    "domain": "Pharmacy",
+    "category": "indian_english",
+    "difficulty": "adversarial",
+    "raw_text": "Tab Amoxycillin 625mg 0-0-1 Subah shaam",
+    "expected_pronunciation": "Tablet Amoxycillin six two five milligram zero zero one Subah shaam",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_222",
+    "domain": "Pharmacy",
+    "category": "indian_english",
+    "difficulty": "adversarial",
+    "raw_text": "Tab Cetirizine 250mg 1/2 tab BD Paani ke saath",
+    "expected_pronunciation": "Tablet Cetirizine two five zero milligram one slash two Tablet twice daily Paani ke saath",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_223",
+    "domain": "Pharmacy",
+    "category": "indian_english",
+    "difficulty": "adversarial",
+    "raw_text": "Tab Metformin 100mg 1 tab OD Khali pet",
+    "expected_pronunciation": "Tablet Metformin one hundred milligram one Tablet once daily Khali pet",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_224",
+    "domain": "Pharmacy",
+    "category": "indian_english",
+    "difficulty": "adversarial",
+    "raw_text": "Tab Telmisartan 200mg/5ml 1-0-1 Raat ko lene",
+    "expected_pronunciation": "Tablet Telmisartan two hundred milligram per five milliliter one zero one Raat ko lene",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_225",
+    "domain": "Pharmacy",
+    "category": "indian_english",
+    "difficulty": "adversarial",
+    "raw_text": "Tab Atorvastatin 10mg 0-1-0 Khane ke baad",
+    "expected_pronunciation": "Tablet Atorvastatin ten milligram zero one zero Khane ke baad",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_226",
+    "domain": "Pharmacy",
+    "category": "indian_english",
+    "difficulty": "adversarial",
+    "raw_text": "Tab Omeprazole 20mg 1-1-1 Subah shaam",
+    "expected_pronunciation": "Tablet Omeprazole twenty milligram one one one Subah shaam",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_227",
+    "domain": "Pharmacy",
+    "category": "adversarial",
+    "difficulty": "easy",
+    "raw_text": "Cap Disprin 40mg 1-0-0 Paani ke saath Qty: 30 tablets Exp: 08/25",
+    "expected_pronunciation": "Capsule Disprin forty milligram one zero zero Paani ke saath Qty thirty tablets Expiry August twenty five",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_228",
+    "domain": "Pharmacy",
+    "category": "adversarial",
+    "difficulty": "easy",
+    "raw_text": "Cap Crocin 0.5mg 0-0-1 Khali pet 1 bottle Exp: 10/28",
+    "expected_pronunciation": "Capsule Crocin zerofive milligram zero zero one Khali pet one bottle Expiry October twenty eight",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_229",
+    "domain": "Pharmacy",
+    "category": "adversarial",
+    "difficulty": "easy",
+    "raw_text": "Cap Combiflam 1250mg 1/2 tab BD Raat ko lene 10 capsules Exp: 05/26",
+    "expected_pronunciation": "Capsule Combiflam one two five zero milligram one slash two Tablet twice daily Raat ko lene ten capsules Expiry May twenty six",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_230",
+    "domain": "Pharmacy",
+    "category": "adversarial",
+    "difficulty": "easy",
+    "raw_text": "Cap Gelusil 1500mcg 1 tab OD Khane ke baad Qty: 10 tabs Exp: 03/26",
+    "expected_pronunciation": "Capsule Gelusil 1500mcg one Tablet once daily Khane ke baad Qty ten tabs Expiry March twenty six",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_231",
+    "domain": "Pharmacy",
+    "category": "adversarial",
+    "difficulty": "easy",
+    "raw_text": "Cap Digene 500mg 1-0-1 Subah shaam Qty: 14 caps Exp: 12/27",
+    "expected_pronunciation": "Capsule Digene five hundred milligram one zero one Subah shaam Qty fourteen caps Expiry December twenty seven",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_232",
+    "domain": "Pharmacy",
+    "category": "adversarial",
+    "difficulty": "easy",
+    "raw_text": "Cap Zinetac 625mg 0-1-0 Paani ke saath Qty: 30 tablets Exp: 08/25",
+    "expected_pronunciation": "Capsule Zinetac six two five milligram zero one zero Paani ke saath Qty thirty tablets Expiry August twenty five",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_233",
+    "domain": "Pharmacy",
+    "category": "adversarial",
+    "difficulty": "medium",
+    "raw_text": "Cap Pan-D 250mg 1-1-1 Khali pet 1 bottle Exp: 10/28",
+    "expected_pronunciation": "Capsule Pan to D two five zero milligram one one one Khali pet one bottle Expiry October twenty eight",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_234",
+    "domain": "Pharmacy",
+    "category": "adversarial",
+    "difficulty": "medium",
+    "raw_text": "Cap Deriphyllin 100mg 1-0-0 Raat ko lene 10 capsules Exp: 05/26",
+    "expected_pronunciation": "Capsule Deriphyllin one hundred milligram one zero zero Raat ko lene ten capsules Expiry May twenty six",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_235",
+    "domain": "Pharmacy",
+    "category": "adversarial",
+    "difficulty": "medium",
+    "raw_text": "Cap Ibuprofen 200mg/5ml 0-0-1 Khane ke baad Qty: 10 tabs Exp: 03/26",
+    "expected_pronunciation": "Capsule Ibuprofen two hundred milligram per five milliliter zero zero one Khane ke baad Qty ten tabs Expiry March twenty six",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_236",
+    "domain": "Pharmacy",
+    "category": "adversarial",
+    "difficulty": "medium",
+    "raw_text": "Cap Aspirin 10mg 1/2 tab BD Subah shaam Qty: 14 caps Exp: 12/27",
+    "expected_pronunciation": "Capsule Aspirin ten milligram one slash two Tablet twice daily Subah shaam Qty fourteen caps Expiry December twenty seven",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_237",
+    "domain": "Pharmacy",
+    "category": "adversarial",
+    "difficulty": "medium",
+    "raw_text": "Cap Ciprofloxacin 20mg 1 tab OD Paani ke saath Qty: 30 tablets Exp: 08/25",
+    "expected_pronunciation": "Capsule Ciprofloxacin twenty milligram one Tablet once daily Paani ke saath Qty thirty tablets Expiry August twenty five",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_238",
+    "domain": "Pharmacy",
+    "category": "adversarial",
+    "difficulty": "medium",
+    "raw_text": "Cap Azithromycin 40mg 1-0-1 Khali pet 1 bottle Exp: 10/28",
+    "expected_pronunciation": "Capsule Azithromycin forty milligram one zero one Khali pet one bottle Expiry October twenty eight",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_239",
+    "domain": "Pharmacy",
+    "category": "adversarial",
+    "difficulty": "hard",
+    "raw_text": "Cap Amoxicillin 0.5mg 0-1-0 Raat ko lene 10 capsules Exp: 05/26",
+    "expected_pronunciation": "Capsule Amoxicillin zerofive milligram zero one zero Raat ko lene ten capsules Expiry May twenty six",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_240",
+    "domain": "Pharmacy",
+    "category": "adversarial",
+    "difficulty": "hard",
+    "raw_text": "Cap Augmentin 1250mg 1-1-1 Khane ke baad Qty: 10 tabs Exp: 03/26",
+    "expected_pronunciation": "Capsule Augmentin one two five zero milligram one one one Khane ke baad Qty ten tabs Expiry March twenty six",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_241",
+    "domain": "Pharmacy",
+    "category": "adversarial",
+    "difficulty": "hard",
+    "raw_text": "Cap Azithral 1500mcg 1-0-0 Subah shaam Qty: 14 caps Exp: 12/27",
+    "expected_pronunciation": "Capsule Azithral 1500mcg one zero zero Subah shaam Qty fourteen caps Expiry December twenty seven",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_242",
+    "domain": "Pharmacy",
+    "category": "adversarial",
+    "difficulty": "hard",
+    "raw_text": "Cap Paracetamol 500mg 0-0-1 Paani ke saath Qty: 30 tablets Exp: 08/25",
+    "expected_pronunciation": "Capsule Paracetamol five hundred milligram zero zero one Paani ke saath Qty thirty tablets Expiry August twenty five",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_243",
+    "domain": "Pharmacy",
+    "category": "adversarial",
+    "difficulty": "hard",
+    "raw_text": "Cap Dolo 625mg 1/2 tab BD Khali pet 1 bottle Exp: 10/28",
+    "expected_pronunciation": "Capsule Dolo six two five milligram one slash two Tablet twice daily Khali pet one bottle Expiry October twenty eight",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_244",
+    "domain": "Pharmacy",
+    "category": "adversarial",
+    "difficulty": "hard",
+    "raw_text": "Cap Pantocid 250mg 1 tab OD Raat ko lene 10 capsules Exp: 05/26",
+    "expected_pronunciation": "Capsule Pantocid two five zero milligram one Tablet once daily Raat ko lene ten capsules Expiry May twenty six",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_245",
+    "domain": "Pharmacy",
+    "category": "adversarial",
+    "difficulty": "adversarial",
+    "raw_text": "Cap Amoxycillin 100mg 1-0-1 Khane ke baad Qty: 10 tabs Exp: 03/26",
+    "expected_pronunciation": "Capsule Amoxycillin one hundred milligram one zero one Khane ke baad Qty ten tabs Expiry March twenty six",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_246",
+    "domain": "Pharmacy",
+    "category": "adversarial",
+    "difficulty": "adversarial",
+    "raw_text": "Cap Cetirizine 200mg/5ml 0-1-0 Subah shaam Qty: 14 caps Exp: 12/27",
+    "expected_pronunciation": "Capsule Cetirizine two hundred milligram per five milliliter zero one zero Subah shaam Qty fourteen caps Expiry December twenty seven",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_247",
+    "domain": "Pharmacy",
+    "category": "adversarial",
+    "difficulty": "adversarial",
+    "raw_text": "Cap Metformin 10mg 1-1-1 Paani ke saath Qty: 30 tablets Exp: 08/25",
+    "expected_pronunciation": "Capsule Metformin ten milligram one one one Paani ke saath Qty thirty tablets Expiry August twenty five",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_248",
+    "domain": "Pharmacy",
+    "category": "adversarial",
+    "difficulty": "adversarial",
+    "raw_text": "Cap Telmisartan 20mg 1-0-0 Khali pet 1 bottle Exp: 10/28",
+    "expected_pronunciation": "Capsule Telmisartan twenty milligram one zero zero Khali pet one bottle Expiry October twenty eight",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_249",
+    "domain": "Pharmacy",
+    "category": "adversarial",
+    "difficulty": "adversarial",
+    "raw_text": "Cap Atorvastatin 40mg 0-0-1 Raat ko lene 10 capsules Exp: 05/26",
+    "expected_pronunciation": "Capsule Atorvastatin forty milligram zero zero one Raat ko lene ten capsules Expiry May twenty six",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
+  },
+  {
+    "id": "rx_synth_250",
+    "domain": "Pharmacy",
+    "category": "adversarial",
+    "difficulty": "adversarial",
+    "raw_text": "Cap Omeprazole 0.5mg 1/2 tab BD Khane ke baad Qty: 10 tabs Exp: 03/26",
+    "expected_pronunciation": "Capsule Omeprazole zerofive milligram one slash two Tablet twice daily Khane ke baad Qty ten tabs Expiry March twenty six",
+    "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data"
   }
 ]

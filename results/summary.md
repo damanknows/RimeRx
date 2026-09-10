@@ -35,3 +35,12 @@
 
 - **Secondary Metric &mdash; Phoneme Error Rate (PER)**: G2P transliteration edit distance using `Epitran` G2P (`eng-Latn`).
 
+
+## Human Listening Evaluation (MOS & Comprehension)
+
+- **Status**: **SESSIONS LOGGED** (18 participants, 18 total ratings).
+
+- **Baseline Naturalness / Intelligibility**: 5.0 / 4.0
+
+- **RimeRx Naturalness / Intelligibility**: 5.0 / 4.0
+

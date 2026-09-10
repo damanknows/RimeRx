@@ -20,7 +20,7 @@ def test_api_config_providers():
 def test_render_default_rime_and_timing():
     """Verify rendering with provider 'rime' returns latency metrics and audio_id."""
     payload = {
-        "case_id": "rx_001",
+        "case_id": "rx_synth_001",
         "prompt_type": "default",
         "provider": "rime"
     }
@@ -50,11 +50,11 @@ def test_text_length_rejection():
 
 def test_api_wer_exact_audio_id():
     """Verify /api/wer accepts audio_id from /api/render and returns WER and per-word analysis."""
-    render_resp = client.post("/api/render", json={"case_id": "rx_001", "prompt_type": "default"})
+    render_resp = client.post("/api/render", json={"case_id": "rx_synth_001", "prompt_type": "default"})
     assert render_resp.status_code == 200
     audio_id = render_resp.json()["audio_id"]
 
-    wer_resp = client.post("/api/wer", json={"audio_id": audio_id, "case_id": "rx_001", "prompt_type": "default"})
+    wer_resp = client.post("/api/wer", json={"audio_id": audio_id, "case_id": "rx_synth_001", "prompt_type": "default"})
     assert wer_resp.status_code == 200
     wer_data = wer_resp.json()
     assert wer_data["audio_id"] == audio_id
@@ -64,7 +64,7 @@ def test_api_wer_exact_audio_id():
 
 def test_api_wer_nonexistent_audio_file():
     """Verify /api/wer returns 404 when given a non-existent audio_id."""
-    resp = client.post("/api/wer", json={"audio_id": "non_existent_audio_123.mp3", "case_id": "rx_001"})
+    resp = client.post("/api/wer", json={"audio_id": "non_existent_audio_123.mp3", "case_id": "rx_synth_001"})
     assert resp.status_code == 404
 
 def test_blind_mos_session_and_rating():
@@ -115,7 +115,7 @@ def test_missing_key_graceful_failure_openai(monkeypatch):
     """Verify missing OPENAI_API_KEY returns HTTP 400 with clear message."""
     monkeypatch.delenv("OPENAI_API_KEY", raising=False)
     payload = {
-        "case_id": "rx_001",
+        "case_id": "rx_synth_001",
         "prompt_type": "default",
         "provider": "openai"
     }
@@ -127,7 +127,7 @@ def test_missing_key_graceful_failure_elevenlabs(monkeypatch):
     """Verify missing ELEVENLABS_API_KEY returns HTTP 400 with clear message."""
     monkeypatch.delenv("ELEVENLABS_API_KEY", raising=False)
     payload = {
-        "case_id": "rx_001",
+        "case_id": "rx_synth_001",
         "prompt_type": "default",
         "provider": "elevenlabs"
     }
@@ -138,7 +138,7 @@ def test_missing_key_graceful_failure_elevenlabs(monkeypatch):
 def test_unknown_provider():
     """Verify passing an unknown provider name returns HTTP 400."""
     payload = {
-        "case_id": "rx_001",
+        "case_id": "rx_synth_001",
         "prompt_type": "default",
         "provider": "invalid_provider"
     }

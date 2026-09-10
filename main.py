@@ -7,7 +7,7 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 import aiofiles
 
-from data import TEST_CASES, tune_for_rime, safe_tune_for_rime, extract_critical_entities, validate_semantic_preservation
+from data import TEST_CASES, STRESS_TEST_CASES, tune_for_rime, safe_tune_for_rime, extract_critical_entities, validate_semantic_preservation, evaluate_stress_case
 from tts.providers import get_provider, PROVIDERS_CONFIG, RELIABILITY_STATS
 from db import init_db, save_mos_rating, export_mos_csv_string
 from dotenv import load_dotenv
@@ -65,6 +65,11 @@ class MosRatingRequest(BaseModel):
     target: str # "A" | "B"
     naturalness: int = Field(..., ge=1, le=5)
     intelligibility: int = Field(..., ge=1, le=5)
+    medication_correct: Optional[bool] = None
+    strength_correct: Optional[bool] = None
+    dosage_correct: Optional[bool] = None
+    duration_correct: Optional[bool] = None
+    date_correct: Optional[bool] = None
 
 def get_target_case(req):
     if req.case_id:
@@ -184,10 +189,13 @@ async def create_blind_session():
     async with aiofiles.open(fpath_b, "wb") as f:
         await f.write(bytes_b)
 
+    critical_entities = extract_critical_entities(case["raw_text"])
+
     session_id = f"blind_{uuid.uuid4().hex[:8]}"
     BLIND_SESSIONS[session_id] = {
         "case_id": case["id"],
         "raw_text": case["raw_text"],
+        "critical_entities": critical_entities,
         "A": {"provider": "rime", "variant": variant_a, "audio_id": fname_a},
         "B": {"provider": "rime", "variant": variant_b, "audio_id": fname_b}
     }
@@ -196,6 +204,7 @@ async def create_blind_session():
         "session_id": session_id,
         "case_id": case["id"],
         "raw_text": case["raw_text"],
+        "critical_entities": critical_entities,
         "audio_a_url": f"/static/audio/{fname_a}",
         "audio_b_url": f"/static/audio/{fname_b}"
     }
@@ -221,7 +230,12 @@ async def submit_mos_rating(req: MosRatingRequest):
         provider=provider_name,
         variant=variant,
         naturalness=req.naturalness,
-        intelligibility=req.intelligibility
+        intelligibility=req.intelligibility,
+        medication_correct=req.medication_correct,
+        strength_correct=req.strength_correct,
+        dosage_correct=req.dosage_correct,
+        duration_correct=req.duration_correct,
+        date_correct=req.date_correct
     )
 
     return {
@@ -231,7 +245,14 @@ async def submit_mos_rating(req: MosRatingRequest):
         "revealed_provider": provider_name,
         "revealed_variant": variant,
         "naturalness": req.naturalness,
-        "intelligibility": req.intelligibility
+        "intelligibility": req.intelligibility,
+        "comprehension": {
+            "medication_correct": req.medication_correct,
+            "strength_correct": req.strength_correct,
+            "dosage_correct": req.dosage_correct,
+            "duration_correct": req.duration_correct,
+            "date_correct": req.date_correct
+        }
     }
 
 @app.get("/api/mos/export")
@@ -242,6 +263,88 @@ async def export_mos_ratings():
         media_type="text/csv",
         headers={"Content-Disposition": "attachment; filename=mos_ratings.csv"}
     )
+
+# --- STRESS TEST SYSTEM ENDPOINTS (PHASE 9) ---
+class StressRunRequest(BaseModel):
+    case_id: Optional[str] = None
+    provider: Optional[str] = "rime"
+
+@app.get("/api/stress/cases")
+async def get_stress_cases():
+    """Returns all dedicated stress test cases with difficulty labels and expected pronunciations."""
+    return STRESS_TEST_CASES
+
+@app.post("/api/stress/run")
+async def run_stress_test(req: StressRunRequest):
+    """
+    Executes a dedicated stress-test run for a target case ID.
+    Renders Rime baseline vs RimeRx tuned speech, transcribes with ASR,
+    and performs honest per-entity matching (drug, strength, dose, frequency, duration, date)
+    with explicit failure limitation notes when misheard.
+    """
+    case = None
+    if req.case_id:
+        case = next((c for c in STRESS_TEST_CASES if c["id"] == req.case_id), None)
+        if not case:
+            case = next((c for c in TEST_CASES if c["id"] == req.case_id), None)
+    if not case:
+        case = STRESS_TEST_CASES[0]
+
+    raw_text = case["raw_text"]
+    provider_name = req.provider or "rime"
+    provider = get_provider(provider_name)
+
+    # 1. Synthesize baseline audio
+    baseline_bytes, meta_base = await provider.synthesize(raw_text)
+    fname_base = f"stress_{case['id']}_{provider_name}_base_{uuid.uuid4().hex[:4]}.mp3"
+    fpath_base = os.path.join(AUDIO_DIR, fname_base)
+    async with aiofiles.open(fpath_base, "wb") as f:
+        await f.write(baseline_bytes)
+
+    # 2. Synthesize safety-tuned audio
+    tuned_meta = safe_tune_for_rime(raw_text)
+    tuned_prompt = tuned_meta["prompt_used"]
+    tuned_bytes, meta_tuned = await provider.synthesize(tuned_prompt)
+    fname_tuned = f"stress_{case['id']}_{provider_name}_tuned_{uuid.uuid4().hex[:4]}.mp3"
+    fpath_tuned = os.path.join(AUDIO_DIR, fname_tuned)
+    async with aiofiles.open(fpath_tuned, "wb") as f:
+        await f.write(tuned_bytes)
+
+    # 3. Transcribe with Whisper ASR
+    baseline_hypothesis = transcribe_audio(fpath_base, beam_size=EVAL_BEAM_SIZE)
+    tuned_hypothesis = transcribe_audio(fpath_tuned, beam_size=EVAL_BEAM_SIZE)
+
+    # 4. Evaluate per-entity EXPECTED vs HEARD matching
+    baseline_eval = evaluate_stress_case(raw_text, baseline_hypothesis)
+    tuned_eval = evaluate_stress_case(raw_text, tuned_hypothesis)
+
+    return {
+        "case_id": case["id"],
+        "category": case.get("category", "stress"),
+        "difficulty": case.get("difficulty", "hard"),
+        "raw_text": raw_text,
+        "expected_pronunciation": case.get("expected_pronunciation", tune_for_rime(raw_text)),
+        "baseline": {
+            "prompt_used": raw_text,
+            "audio_url": f"/static/audio/{fname_base}",
+            "hypothesis": baseline_hypothesis,
+            "evaluation": baseline_eval
+        },
+        "rimerx": {
+            "prompt_used": tuned_prompt,
+            "is_safe": tuned_meta["is_safe"],
+            "audio_url": f"/static/audio/{fname_tuned}",
+            "hypothesis": tuned_hypothesis,
+            "evaluation": tuned_eval
+        },
+        "honest_assessment": {
+            "overall_success": tuned_eval["overall_matched"],
+            "baseline_accuracy_pct": baseline_eval["accuracy_pct"],
+            "rimerx_accuracy_pct": tuned_eval["accuracy_pct"],
+            "accuracy_delta_pts": round(tuned_eval["accuracy_pct"] - baseline_eval["accuracy_pct"], 1),
+            "limitation_note": tuned_eval["limitation_note"] or baseline_eval["limitation_note"]
+        }
+    }
 
 # --- METRICS ENDPOINT ---
 _epi_instance = None

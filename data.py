@@ -14,6 +14,10 @@ def _load_corpus():
         with open(logistics_path, "r", encoding="utf-8") as f:
             cases.extend(json.load(f))
 
+    for c in cases:
+        if "notice" not in c:
+            c["notice"] = "Synthetic/curated evaluation data for TTS benchmark — Zero real patient data"
+
     if not cases:
         cases = [
             {
@@ -507,4 +511,101 @@ def safe_tune_for_rime(raw_text: str) -> dict:
         "normalized_text": normalized,
         "preservation": preservation,
         "error": None
+    }
+
+def _load_stress_corpus():
+    base_dir = os.path.dirname(__file__)
+    stress_path = os.path.join(base_dir, "corpus", "stress.json")
+    if os.path.exists(stress_path):
+        with open(stress_path, "r", encoding="utf-8") as f:
+            return json.load(f)
+    return [
+        {
+            "id": "stress_001",
+            "domain": "Pharmacy (Stress Case)",
+            "category": "dosages",
+            "difficulty": "hard",
+            "raw_text": "Tab Augmentin 625mg 1-0-1 x 5 days Exp: 03/26",
+            "expected_pronunciation": "Tablet Augmentin six two five milligram one zero one times five days Expiry March twenty six"
+        },
+        {
+            "id": "stress_002",
+            "domain": "Pharmacy (Stress Case)",
+            "category": "strengths",
+            "difficulty": "hard",
+            "raw_text": "Pantocid-DSR 40/30 mg 1-0-1 x 7 days",
+            "expected_pronunciation": "Pantocid D S R forty slash thirty milligram one zero one times seven days"
+        },
+        {
+            "id": "stress_003",
+            "domain": "Pharmacy (Stress Case)",
+            "category": "dosage_schedules",
+            "difficulty": "hard",
+            "raw_text": "1/2 tablet 0-1-0",
+            "expected_pronunciation": "one half tablet zero one zero"
+        }
+    ]
+
+STRESS_TEST_CASES = _load_stress_corpus()
+
+def evaluate_stress_case(raw_text: str, hypothesis: str) -> dict:
+    """
+    Evaluates ASR transcription hypothesis for a stress test case across 6 entity dimensions:
+    drug, strength, dose, frequency, duration, date.
+    Performs honest entity matching without fabricating success.
+    """
+    entities = extract_critical_entities(raw_text)
+    hyp_lower = hypothesis.lower() if hypothesis else ""
+
+    results = {}
+    total_present = 0
+    matched_count = 0
+    failed_fields = []
+
+    field_map = {
+        "drug": entities.get("drug"),
+        "strength": entities.get("strength"),
+        "dose": entities.get("dose") or entities.get("dosage_schedule"),
+        "frequency": entities.get("frequency"),
+        "duration": entities.get("duration"),
+        "date": entities.get("date") or entities.get("expiry")
+    }
+
+    for key, val in field_map.items():
+        if val:
+            total_present += 1
+            is_match = check_entity_preservation(key, str(val), hypothesis)
+            if is_match:
+                matched_count += 1
+                results[key] = {"expected": str(val), "matched": True, "status": "✓ MATCHED"}
+            else:
+                failed_fields.append(key)
+                results[key] = {"expected": str(val), "matched": False, "status": "✗ MISHEARD"}
+        else:
+            results[key] = {"expected": "N/A", "matched": True, "status": "— NOT IN INPUT"}
+
+    acc_pct = round((matched_count / total_present * 100), 1) if total_present > 0 else 100.0
+    overall_matched = (len(failed_fields) == 0)
+
+    limitation_note = None
+    if not overall_matched:
+        reasons = []
+        if "drug" in failed_fields:
+            reasons.append(f"ASR acoustic misrecognition on brand name '{entities.get('drug')}'")
+        if "strength" in failed_fields:
+            reasons.append(f"Strength specification '{entities.get('strength')}' misheard by acoustic model")
+        if "dose" in failed_fields:
+            reasons.append(f"Dosage pattern '{field_map['dose']}' misrecognized in acoustic stream")
+        if "date" in failed_fields:
+            reasons.append(f"Expiry date format '{field_map['date']}' truncated or misheard")
+        limitation_note = "; ".join(reasons) if reasons else f"Entities {failed_fields} misheard by ASR model"
+
+    return {
+        "overall_matched": overall_matched,
+        "accuracy_pct": acc_pct,
+        "matched_count": matched_count,
+        "total_count": total_present,
+        "failed_fields": failed_fields,
+        "entities": results,
+        "limitation_note": limitation_note
     }

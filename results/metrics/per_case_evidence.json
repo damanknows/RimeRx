@@ -1,0 +1,907 @@
+{
+  "rx_001": {
+    "case_id": "rx_001",
+    "domain": "Pharmacy",
+    "category": "dosages",
+    "raw_text": "Tab. Augmentin 625mg 1-0-1 x 5 days. Dr. Reddy's Lab, Hyderabad. Ph: 98765-43210",
+    "expected_pronunciation": "Tablet Augmentin six two five milligram one zero one times five days Doctor Reddys Lab Hyderabad Phone nine eight seven six five four three two one zero",
+    "expected_critical_entities": {
+      "drug": "Augmentin",
+      "strength": "625mg",
+      "dose": "1-0-1",
+      "frequency": "1-0-1",
+      "schedule": "1-0-1",
+      "duration": "5 days",
+      "quantity": null,
+      "date": null,
+      "expiry": null,
+      "abbreviations": [
+        "Tab",
+        "Dr",
+        "Ph"
+      ],
+      "drugs": [
+        "Augmentin"
+      ],
+      "strengths": [
+        "625mg"
+      ],
+      "schedules": [
+        "1-0-1"
+      ],
+      "dates": [],
+      "numbers": [
+        "43210",
+        "5",
+        "98765",
+        "1",
+        "0",
+        "625"
+      ]
+    },
+    "evaluations": [
+      {
+        "provider": "rime",
+        "variant": "default",
+        "normalized_text": "Tab. Augmentin 625mg 1-0-1 x 5 days. Dr. Reddy's Lab, Hyderabad. Ph: 98765-43210",
+        "rime_configuration": {
+          "model_id": "mist/v1",
+          "voice": "marsh",
+          "language": "en-IN",
+          "audio_format": "mp3"
+        },
+        "audio_clip_path": "results/clips/baseline/rx_001_rime.mp3",
+        "transcript_json_path": "results/transcripts/baseline/rx_001_rime.json",
+        "hypothesis": "TAB.  Augmentin 625 milligrams 1 to 01 by 5 days.  Dr. Reddy's lab, Hyderabad, pH 98765, 43210.",
+        "wer": 85.19,
+        "per": 96.3,
+        "critical_token_accuracy": 100.0,
+        "latency": {
+          "ttfb_ms": 1078.82,
+          "total_ms": 2230.54,
+          "cold": true
+        },
+        "status": "SUCCESS"
+      },
+      {
+        "provider": "rime",
+        "variant": "tuned",
+        "normalized_text": "Tablet Augmentin six two five milligram one zero one times five days Doctor Reddys Lab Hyderabad Phone nine eight seven six five four three two one zero",
+        "rime_configuration": {
+          "model_id": "mist/v1",
+          "voice": "marsh",
+          "language": "en-IN",
+          "audio_format": "mp3"
+        },
+        "audio_clip_path": "results/clips/rimex/rx_001_rime.mp3",
+        "transcript_json_path": "results/transcripts/rimex/rx_001_rime.json",
+        "hypothesis": "tablet augment 625 milligram 101 x 5 days Dr. Reddy's lab Hyderabad, phone 987-654-3210.",
+        "wer": 77.78,
+        "per": 0.0,
+        "critical_token_accuracy": 80.0,
+        "latency": {
+          "ttfb_ms": 1096.76,
+          "total_ms": 1892.23,
+          "cold": false
+        },
+        "status": "SUCCESS"
+      },
+      {
+        "provider": "openai",
+        "variant": "default",
+        "normalized_text": "Tab. Augmentin 625mg 1-0-1 x 5 days. Dr. Reddy's Lab, Hyderabad. Ph: 98765-43210",
+        "rime_configuration": {
+          "model_id": "mist/v1",
+          "voice": "marsh",
+          "language": "en-IN",
+          "audio_format": "mp3"
+        },
+        "audio_clip_path": "results/clips/baseline/rx_001_openai.mp3",
+        "transcript_json_path": "results/transcripts/baseline/rx_001_openai.json",
+        "hypothesis": "",
+        "wer": null,
+        "per": 96.3,
+        "critical_token_accuracy": 0.0,
+        "latency": {
+          "ttfb_ms": null,
+          "total_ms": null,
+          "cold": false
+        },
+        "status": "FAILED (400: OPENAI_API_KEY environment variable is missing or empty. Please set a valid)"
+      },
+      {
+        "provider": "openai",
+        "variant": "tuned",
+        "normalized_text": "Tablet Augmentin six two five milligram one zero one times five days Doctor Reddys Lab Hyderabad Phone nine eight seven six five four three two one zero",
+        "rime_configuration": {
+          "model_id": "mist/v1",
+          "voice": "marsh",
+          "language": "en-IN",
+          "audio_format": "mp3"
+        },
+        "audio_clip_path": "results/clips/rimex/rx_001_openai.mp3",
+        "transcript_json_path": "results/transcripts/rimex/rx_001_openai.json",
+        "hypothesis": "",
+        "wer": null,
+        "per": 0.0,
+        "critical_token_accuracy": 0.0,
+        "latency": {
+          "ttfb_ms": null,
+          "total_ms": null,
+          "cold": false
+        },
+        "status": "FAILED (400: OPENAI_API_KEY environment variable is missing or empty. Please set a valid)"
+      },
+      {
+        "provider": "elevenlabs",
+        "variant": "default",
+        "normalized_text": "Tab. Augmentin 625mg 1-0-1 x 5 days. Dr. Reddy's Lab, Hyderabad. Ph: 98765-43210",
+        "rime_configuration": {
+          "model_id": "mist/v1",
+          "voice": "marsh",
+          "language": "en-IN",
+          "audio_format": "mp3"
+        },
+        "audio_clip_path": "results/clips/baseline/rx_001_elevenlabs.mp3",
+        "transcript_json_path": "results/transcripts/baseline/rx_001_elevenlabs.json",
+        "hypothesis": "",
+        "wer": null,
+        "per": 96.3,
+        "critical_token_accuracy": 0.0,
+        "latency": {
+          "ttfb_ms": null,
+          "total_ms": null,
+          "cold": false
+        },
+        "status": "FAILED (400: ELEVENLABS_API_KEY environment variable is missing or empty. Please set a v)"
+      },
+      {
+        "provider": "elevenlabs",
+        "variant": "tuned",
+        "normalized_text": "Tablet Augmentin six two five milligram one zero one times five days Doctor Reddys Lab Hyderabad Phone nine eight seven six five four three two one zero",
+        "rime_configuration": {
+          "model_id": "mist/v1",
+          "voice": "marsh",
+          "language": "en-IN",
+          "audio_format": "mp3"
+        },
+        "audio_clip_path": "results/clips/rimex/rx_001_elevenlabs.mp3",
+        "transcript_json_path": "results/transcripts/rimex/rx_001_elevenlabs.json",
+        "hypothesis": "",
+        "wer": null,
+        "per": 0.0,
+        "critical_token_accuracy": 0.0,
+        "latency": {
+          "ttfb_ms": null,
+          "total_ms": null,
+          "cold": false
+        },
+        "status": "FAILED (400: ELEVENLABS_API_KEY environment variable is missing or empty. Please set a v)"
+      }
+    ]
+  },
+  "rx_002": {
+    "case_id": "rx_002",
+    "domain": "Pharmacy",
+    "category": "quantities",
+    "raw_text": "Syp. Azithral 200mg/5ml - 5ml BD. Mfg: Alembic. Exp: 03/26.",
+    "expected_pronunciation": "Syrup Azithral two hundred milligram per five milliliter five milliliter twice daily Manufactured by Alembic Expiry March twenty six",
+    "expected_critical_entities": {
+      "drug": "Azithral",
+      "strength": "200mg/5ml",
+      "dose": "5ml",
+      "frequency": "BD",
+      "schedule": null,
+      "duration": null,
+      "quantity": null,
+      "date": null,
+      "expiry": "03/26",
+      "abbreviations": [
+        "Syp",
+        "BD",
+        "Mfg",
+        "Exp"
+      ],
+      "drugs": [
+        "Azithral"
+      ],
+      "strengths": [
+        "5ml",
+        "200mg/5ml"
+      ],
+      "schedules": [
+        "BD"
+      ],
+      "dates": [
+        "03/26"
+      ],
+      "numbers": [
+        "26",
+        "5",
+        "03",
+        "200"
+      ]
+    },
+    "evaluations": [
+      {
+        "provider": "rime",
+        "variant": "default",
+        "normalized_text": "Syp. Azithral 200mg/5ml - 5ml BD. Mfg: Alembic. Exp: 03/26.",
+        "rime_configuration": {
+          "model_id": "mist/v1",
+          "voice": "marsh",
+          "language": "en-IN",
+          "audio_format": "mp3"
+        },
+        "audio_clip_path": "results/clips/baseline/rx_002_rime.mp3",
+        "transcript_json_path": "results/transcripts/baseline/rx_002_rime.json",
+        "hypothesis": "CEP azathol 200 milligrams slash 5 milliliters 5 milliliters bd mfg alembic exp  03 slash 26",
+        "wer": 94.74,
+        "per": 94.74,
+        "critical_token_accuracy": 80.0,
+        "latency": {
+          "ttfb_ms": 1028.09,
+          "total_ms": 1831.52,
+          "cold": false
+        },
+        "status": "SUCCESS"
+      },
+      {
+        "provider": "rime",
+        "variant": "tuned",
+        "normalized_text": "Syrup Azithral two hundred milligram per five milliliter five milliliter twice daily Manufactured by Alembic Expiry March twenty six",
+        "rime_configuration": {
+          "model_id": "mist/v1",
+          "voice": "marsh",
+          "language": "en-IN",
+          "audio_format": "mp3"
+        },
+        "audio_clip_path": "results/clips/rimex/rx_002_rime.mp3",
+        "transcript_json_path": "results/transcripts/rimex/rx_002_rime.json",
+        "hypothesis": "Syrup Azifil 200 milligram per 5 milliliter 5 milliliter twice daily manufactured by Alembic  Expre March 26.",
+        "wer": 42.11,
+        "per": 0.0,
+        "critical_token_accuracy": 80.0,
+        "latency": {
+          "ttfb_ms": 1062.69,
+          "total_ms": 1852.48,
+          "cold": false
+        },
+        "status": "SUCCESS"
+      },
+      {
+        "provider": "openai",
+        "variant": "default",
+        "normalized_text": "Syp. Azithral 200mg/5ml - 5ml BD. Mfg: Alembic. Exp: 03/26.",
+        "rime_configuration": {
+          "model_id": "mist/v1",
+          "voice": "marsh",
+          "language": "en-IN",
+          "audio_format": "mp3"
+        },
+        "audio_clip_path": "results/clips/baseline/rx_002_openai.mp3",
+        "transcript_json_path": "results/transcripts/baseline/rx_002_openai.json",
+        "hypothesis": "",
+        "wer": null,
+        "per": 94.74,
+        "critical_token_accuracy": 0.0,
+        "latency": {
+          "ttfb_ms": null,
+          "total_ms": null,
+          "cold": false
+        },
+        "status": "FAILED (400: OPENAI_API_KEY environment variable is missing or empty. Please set a valid)"
+      },
+      {
+        "provider": "openai",
+        "variant": "tuned",
+        "normalized_text": "Syrup Azithral two hundred milligram per five milliliter five milliliter twice daily Manufactured by Alembic Expiry March twenty six",
+        "rime_configuration": {
+          "model_id": "mist/v1",
+          "voice": "marsh",
+          "language": "en-IN",
+          "audio_format": "mp3"
+        },
+        "audio_clip_path": "results/clips/rimex/rx_002_openai.mp3",
+        "transcript_json_path": "results/transcripts/rimex/rx_002_openai.json",
+        "hypothesis": "",
+        "wer": null,
+        "per": 0.0,
+        "critical_token_accuracy": 0.0,
+        "latency": {
+          "ttfb_ms": null,
+          "total_ms": null,
+          "cold": false
+        },
+        "status": "FAILED (400: OPENAI_API_KEY environment variable is missing or empty. Please set a valid)"
+      },
+      {
+        "provider": "elevenlabs",
+        "variant": "default",
+        "normalized_text": "Syp. Azithral 200mg/5ml - 5ml BD. Mfg: Alembic. Exp: 03/26.",
+        "rime_configuration": {
+          "model_id": "mist/v1",
+          "voice": "marsh",
+          "language": "en-IN",
+          "audio_format": "mp3"
+        },
+        "audio_clip_path": "results/clips/baseline/rx_002_elevenlabs.mp3",
+        "transcript_json_path": "results/transcripts/baseline/rx_002_elevenlabs.json",
+        "hypothesis": "",
+        "wer": null,
+        "per": 94.74,
+        "critical_token_accuracy": 0.0,
+        "latency": {
+          "ttfb_ms": null,
+          "total_ms": null,
+          "cold": false
+        },
+        "status": "FAILED (400: ELEVENLABS_API_KEY environment variable is missing or empty. Please set a v)"
+      },
+      {
+        "provider": "elevenlabs",
+        "variant": "tuned",
+        "normalized_text": "Syrup Azithral two hundred milligram per five milliliter five milliliter twice daily Manufactured by Alembic Expiry March twenty six",
+        "rime_configuration": {
+          "model_id": "mist/v1",
+          "voice": "marsh",
+          "language": "en-IN",
+          "audio_format": "mp3"
+        },
+        "audio_clip_path": "results/clips/rimex/rx_002_elevenlabs.mp3",
+        "transcript_json_path": "results/transcripts/rimex/rx_002_elevenlabs.json",
+        "hypothesis": "",
+        "wer": null,
+        "per": 0.0,
+        "critical_token_accuracy": 0.0,
+        "latency": {
+          "ttfb_ms": null,
+          "total_ms": null,
+          "cold": false
+        },
+        "status": "FAILED (400: ELEVENLABS_API_KEY environment variable is missing or empty. Please set a v)"
+      }
+    ]
+  },
+  "rx_003": {
+    "case_id": "rx_003",
+    "domain": "Pharmacy",
+    "category": "code_switched",
+    "raw_text": "Tab. Dolo 650mg 1-1-1 x 3 days. Khane ke baad lena. Ph: 91234-56789",
+    "expected_pronunciation": "Tablet Dolo six five zero milligram one one one times three days Khane ke baad lena Phone nine one two three four five six seven eight nine",
+    "expected_critical_entities": {
+      "drug": "Dolo",
+      "strength": "650mg",
+      "dose": "1-1-1",
+      "frequency": "1-1-1",
+      "schedule": "1-1-1",
+      "duration": "3 days",
+      "quantity": null,
+      "date": null,
+      "expiry": null,
+      "abbreviations": [
+        "Tab",
+        "Ph"
+      ],
+      "drugs": [
+        "Dolo"
+      ],
+      "strengths": [
+        "650mg"
+      ],
+      "schedules": [
+        "1-1-1"
+      ],
+      "dates": [],
+      "numbers": [
+        "91234",
+        "650",
+        "3",
+        "1",
+        "56789"
+      ]
+    },
+    "evaluations": [
+      {
+        "provider": "rime",
+        "variant": "default",
+        "normalized_text": "Tab. Dolo 650mg 1-1-1 x 3 days. Khane ke baad lena. Ph: 91234-56789",
+        "rime_configuration": {
+          "model_id": "mist/v1",
+          "voice": "marsh",
+          "language": "en-IN",
+          "audio_format": "mp3"
+        },
+        "audio_clip_path": "results/clips/baseline/rx_003_rime.mp3",
+        "transcript_json_path": "results/transcripts/baseline/rx_003_rime.json",
+        "hypothesis": "Tab.  Double 650 milligrams 1 to 1 1 by 3 days.  Cane K. Bodlana, Ph. 9 1 2 3 4, 5 6 7 8 9.",
+        "wer": 96.3,
+        "per": 85.19,
+        "critical_token_accuracy": 80.0,
+        "latency": {
+          "ttfb_ms": 1038.11,
+          "total_ms": 1843.65,
+          "cold": false
+        },
+        "status": "SUCCESS"
+      },
+      {
+        "provider": "rime",
+        "variant": "tuned",
+        "normalized_text": "Tablet Dolo six five zero milligram one one one times three days Khane ke baad lena Phone nine one two three four five six seven eight nine",
+        "rime_configuration": {
+          "model_id": "mist/v1",
+          "voice": "marsh",
+          "language": "en-IN",
+          "audio_format": "mp3"
+        },
+        "audio_clip_path": "results/clips/rimex/rx_003_rime.mp3",
+        "transcript_json_path": "results/transcripts/rimex/rx_003_rime.json",
+        "hypothesis": "TABLEDOLO 650 milligram, 111 x 3 days cane K-BOD LINA phone 9, 1, 2, 3, 4, 5, 6, 7, 8, 9",
+        "wer": 88.89,
+        "per": 0.0,
+        "critical_token_accuracy": 100.0,
+        "latency": {
+          "ttfb_ms": 2759.09,
+          "total_ms": 4291.6,
+          "cold": false
+        },
+        "status": "SUCCESS"
+      },
+      {
+        "provider": "openai",
+        "variant": "default",
+        "normalized_text": "Tab. Dolo 650mg 1-1-1 x 3 days. Khane ke baad lena. Ph: 91234-56789",
+        "rime_configuration": {
+          "model_id": "mist/v1",
+          "voice": "marsh",
+          "language": "en-IN",
+          "audio_format": "mp3"
+        },
+        "audio_clip_path": "results/clips/baseline/rx_003_openai.mp3",
+        "transcript_json_path": "results/transcripts/baseline/rx_003_openai.json",
+        "hypothesis": "",
+        "wer": null,
+        "per": 85.19,
+        "critical_token_accuracy": 0.0,
+        "latency": {
+          "ttfb_ms": null,
+          "total_ms": null,
+          "cold": false
+        },
+        "status": "FAILED (400: OPENAI_API_KEY environment variable is missing or empty. Please set a valid)"
+      },
+      {
+        "provider": "openai",
+        "variant": "tuned",
+        "normalized_text": "Tablet Dolo six five zero milligram one one one times three days Khane ke baad lena Phone nine one two three four five six seven eight nine",
+        "rime_configuration": {
+          "model_id": "mist/v1",
+          "voice": "marsh",
+          "language": "en-IN",
+          "audio_format": "mp3"
+        },
+        "audio_clip_path": "results/clips/rimex/rx_003_openai.mp3",
+        "transcript_json_path": "results/transcripts/rimex/rx_003_openai.json",
+        "hypothesis": "",
+        "wer": null,
+        "per": 0.0,
+        "critical_token_accuracy": 0.0,
+        "latency": {
+          "ttfb_ms": null,
+          "total_ms": null,
+          "cold": false
+        },
+        "status": "FAILED (400: OPENAI_API_KEY environment variable is missing or empty. Please set a valid)"
+      },
+      {
+        "provider": "elevenlabs",
+        "variant": "default",
+        "normalized_text": "Tab. Dolo 650mg 1-1-1 x 3 days. Khane ke baad lena. Ph: 91234-56789",
+        "rime_configuration": {
+          "model_id": "mist/v1",
+          "voice": "marsh",
+          "language": "en-IN",
+          "audio_format": "mp3"
+        },
+        "audio_clip_path": "results/clips/baseline/rx_003_elevenlabs.mp3",
+        "transcript_json_path": "results/transcripts/baseline/rx_003_elevenlabs.json",
+        "hypothesis": "",
+        "wer": null,
+        "per": 85.19,
+        "critical_token_accuracy": 0.0,
+        "latency": {
+          "ttfb_ms": null,
+          "total_ms": null,
+          "cold": false
+        },
+        "status": "FAILED (400: ELEVENLABS_API_KEY environment variable is missing or empty. Please set a v)"
+      },
+      {
+        "provider": "elevenlabs",
+        "variant": "tuned",
+        "normalized_text": "Tablet Dolo six five zero milligram one one one times three days Khane ke baad lena Phone nine one two three four five six seven eight nine",
+        "rime_configuration": {
+          "model_id": "mist/v1",
+          "voice": "marsh",
+          "language": "en-IN",
+          "audio_format": "mp3"
+        },
+        "audio_clip_path": "results/clips/rimex/rx_003_elevenlabs.mp3",
+        "transcript_json_path": "results/transcripts/rimex/rx_003_elevenlabs.json",
+        "hypothesis": "",
+        "wer": null,
+        "per": 0.0,
+        "critical_token_accuracy": 0.0,
+        "latency": {
+          "ttfb_ms": null,
+          "total_ms": null,
+          "cold": false
+        },
+        "status": "FAILED (400: ELEVENLABS_API_KEY environment variable is missing or empty. Please set a v)"
+      }
+    ]
+  },
+  "rx_004": {
+    "case_id": "rx_004",
+    "domain": "Pharmacy",
+    "category": "drug_names",
+    "raw_text": "Cap. Pantocid 40mg OD before breakfast. Mfg: Sun Pharma. Exp: 08/27.",
+    "expected_pronunciation": "Capsule Pantocid forty milligram once daily before breakfast Manufactured by Sun Pharma Expiry August twenty seven",
+    "expected_critical_entities": {
+      "drug": "Pantocid",
+      "strength": "40mg",
+      "dose": null,
+      "frequency": "OD",
+      "schedule": null,
+      "duration": null,
+      "quantity": null,
+      "date": null,
+      "expiry": "08/27",
+      "abbreviations": [
+        "Cap",
+        "OD",
+        "Mfg",
+        "Ph",
+        "Exp"
+      ],
+      "drugs": [
+        "Pantocid"
+      ],
+      "strengths": [
+        "40mg"
+      ],
+      "schedules": [
+        "OD"
+      ],
+      "dates": [
+        "08/27"
+      ],
+      "numbers": [
+        "08",
+        "27",
+        "40"
+      ]
+    },
+    "evaluations": [
+      {
+        "provider": "rime",
+        "variant": "default",
+        "normalized_text": "Cap. Pantocid 40mg OD before breakfast. Mfg: Sun Pharma. Exp: 08/27.",
+        "rime_configuration": {
+          "model_id": "mist/v1",
+          "voice": "marsh",
+          "language": "en-IN",
+          "audio_format": "mp3"
+        },
+        "audio_clip_path": "results/clips/baseline/rx_004_rime.mp3",
+        "transcript_json_path": "results/transcripts/baseline/rx_004_rime.json",
+        "hypothesis": "Cap.  Hantoset 40 mg odd before breakfast.  MFG, Sun Pharma, EXP 08 slash 27.",
+        "wer": 75.0,
+        "per": 81.25,
+        "critical_token_accuracy": 75.0,
+        "latency": {
+          "ttfb_ms": 1316.56,
+          "total_ms": 3912.64,
+          "cold": false
+        },
+        "status": "SUCCESS"
+      },
+      {
+        "provider": "rime",
+        "variant": "tuned",
+        "normalized_text": "Capsule Pantocid forty milligram once daily before breakfast Manufactured by Sun Pharma Expiry August twenty seven",
+        "rime_configuration": {
+          "model_id": "mist/v1",
+          "voice": "marsh",
+          "language": "en-IN",
+          "audio_format": "mp3"
+        },
+        "audio_clip_path": "results/clips/rimex/rx_004_rime.mp3",
+        "transcript_json_path": "results/transcripts/rimex/rx_004_rime.json",
+        "hypothesis": "Capsule pantos at 40mg, once daily before breakfast manufactured by Sun Pharma Expre August 27.",
+        "wer": 37.5,
+        "per": 0.0,
+        "critical_token_accuracy": 75.0,
+        "latency": {
+          "ttfb_ms": 1322.98,
+          "total_ms": 1853.3,
+          "cold": false
+        },
+        "status": "SUCCESS"
+      },
+      {
+        "provider": "openai",
+        "variant": "default",
+        "normalized_text": "Cap. Pantocid 40mg OD before breakfast. Mfg: Sun Pharma. Exp: 08/27.",
+        "rime_configuration": {
+          "model_id": "mist/v1",
+          "voice": "marsh",
+          "language": "en-IN",
+          "audio_format": "mp3"
+        },
+        "audio_clip_path": "results/clips/baseline/rx_004_openai.mp3",
+        "transcript_json_path": "results/transcripts/baseline/rx_004_openai.json",
+        "hypothesis": "",
+        "wer": null,
+        "per": 81.25,
+        "critical_token_accuracy": 0.0,
+        "latency": {
+          "ttfb_ms": null,
+          "total_ms": null,
+          "cold": false
+        },
+        "status": "FAILED (400: OPENAI_API_KEY environment variable is missing or empty. Please set a valid)"
+      },
+      {
+        "provider": "openai",
+        "variant": "tuned",
+        "normalized_text": "Capsule Pantocid forty milligram once daily before breakfast Manufactured by Sun Pharma Expiry August twenty seven",
+        "rime_configuration": {
+          "model_id": "mist/v1",
+          "voice": "marsh",
+          "language": "en-IN",
+          "audio_format": "mp3"
+        },
+        "audio_clip_path": "results/clips/rimex/rx_004_openai.mp3",
+        "transcript_json_path": "results/transcripts/rimex/rx_004_openai.json",
+        "hypothesis": "",
+        "wer": null,
+        "per": 0.0,
+        "critical_token_accuracy": 0.0,
+        "latency": {
+          "ttfb_ms": null,
+          "total_ms": null,
+          "cold": false
+        },
+        "status": "FAILED (400: OPENAI_API_KEY environment variable is missing or empty. Please set a valid)"
+      },
+      {
+        "provider": "elevenlabs",
+        "variant": "default",
+        "normalized_text": "Cap. Pantocid 40mg OD before breakfast. Mfg: Sun Pharma. Exp: 08/27.",
+        "rime_configuration": {
+          "model_id": "mist/v1",
+          "voice": "marsh",
+          "language": "en-IN",
+          "audio_format": "mp3"
+        },
+        "audio_clip_path": "results/clips/baseline/rx_004_elevenlabs.mp3",
+        "transcript_json_path": "results/transcripts/baseline/rx_004_elevenlabs.json",
+        "hypothesis": "",
+        "wer": null,
+        "per": 81.25,
+        "critical_token_accuracy": 0.0,
+        "latency": {
+          "ttfb_ms": null,
+          "total_ms": null,
+          "cold": false
+        },
+        "status": "FAILED (400: ELEVENLABS_API_KEY environment variable is missing or empty. Please set a v)"
+      },
+      {
+        "provider": "elevenlabs",
+        "variant": "tuned",
+        "normalized_text": "Capsule Pantocid forty milligram once daily before breakfast Manufactured by Sun Pharma Expiry August twenty seven",
+        "rime_configuration": {
+          "model_id": "mist/v1",
+          "voice": "marsh",
+          "language": "en-IN",
+          "audio_format": "mp3"
+        },
+        "audio_clip_path": "results/clips/rimex/rx_004_elevenlabs.mp3",
+        "transcript_json_path": "results/transcripts/rimex/rx_004_elevenlabs.json",
+        "hypothesis": "",
+        "wer": null,
+        "per": 0.0,
+        "critical_token_accuracy": 0.0,
+        "latency": {
+          "ttfb_ms": null,
+          "total_ms": null,
+          "cold": false
+        },
+        "status": "FAILED (400: ELEVENLABS_API_KEY environment variable is missing or empty. Please set a v)"
+      }
+    ]
+  },
+  "rx_005": {
+    "case_id": "rx_005",
+    "domain": "Pharmacy",
+    "category": "dosages",
+    "raw_text": "Tab. Metformin 500mg 1-0-1 after meals. Dr. Sharma, Delhi. Ph: 99887-76655",
+    "expected_pronunciation": "Tablet Metformin five hundred milligram one zero one after meals Doctor Sharma Delhi Phone nine nine eight eight seven seven six six five five",
+    "expected_critical_entities": {
+      "drug": "Metformin",
+      "strength": "500mg",
+      "dose": "1-0-1",
+      "frequency": "1-0-1",
+      "schedule": "1-0-1",
+      "duration": null,
+      "quantity": null,
+      "date": null,
+      "expiry": null,
+      "abbreviations": [
+        "Tab",
+        "Dr",
+        "Ph"
+      ],
+      "drugs": [
+        "Metformin"
+      ],
+      "strengths": [
+        "500mg"
+      ],
+      "schedules": [
+        "1-0-1"
+      ],
+      "dates": [],
+      "numbers": [
+        "500",
+        "1",
+        "99887",
+        "76655",
+        "0"
+      ]
+    },
+    "evaluations": [
+      {
+        "provider": "rime",
+        "variant": "default",
+        "normalized_text": "Tab. Metformin 500mg 1-0-1 after meals. Dr. Sharma, Delhi. Ph: 99887-76655",
+        "rime_configuration": {
+          "model_id": "mist/v1",
+          "voice": "marsh",
+          "language": "en-IN",
+          "audio_format": "mp3"
+        },
+        "audio_clip_path": "results/clips/baseline/rx_005_rime.mp3",
+        "transcript_json_path": "results/transcripts/baseline/rx_005_rime.json",
+        "hypothesis": "TAB, metformin 500 mg 1-0-1 after meals, Dr. Sharma, Delhi, pH 99887, 76655.",
+        "wer": 79.17,
+        "per": 91.67,
+        "critical_token_accuracy": 100.0,
+        "latency": {
+          "ttfb_ms": 1062.97,
+          "total_ms": 3010.53,
+          "cold": false
+        },
+        "status": "SUCCESS"
+      },
+      {
+        "provider": "rime",
+        "variant": "tuned",
+        "normalized_text": "Tablet Metformin five hundred milligram one zero one after meals Doctor Sharma Delhi Phone nine nine eight eight seven seven six six five five",
+        "rime_configuration": {
+          "model_id": "mist/v1",
+          "voice": "marsh",
+          "language": "en-IN",
+          "audio_format": "mp3"
+        },
+        "audio_clip_path": "results/clips/rimex/rx_005_rime.mp3",
+        "transcript_json_path": "results/transcripts/rimex/rx_005_rime.json",
+        "hypothesis": "Tablumetfermin 500 milligram, 101 after meals Dr. Sharma, Delifo 9988776655.",
+        "wer": 83.33,
+        "per": 0.0,
+        "critical_token_accuracy": 75.0,
+        "latency": {
+          "ttfb_ms": 1060.31,
+          "total_ms": 2027.24,
+          "cold": false
+        },
+        "status": "SUCCESS"
+      },
+      {
+        "provider": "openai",
+        "variant": "default",
+        "normalized_text": "Tab. Metformin 500mg 1-0-1 after meals. Dr. Sharma, Delhi. Ph: 99887-76655",
+        "rime_configuration": {
+          "model_id": "mist/v1",
+          "voice": "marsh",
+          "language": "en-IN",
+          "audio_format": "mp3"
+        },
+        "audio_clip_path": "results/clips/baseline/rx_005_openai.mp3",
+        "transcript_json_path": "results/transcripts/baseline/rx_005_openai.json",
+        "hypothesis": "",
+        "wer": null,
+        "per": 91.67,
+        "critical_token_accuracy": 0.0,
+        "latency": {
+          "ttfb_ms": null,
+          "total_ms": null,
+          "cold": false
+        },
+        "status": "FAILED (400: OPENAI_API_KEY environment variable is missing or empty. Please set a valid)"
+      },
+      {
+        "provider": "openai",
+        "variant": "tuned",
+        "normalized_text": "Tablet Metformin five hundred milligram one zero one after meals Doctor Sharma Delhi Phone nine nine eight eight seven seven six six five five",
+        "rime_configuration": {
+          "model_id": "mist/v1",
+          "voice": "marsh",
+          "language": "en-IN",
+          "audio_format": "mp3"
+        },
+        "audio_clip_path": "results/clips/rimex/rx_005_openai.mp3",
+        "transcript_json_path": "results/transcripts/rimex/rx_005_openai.json",
+        "hypothesis": "",
+        "wer": null,
+        "per": 0.0,
+        "critical_token_accuracy": 0.0,
+        "latency": {
+          "ttfb_ms": null,
+          "total_ms": null,
+          "cold": false
+        },
+        "status": "FAILED (400: OPENAI_API_KEY environment variable is missing or empty. Please set a valid)"
+      },
+      {
+        "provider": "elevenlabs",
+        "variant": "default",
+        "normalized_text": "Tab. Metformin 500mg 1-0-1 after meals. Dr. Sharma, Delhi. Ph: 99887-76655",
+        "rime_configuration": {
+          "model_id": "mist/v1",
+          "voice": "marsh",
+          "language": "en-IN",
+          "audio_format": "mp3"
+        },
+        "audio_clip_path": "results/clips/baseline/rx_005_elevenlabs.mp3",
+        "transcript_json_path": "results/transcripts/baseline/rx_005_elevenlabs.json",
+        "hypothesis": "",
+        "wer": null,
+        "per": 91.67,
+        "critical_token_accuracy": 0.0,
+        "latency": {
+          "ttfb_ms": null,
+          "total_ms": null,
+          "cold": false
+        },
+        "status": "FAILED (400: ELEVENLABS_API_KEY environment variable is missing or empty. Please set a v)"
+      },
+      {
+        "provider": "elevenlabs",
+        "variant": "tuned",
+        "normalized_text": "Tablet Metformin five hundred milligram one zero one after meals Doctor Sharma Delhi Phone nine nine eight eight seven seven six six five five",
+        "rime_configuration": {
+          "model_id": "mist/v1",
+          "voice": "marsh",
+          "language": "en-IN",
+          "audio_format": "mp3"
+        },
+        "audio_clip_path": "results/clips/rimex/rx_005_elevenlabs.mp3",
+        "transcript_json_path": "results/transcripts/rimex/rx_005_elevenlabs.json",
+        "hypothesis": "",
+        "wer": null,
+        "per": 0.0,
+        "critical_token_accuracy": 0.0,
+        "latency": {
+          "ttfb_ms": null,
+          "total_ms": null,
+          "cold": false
+        },
+        "status": "FAILED (400: ELEVENLABS_API_KEY environment variable is missing or empty. Please set a v)"
+      }
+    ]
+  }
+}

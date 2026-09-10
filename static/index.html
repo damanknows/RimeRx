@@ -561,6 +561,99 @@
 
     </section>
 
+    <!-- STRESS TEST SYSTEM (PHASE 9) -->
+    <section class="bg-[#121216] rounded-2xl border border-rose-500/20 overflow-hidden transition-all shadow-xl">
+      <div class="p-6 border-b border-white/5 bg-[#16161c] flex items-center justify-between flex-wrap gap-3">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-lg bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-rose-400 font-bold text-sm">
+            <i class="fa-solid fa-bolt text-rose-400"></i>
+          </div>
+          <div>
+            <h3 class="font-mono font-bold text-zinc-100 text-sm flex items-center gap-2">
+              DEDICATED STRESS-TEST SYSTEM
+              <span class="px-2 py-0.5 rounded bg-rose-500/20 text-rose-400 font-mono text-[10px] uppercase font-semibold">PHASE 9 HARD VOICE CASES</span>
+            </h3>
+            <p class="text-xs text-zinc-400">Evaluates difficult prescription voice cases against Rime baseline vs RimeRx tuned speech with honest entity recall tracking.</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-3">
+          <select id="stressCaseSelect" class="bg-[#0a0a0c] border border-white/10 text-zinc-200 text-xs font-mono rounded-lg px-3 py-2 focus:outline-none focus:border-rose-500">
+            <option value="stress_001">Tab Augmentin 625mg 1-0-1 x 5 days Exp: 03/26</option>
+            <option value="stress_002">Pantocid-DSR 40/30 mg 1-0-1 x 7 days</option>
+            <option value="stress_003">1/2 tablet 0-1-0</option>
+            <option value="stress_004">Syp Azithral 200mg/5ml - 5ml BD x 3 days Mfg: Alembic Exp: 11/27</option>
+            <option value="stress_005">Cap Omeprazole 20mg 1-0-0 before food x 14 days Qty: 14 caps</option>
+            <option value="stress_006">Tab Calpol 500mg 1-1-1 SOS for fever Max 3 days</option>
+            <option value="stress_007">Tab Amoxyclav 1000 mg 1-0-1 after food x 10 days</option>
+            <option value="stress_008">Tab Eltroxin 50 mcg 1-0-0 early morning empty stomach</option>
+            <option value="stress_009">Tab Montair-LC 10mg/5mg 0-0-1 at bedtime Exp: 09/2028</option>
+            <option value="stress_010">Drop Ciprofloxacin 0.3% 2 drops in right ear TID x 5 days</option>
+          </select>
+          <button 
+            id="runStressBtn"
+            onclick="runStressTest()"
+            class="py-2 px-4 bg-rose-500 hover:bg-rose-400 text-zinc-950 font-mono font-bold text-xs rounded-lg transition-all shadow-md flex items-center gap-2 cursor-pointer"
+          >
+            <i class="fa-solid fa-play text-[10px]"></i> Run Stress Test
+          </button>
+        </div>
+      </div>
+
+      <div id="stressResultBox" class="p-6 space-y-6 text-xs font-mono hidden">
+        <!-- EXPECTED vs HEARD COMPARISON -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- BASELINE (UNTUNED) -->
+          <div class="p-4 bg-[#0d0d0f] rounded-xl border border-white/5 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-amber-400 font-bold uppercase flex items-center gap-1.5">
+                <i class="fa-solid fa-microphone-slash text-amber-400"></i> Baseline (Untuned)
+              </span>
+              <span id="stressBaseAccBadge" class="px-2 py-0.5 rounded bg-zinc-800 text-zinc-400 text-[10px]">0% RECALL</span>
+            </div>
+            <div class="space-y-1">
+              <span class="text-[10px] text-zinc-500 uppercase">HEARD ASR TRANSCRIPT:</span>
+              <div id="stressBaseHeard" class="p-2.5 bg-[#141418] rounded border border-white/5 text-zinc-300 italic"></div>
+            </div>
+            <audio id="stressBaseAudio" controls class="w-full h-8 mt-2"></audio>
+          </div>
+
+          <!-- RIMERX TUNED -->
+          <div class="p-4 bg-[#0d0d0f] rounded-xl border border-teal-500/20 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-teal-400 font-bold uppercase flex items-center gap-1.5">
+                <i class="fa-solid fa-shield-halved text-teal-400"></i> RimeRx (Safety-Tuned)
+              </span>
+              <span id="stressTunedAccBadge" class="px-2 py-0.5 rounded bg-teal-500/20 text-teal-300 text-[10px]">100% RECALL</span>
+            </div>
+            <div class="space-y-1">
+              <span class="text-[10px] text-zinc-500 uppercase">HEARD ASR TRANSCRIPT:</span>
+              <div id="stressTunedHeard" class="p-2.5 bg-[#141418] rounded border border-white/5 text-zinc-200 font-bold"></div>
+            </div>
+            <audio id="stressTunedAudio" controls class="w-full h-8 mt-2"></audio>
+          </div>
+        </div>
+
+        <!-- PER-ENTITY RECALL CHECKLIST -->
+        <div class="p-4 bg-[#0d0d0f] rounded-xl border border-white/5 space-y-3">
+          <span class="text-zinc-400 font-bold uppercase flex items-center gap-2">
+            <i class="fa-solid fa-list-check text-rose-400"></i> Critical Entity Recall Checklist (RimeRx Speech Output)
+          </span>
+          <div id="stressEntitiesGrid" class="grid grid-cols-2 md:grid-cols-6 gap-3">
+            <!-- Badges populated dynamically -->
+          </div>
+        </div>
+
+        <!-- HONEST ASSESSMENT & LIMITATION BOX -->
+        <div id="stressHonestBox" class="p-4 rounded-xl space-y-2 border text-xs font-mono">
+          <div class="flex items-center justify-between">
+            <span id="stressHonestTitle" class="font-bold uppercase flex items-center gap-2"></span>
+            <span id="stressHonestDelta" class="px-2 py-0.5 rounded font-bold text-[10px]"></span>
+          </div>
+          <p id="stressHonestBody" class="text-zinc-300 leading-relaxed"></p>
+        </div>
+      </div>
+    </section>
+
     <!-- SESSION AUDIT LOG TABLE -->
     <section class="bg-[#121216] rounded-2xl p-6 border border-white/10 space-y-4">
       <div class="flex items-center justify-between border-b border-white/5 pb-3">
@@ -1472,6 +1565,86 @@
 
       summaryBox.classList.remove("hidden");
       showToast("Both clips rated! Provider variants revealed.", "success");
+    }
+
+    async function runStressTest() {
+      const select = document.getElementById("stressCaseSelect");
+      const caseId = select.value;
+      const runBtn = document.getElementById("runStressBtn");
+
+      runBtn.disabled = true;
+      runBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-[10px]"></i> <span>Evaluating ASR...</span>`;
+
+      try {
+        const res = await fetchAPI("/api/stress/run", { case_id: caseId, provider: "rime" });
+
+        const resultBox = document.getElementById("stressResultBox");
+        resultBox.classList.remove("hidden");
+
+        // Baseline display
+        document.getElementById("stressBaseHeard").textContent = res.baseline.hypothesis || "(No transcript)";
+        document.getElementById("stressBaseAudio").src = res.baseline.audio_url;
+        document.getElementById("stressBaseAccBadge").textContent = `${res.baseline.evaluation.accuracy_pct}% RECALL`;
+
+        // Tuned display
+        document.getElementById("stressTunedHeard").textContent = res.rimerx.hypothesis || "(No transcript)";
+        document.getElementById("stressTunedAudio").src = res.rimerx.audio_url;
+        document.getElementById("stressTunedAccBadge").textContent = `${res.rimerx.evaluation.accuracy_pct}% RECALL`;
+
+        // Per-entity badges
+        const entitiesGrid = document.getElementById("stressEntitiesGrid");
+        entitiesGrid.innerHTML = "";
+
+        const entities = res.rimerx.evaluation.entities;
+        for (const [key, val] of Object.entries(entities)) {
+          const isMatched = val.matched;
+          const isNA = val.expected === "N/A";
+          
+          let colorClass = isMatched 
+            ? (isNA ? "bg-zinc-800 text-zinc-500 border-zinc-700" : "bg-teal-500/10 text-teal-400 border-teal-500/30") 
+            : "bg-rose-500/10 text-rose-400 border-rose-500/30 font-bold";
+
+          entitiesGrid.innerHTML += `
+            <div class="p-2.5 rounded-lg border ${colorClass} text-center space-y-0.5">
+              <div class="font-mono uppercase font-bold text-[10px]">${key}</div>
+              <div class="text-xs truncate">${val.status}</div>
+              <div class="text-[9px] opacity-75 truncate" title="${val.expected}">Exp: ${val.expected}</div>
+            </div>
+          `;
+        }
+
+        // Honest Assessment Box
+        const honestBox = document.getElementById("stressHonestBox");
+        const honestTitle = document.getElementById("stressHonestTitle");
+        const honestDelta = document.getElementById("stressHonestDelta");
+        const honestBody = document.getElementById("stressHonestBody");
+
+        const isSuccess = res.honest_assessment.overall_success;
+        if (isSuccess) {
+          honestBox.className = "p-4 rounded-xl space-y-2 border text-xs font-mono bg-teal-500/10 border-teal-500/30 text-zinc-200";
+          honestTitle.innerHTML = `<i class="fa-solid fa-circle-check text-teal-400"></i> STRESS TEST PASSED — 100% RECALL ACCURACY`;
+          honestTitle.className = "font-bold uppercase flex items-center gap-2 text-teal-400";
+          honestDelta.className = "px-2 py-0.5 rounded font-bold text-[10px] bg-teal-500/20 text-teal-300";
+          honestDelta.textContent = `+${res.honest_assessment.accuracy_delta_pts} PTS IMPROVEMENT`;
+          honestBody.textContent = `All critical prescription entities (${Object.keys(res.rimerx.evaluation.entities).join(", ")}) were successfully preserved and transcribed with 100% acoustic recall.`;
+        } else {
+          honestBox.className = "p-4 rounded-xl space-y-2 border text-xs font-mono bg-rose-500/10 border-rose-500/30 text-zinc-200";
+          honestTitle.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-rose-400"></i> STRESS TEST LIMITATION DETECTED (${res.honest_assessment.rimerx_accuracy_pct}% RECALL)`;
+          honestTitle.className = "font-bold uppercase flex items-center gap-2 text-rose-400";
+          honestDelta.className = "px-2 py-0.5 rounded font-bold text-[10px] bg-rose-500/20 text-rose-300";
+          honestDelta.textContent = `LIMITATION HIGHLIGHTED`;
+          honestBody.innerHTML = `<strong>Honest Limitation Breakdown:</strong> ${res.honest_assessment.limitation_note || "Specific entities misheard by ASR model."} RimeRx preserves input safety but acoustic ASR ceiling limits recognition of niche brand names or complex fractions.`;
+        }
+
+        showToast(`Stress test evaluated for case ${caseId.toUpperCase()}`, "info");
+
+      } catch (err) {
+        console.error("Stress test error:", err);
+        showToast(`Stress test failed: ${err.message}`, "error");
+      } finally {
+        runBtn.disabled = false;
+        runBtn.innerHTML = `<i class="fa-solid fa-play text-[10px]"></i> <span>Run Stress Test</span>`;
+      }
     }
 
     function escapeHtml(str) {

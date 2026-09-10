@@ -1,0 +1,115 @@
+{
+  "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data",
+  "summary": {
+    "total_samples_evaluated": 30,
+    "baseline_pipeline_a": {
+      "critical_token_accuracy": 87.0,
+      "mean_wer": 86.08,
+      "mean_per": 89.83,
+      "reliability_rate": 100.0
+    },
+    "rimerx_pipeline_b": {
+      "critical_token_accuracy": 82.0,
+      "mean_wer": 65.92,
+      "mean_per": 0.0,
+      "reliability_rate": 100.0
+    },
+    "improvement_delta": {
+      "critical_token_accuracy_gain": -5.0,
+      "wer_reduction_pts": 20.16,
+      "per_reduction_pts": 89.83
+    }
+  },
+  "by_category": {
+    "dosages": {
+      "total": 12,
+      "default_wer": [
+        85.19,
+        79.17
+      ],
+      "tuned_wer": [
+        77.78,
+        83.33
+      ],
+      "default_per": [
+        96.3,
+        91.67
+      ],
+      "tuned_per": [
+        0.0,
+        0.0
+      ],
+      "default_ent": [
+        100.0,
+        100.0
+      ],
+      "tuned_ent": [
+        80.0,
+        75.0
+      ]
+    },
+    "quantities": {
+      "total": 6,
+      "default_wer": [
+        94.74
+      ],
+      "tuned_wer": [
+        42.11
+      ],
+      "default_per": [
+        94.74
+      ],
+      "tuned_per": [
+        0.0
+      ],
+      "default_ent": [
+        80.0
+      ],
+      "tuned_ent": [
+        80.0
+      ]
+    },
+    "code_switched": {
+      "total": 6,
+      "default_wer": [
+        96.3
+      ],
+      "tuned_wer": [
+        88.89
+      ],
+      "default_per": [
+        85.19
+      ],
+      "tuned_per": [
+        0.0
+      ],
+      "default_ent": [
+        80.0
+      ],
+      "tuned_ent": [
+        100.0
+      ]
+    },
+    "drug_names": {
+      "total": 6,
+      "default_wer": [
+        75.0
+      ],
+      "tuned_wer": [
+        37.5
+      ],
+      "default_per": [
+        81.25
+      ],
+      "tuned_per": [
+        0.0
+      ],
+      "default_ent": [
+        75.0
+      ],
+      "tuned_ent": [
+        75.0
+      ]
+    }
+  }
+}

@@ -42,6 +42,46 @@ RimeRx reduces pronunciation and intelligibility errors in critical medication i
 2. **Exploratory Sample Size**: Benchmark evaluation is performed on a 50-item synthetic domain corpus.
 3. **2,500 Character Input Limit**: Inputs exceeding 2,500 characters return `HTTP 400 Bad Request`.
 
+## Per-Case Evidence & Reproducible Artifact Structure (Phase 7)
+
+All benchmark evaluation runs generate itemized per-case evidence under the `results/` folder:
+
+```
+results/
+├── clips/
+│   ├── baseline/      # Raw text synthesized audio clips (.mp3)
+│   └── rimex/         # RimeRx normalized synthesized audio clips (.mp3)
+├── transcripts/
+│   ├── baseline/      # Itemized JSON evidence for baseline pipeline
+│   └── rimex/         # Itemized JSON evidence for RimeRx pipeline
+├── metrics/
+│   ├── baseline_results.csv   # Itemized CSV for baseline pipeline
+│   ├── rimex_results.csv      # Itemized CSV for RimeRx pipeline
+│   ├── comparison.csv         # Side-by-side metric comparison CSV
+│   ├── metrics.json           # Aggregated macro metrics & category breakdown
+│   ├── item_results.csv       # Complete benchmark log
+│   └── per_case_evidence.json # Consolidated nested per-case evidence JSON
+├── figures/           # Plot diagrams and visual benchmark charts
+└── summary.md         # Executive Markdown benchmark report
+```
+
+### Itemized Evidence Fields (`results/transcripts/{variant}/{case_id}_{provider}.json`)
+For every evaluation pair, the following fields are preserved:
+- `raw_text`: Original prescription input string.
+- `normalized_text`: RimeRx normalized prompt (or raw for baseline).
+- `expected_critical_entities`: Structured dictionary of extracted drug, strength, dose, duration, date, and quantity entities.
+- `rime_configuration`: Model (`mist/v1`), Speaker (`marsh`), Language (`en-IN`), Audio Format (`mp3`).
+- `audio_clip_path`: Filepath to synthesized audio.
+- `hypothesis`: ASR transcript from Whisper (`small.en`).
+- `wer`: Word Error Rate.
+- `per`: Phoneme Error Rate.
+- `critical_token_accuracy`: Critical Token Accuracy percentage.
+- `latency`: TTFB and Total Latency in milliseconds.
+- `provider`: TTS provider ID (`rime`, `openai`, `elevenlabs`).
+
+### Audio Clip Generation & Storage
+Synthesized `.mp3` audio clips are automatically generated when executing `python run_benchmark.py`. Generated `.mp3` audio files are ignored from git version control via `.gitignore` to prevent repository bloat, while directory placeholders (`.gitkeep`) preserve the artifact hierarchy. Running the benchmark script regenerates full local audio clips for all 250 evaluation cases.
+
 ## Repeatable Command
 ```bash
 # Set UTF-8 encoding (Windows PowerShell)
@@ -50,6 +90,7 @@ $env:PYTHONUTF8="1"
 # Run full corpus benchmark suite across all test cases
 python run_benchmark.py
 
-# Generate executive Markdown summary report
+# Generate executive Markdown summary report & export evidence artifacts
 python analyze_results.py
 ```
+

@@ -2,6 +2,16 @@
 .venv-1/
 __pycache__/
 *.pyc
+*.db
 .env
 static/audio/*.mp3
 !static/audio/.gitkeep
+results/clips/*.mp3
+results/clips/*/*.mp3
+!results/clips/.gitkeep
+!results/clips/*/.gitkeep
+!results/transcripts/.gitkeep
+!results/transcripts/*/.gitkeep
+!results/metrics/.gitkeep
+!results/figures/.gitkeep
+

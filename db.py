@@ -21,26 +21,59 @@ def init_db():
             variant TEXT,
             naturalness INTEGER,
             intelligibility INTEGER,
+            medication_correct INTEGER,
+            strength_correct INTEGER,
+            dosage_correct INTEGER,
+            duration_correct INTEGER,
+            date_correct INTEGER,
             timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );
     """)
     conn.commit()
+
+    # Migration check for columns if table already exists
+    cursor.execute("PRAGMA table_info(mos_ratings)")
+    existing_cols = [r["name"] for r in cursor.fetchall()]
+    for col in ["medication_correct", "strength_correct", "dosage_correct", "duration_correct", "date_correct"]:
+        if col not in existing_cols:
+            cursor.execute(f"ALTER TABLE mos_ratings ADD COLUMN {col} INTEGER")
+            conn.commit()
+
     conn.close()
 
-def save_mos_rating(session_id: str, case_id: str, provider: str, variant: str, naturalness: int, intelligibility: int):
+def save_mos_rating(session_id: str, case_id: str, provider: str, variant: str, naturalness: int, intelligibility: int,
+                    medication_correct: bool = None, strength_correct: bool = None, dosage_correct: bool = None,
+                    duration_correct: bool = None, date_correct: bool = None):
     conn = get_connection()
     cursor = conn.cursor()
+    
+    def to_int_or_none(val):
+        if val is None: return None
+        return 1 if bool(val) else 0
+
     cursor.execute("""
-        INSERT INTO mos_ratings (session_id, case_id, provider, variant, naturalness, intelligibility)
-        VALUES (?, ?, ?, ?, ?, ?)
-    """, (session_id, case_id, provider, variant, naturalness, intelligibility))
+        INSERT INTO mos_ratings (
+            session_id, case_id, provider, variant, naturalness, intelligibility,
+            medication_correct, strength_correct, dosage_correct, duration_correct, date_correct
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    """, (
+        session_id, case_id, provider, variant, naturalness, intelligibility,
+        to_int_or_none(medication_correct), to_int_or_none(strength_correct),
+        to_int_or_none(dosage_correct), to_int_or_none(duration_correct),
+        to_int_or_none(date_correct)
+    ))
     conn.commit()
     conn.close()
 
 def get_all_mos_ratings():
     conn = get_connection()
     cursor = conn.cursor()
-    cursor.execute("SELECT id, session_id, case_id, provider, variant, naturalness, intelligibility, timestamp FROM mos_ratings ORDER BY id DESC")
+    cursor.execute("""
+        SELECT id, session_id, case_id, provider, variant, naturalness, intelligibility,
+               medication_correct, strength_correct, dosage_correct, duration_correct, date_correct, timestamp
+        FROM mos_ratings ORDER BY id DESC
+    """)
     rows = [dict(r) for r in cursor.fetchall()]
     conn.close()
     return rows
@@ -48,7 +81,10 @@ def get_all_mos_ratings():
 def export_mos_csv_string() -> str:
     rows = get_all_mos_ratings()
     output = io.StringIO()
-    fieldnames = ["id", "session_id", "case_id", "provider", "variant", "naturalness", "intelligibility", "timestamp"]
+    fieldnames = [
+        "id", "session_id", "case_id", "provider", "variant", "naturalness", "intelligibility",
+        "medication_correct", "strength_correct", "dosage_correct", "duration_correct", "date_correct", "timestamp"
+    ]
     writer = csv.DictWriter(output, fieldnames=fieldnames)
     writer.writeheader()
     for r in rows:
