@@ -175,3 +175,70 @@ def tune_for_rime(text: str) -> str:
     text = re.sub(r'\s+', ' ', text)
 
     return text.strip()
+
+def extract_critical_entities(text: str) -> dict:
+    """
+    Extracts critical entities from prescription/instruction text:
+    - drugs: Drug brand/generic names
+    - strengths: Dosage strengths and quantities (e.g. 625mg, 200mg/5ml, 500mg)
+    - schedules: Administration frequency/schedules (e.g. 1-0-1, BD, OD, TDS)
+    - dates: Expiration dates (e.g. 03/26)
+    - numbers: Extracted numeric digit sequences
+    """
+    entities = {
+        "drugs": [],
+        "strengths": [],
+        "schedules": [],
+        "dates": [],
+        "numbers": []
+    }
+
+    # Extract strengths (e.g., 625mg, 500mg, 200mg/5ml, 5ml)
+    strengths = re.findall(r'\b\d+(?:\.\d+)?\s*(?:mg|ml)(?:/\d+(?:\.\d+)?\s*(?:mg|ml))?\b', text, re.IGNORECASE)
+    entities["strengths"] = list(set(strengths))
+
+    # Extract dosage schedules (e.g., 1-0-1, 1-1-1, BD, OD, TDS)
+    schedules = re.findall(r'\b(?:\d-\d(?:-\d)?|BD|OD|TDS|every\s+\d+\s+hours)\b', text, re.IGNORECASE)
+    entities["schedules"] = list(set(schedules))
+
+    # Extract dates (e.g., 03/26)
+    dates = re.findall(r'\b\d{1,2}/\d{2}\b', text)
+    entities["dates"] = list(set(dates))
+
+    # Extract numbers (all digit sequences of 1+ length)
+    numbers = re.findall(r'\d+', text)
+    entities["numbers"] = list(set(numbers))
+
+    # Extract drug names
+    known_drugs = ["Augmentin", "Azithral", "Paracetamol", "Dolo", "Pantocid", "Amoxycillin", "Cetirizine", "Metformin", "Telmisartan", "Atorvastatin"]
+    found_drugs = [d for d in known_drugs if re.search(rf'\b{d}\b', text, re.IGNORECASE)]
+    prefix_drugs = re.findall(r'\b(?:Tab|Cap|Syp|Inj)\.?\s+([A-Z][a-z]+)', text)
+    found_drugs.extend(prefix_drugs)
+    entities["drugs"] = list(set(found_drugs))
+
+    return entities
+
+def validate_semantic_preservation(raw_text: str, normalized_text: str) -> dict:
+    """
+    Validates that normalized speech text preserves all critical numbers,
+    strengths, and dosage schedules from raw text without value alterations.
+    """
+    raw_entities = extract_critical_entities(raw_text)
+    raw_numbers = raw_entities["numbers"]
+    
+    norm_text_lower = normalized_text.lower()
+    
+    missing_numbers = []
+    for num_str in raw_numbers:
+        word_form = num_to_words(num_str).lower()
+        digit_words = " ".join(DIGIT_WORDS[int(d)] for d in num_str)
+        if num_str not in normalized_text and word_form not in norm_text_lower and digit_words not in norm_text_lower:
+            missing_numbers.append(num_str)
+
+    is_valid = len(missing_numbers) == 0
+    return {
+        "is_valid": is_valid,
+        "raw_entities": raw_entities,
+        "numeric_integrity": is_valid,
+        "missing_numbers": missing_numbers
+    }

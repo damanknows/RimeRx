@@ -7,13 +7,13 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 import aiofiles
 
-from data import TEST_CASES, tune_for_rime
+from data import TEST_CASES, tune_for_rime, extract_critical_entities, validate_semantic_preservation
 from tts.providers import get_provider, PROVIDERS_CONFIG, RELIABILITY_STATS
 from db import init_db, save_mos_rating, export_mos_csv_string
 from dotenv import load_dotenv
 import uvicorn
 import jiwer
-from asr import transcribe_audio, MODEL_SIZE, COMPUTE_TYPE, EVAL_BEAM_SIZE
+from asr import transcribe_audio, verify_critical_entities, MODEL_SIZE, COMPUTE_TYPE, EVAL_BEAM_SIZE
 from epitran import Epitran
 
 load_dotenv()
@@ -298,6 +298,8 @@ async def evaluate(req: RenderRequest):
     per = jiwer.wer(ref_phonemes, pred_phonemes) # Phoneme Error Rate
     cer_score = jiwer.cer(ref_phonemes, pred_phonemes)
 
+    semantic_validation = validate_semantic_preservation(case["raw_text"], prompt_text)
+
     return {
         "prompt_used": prompt_text,
         "expected_pronunciation": expected_text,
@@ -305,7 +307,8 @@ async def evaluate(req: RenderRequest):
         "ref_phonemes": ref_phonemes,
         "PER": round(per * 100, 2),
         "CER": round(cer_score * 100, 2),
-        "note": "Metric compares Prompt Phonemes vs Gold Phonemes. True WER requires ASR on audio."
+        "semantic_preservation": semantic_validation,
+        "note": "Metric compares Prompt Phonemes vs Gold Phonemes and validates entity preservation."
     }
 
 @app.post("/api/wer")
@@ -327,6 +330,9 @@ async def calculate_true_wer(req: WerRequest):
 
     wer_score, word_details = analyze_word_errors(reference, hypothesis)
 
+    raw_entities = extract_critical_entities(case["raw_text"])
+    entity_verification = verify_critical_entities(raw_entities, hypothesis)
+
     return {
         "audio_id": filename,
         "audio_file": f"/static/audio/{filename}",
@@ -334,6 +340,7 @@ async def calculate_true_wer(req: WerRequest):
         "hypothesis": hypothesis,
         "words": word_details,
         "WER": wer_score,
+        "entity_verification": entity_verification,
         "note": f"ASR Model: {MODEL_SIZE} ({COMPUTE_TYPE}, beam_size={EVAL_BEAM_SIZE})"
     }
 

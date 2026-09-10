@@ -1,9 +1,9 @@
 import os, sys, csv, asyncio, argparse
 sys.path.insert(0, os.path.dirname(__file__))
 
-from data import TEST_CASES, tune_for_rime
+from data import TEST_CASES, tune_for_rime, extract_critical_entities
 from tts.providers import get_provider
-from asr import transcribe_audio, EVAL_BEAM_SIZE
+from asr import transcribe_audio, verify_critical_entities, EVAL_BEAM_SIZE
 import jiwer
 from main import analyze_word_errors, text_to_phonemes
 
@@ -27,7 +27,7 @@ async def run_benchmark(limit: int = None):
     fieldnames = [
         "case_id", "domain", "category", "provider", "variant",
         "raw_text", "prompt_used", "expected_pronunciation",
-        "hypothesis", "wer", "per", "ttfb_ms", "total_ms", "cold", "status"
+        "hypothesis", "wer", "per", "entity_acc", "ttfb_ms", "total_ms", "cold", "status"
     ]
 
     with open(CSV_PATH, "w", newline="", encoding="utf-8") as f:
@@ -44,6 +44,8 @@ async def run_benchmark(limit: int = None):
             category = item.get("category", "general")
             raw_text = item["raw_text"]
             expected_pron = item["expected_pronunciation"]
+
+            raw_entities = extract_critical_entities(raw_text)
 
             for p_name in providers:
                 provider_instance = get_provider(p_name)
@@ -66,6 +68,9 @@ async def run_benchmark(limit: int = None):
                         # Transcribe ASR via small.en (beam size 5)
                         hypothesis = transcribe_audio(clip_path, beam_size=EVAL_BEAM_SIZE)
                         wer_score, _ = analyze_word_errors(expected_pron, hypothesis)
+                        
+                        entity_res = verify_critical_entities(raw_entities, hypothesis)
+                        entity_acc = entity_res["accuracy_pct"]
 
                         row = {
                             "case_id": case_id,
@@ -79,6 +84,7 @@ async def run_benchmark(limit: int = None):
                             "hypothesis": hypothesis,
                             "wer": wer_score,
                             "per": per_score,
+                            "entity_acc": entity_acc,
                             "ttfb_ms": meta.get("ttfb_ms", 0.0),
                             "total_ms": meta.get("total_ms", 0.0),
                             "cold": meta.get("cold", False),
@@ -86,7 +92,7 @@ async def run_benchmark(limit: int = None):
                         }
                         writer.writerow(row)
                         f.flush()
-                        print(f"SUCCESS (WER: {wer_score}%, PER: {per_score}%, TTFB: {meta.get('ttfb_ms')}ms)")
+                        print(f"SUCCESS (WER: {wer_score}%, PER: {per_score}%, EntityAcc: {entity_acc}%, TTFB: {meta.get('ttfb_ms')}ms)")
 
                     except Exception as e:
                         err_msg = str(e)

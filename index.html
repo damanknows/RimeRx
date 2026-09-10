@@ -73,7 +73,14 @@
         </div>
       </div>
       <div class="flex items-center gap-3">
-        <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono font-medium bg-teal-500/10 text-teal-400 border border-teal-500/20">
+        <button 
+          id="startBlindBtn" 
+          class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-mono font-bold bg-amber-500/10 text-amber-300 border border-amber-500/30 hover:bg-amber-500/20 transition-all cursor-pointer"
+        >
+          <i class="fa-solid fa-eye-slash"></i>
+          <span>Start Blind MOS Test</span>
+        </button>
+        <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-mono font-medium bg-teal-500/10 text-teal-400 border border-teal-500/20">
           <span class="w-1.5 h-1.5 rounded-full bg-teal-400 animate-pulse"></span> SYSTEM OK
         </span>
       </div>
@@ -211,7 +218,10 @@
 
               <!-- ASR Hypothesis with Highlighted Errors -->
               <div id="werDefaultContainer" class="hidden pt-2 border-t border-white/5 space-y-1">
-                <span class="text-[11px] font-mono text-zinc-400 uppercase block">ASR Transcript (Misrecognized Words Highlighted):</span>
+                <div class="flex items-center justify-between">
+                  <span class="text-[11px] font-mono text-zinc-400 uppercase block">ASR Transcript (Misrecognized Words Highlighted):</span>
+                  <span id="entityAccDefault" class="text-[10px] font-mono font-bold text-zinc-400"></span>
+                </div>
                 <div id="werDefaultWords" class="p-2.5 bg-[#121216] text-zinc-300 rounded-lg text-xs font-mono break-words leading-relaxed border border-white/5">
                 </div>
               </div>
@@ -249,9 +259,14 @@
                 <span class="text-xs font-mono text-teal-400 uppercase tracking-wider block">PROCESS STEP 02</span>
                 <h3 class="font-bold text-zinc-100 text-base font-grotesk">Tuned Rime Output</h3>
               </div>
-              <span class="px-2.5 py-1 rounded text-xs font-mono bg-teal-500/10 text-teal-400 border border-teal-500/30">
-                Safety Tuned
-              </span>
+              <div class="flex items-center gap-2">
+                <span id="semanticsBadge" class="hidden px-2 py-0.5 rounded text-[10px] font-mono bg-teal-500/20 text-teal-300 border border-teal-500/40 font-bold flex items-center gap-1">
+                  <i class="fa-solid fa-shield-check text-teal-400"></i> SEMANTICS PRESERVED
+                </span>
+                <span class="px-2.5 py-1 rounded text-xs font-mono bg-teal-500/10 text-teal-400 border border-teal-500/30">
+                  Safety Tuned
+                </span>
+              </div>
             </div>
 
             <!-- Audio Player & Slow Toggle -->
@@ -287,7 +302,10 @@
 
               <!-- ASR Hypothesis with Highlighted Errors -->
               <div id="werTunedContainer" class="hidden pt-2 border-t border-teal-500/20 space-y-1">
-                <span class="text-[11px] font-mono text-teal-300/80 uppercase block">ASR Transcript (Misrecognized Words Highlighted):</span>
+                <div class="flex items-center justify-between">
+                  <span class="text-[11px] font-mono text-teal-300/80 uppercase block">ASR Transcript (Misrecognized Words Highlighted):</span>
+                  <span id="entityAccTuned" class="text-[10px] font-mono font-bold text-teal-300"></span>
+                </div>
                 <div id="werTunedWords" class="p-2.5 bg-[#0d0d0f] text-teal-200 rounded-lg text-xs font-mono break-words leading-relaxed border border-teal-500/20">
                 </div>
               </div>
@@ -550,7 +568,12 @@
           <i class="fa-solid fa-list text-teal-400"></i>
           SESSION BENCHMARK LOG
         </h3>
-        <span class="text-xs text-zinc-500 font-mono" id="sessionCount">0 cases run</span>
+        <div class="flex items-center gap-3">
+          <a href="/api/mos/export" class="px-2.5 py-1 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-300 font-mono text-xs border border-white/10 transition-all flex items-center gap-1.5">
+            <i class="fa-solid fa-download text-teal-400"></i> Export Ratings CSV
+          </a>
+          <span class="text-xs text-zinc-500 font-mono" id="sessionCount">0 cases run</span>
+        </div>
       </div>
 
       <div class="overflow-x-auto">
@@ -590,6 +613,93 @@
 
   </main>
 
+  <!-- BLIND MOS EVALUATION MODAL -->
+  <div id="blindModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-[#121216] border border-amber-500/30 rounded-2xl max-w-2xl w-full p-6 sm:p-8 space-y-6 shadow-2xl relative">
+      <button id="closeBlindModalBtn" class="absolute top-4 right-4 text-zinc-500 hover:text-zinc-300 text-base font-mono cursor-pointer">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <div class="space-y-2">
+        <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-amber-500/10 border border-amber-500/30 text-xs font-mono text-amber-300">
+          <i class="fa-solid fa-eye-slash"></i> Blind Listening Evaluation (MOS Test)
+        </div>
+        <h3 class="text-xl font-bold font-grotesk text-zinc-100">Compare Anonymized Audio Samples</h3>
+        <p class="text-xs text-zinc-400 font-mono">Provider identities are hidden until ratings are submitted.</p>
+      </div>
+
+      <!-- Raw Prescription Text -->
+      <div class="p-4 bg-[#0d0d0f] rounded-xl border border-white/5 space-y-1">
+        <span class="text-[10px] font-mono text-zinc-500 uppercase block">CORPUS PRESCRIPTION TEXT:</span>
+        <div id="blindRawText" class="text-xs font-mono text-zinc-200">Loading random case...</div>
+      </div>
+
+      <!-- Blind Audio Players A & B -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="p-4 bg-[#0d0d0f] rounded-xl border border-white/10 space-y-3">
+          <span class="text-xs font-mono font-bold text-amber-400 block">// OPTION A</span>
+          <audio id="audioBlindA" controls class="w-full h-9"></audio>
+        </div>
+        <div class="p-4 bg-[#0d0d0f] rounded-xl border border-white/10 space-y-3">
+          <span class="text-xs font-mono font-bold text-amber-400 block">// OPTION B</span>
+          <audio id="audioBlindB" controls class="w-full h-9"></audio>
+        </div>
+      </div>
+
+      <!-- Rating Selection Form -->
+      <div class="space-y-4 pt-2 border-t border-white/10">
+        <div class="flex items-center justify-between">
+          <label class="text-xs font-mono text-zinc-300">Evaluate Sample:</label>
+          <div class="flex gap-3 text-xs font-mono">
+            <label class="inline-flex items-center gap-1.5 cursor-pointer text-amber-300">
+              <input type="radio" name="blindTarget" value="A" checked class="text-amber-500 focus:ring-0"> Option A
+            </label>
+            <label class="inline-flex items-center gap-1.5 cursor-pointer text-amber-300">
+              <input type="radio" name="blindTarget" value="B" class="text-amber-500 focus:ring-0"> Option B
+            </label>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-mono">
+          <div class="space-y-1">
+            <label class="text-zinc-400 block">Naturalness (1–5 MOS):</label>
+            <select id="naturalnessScore" class="w-full p-2 bg-[#0d0d0f] border border-white/10 rounded-lg text-zinc-200">
+              <option value="5">5 - Excellent (Human-like)</option>
+              <option value="4" selected>4 - Good (Minor robotic tone)</option>
+              <option value="3">3 - Fair (Noticeable synthesis)</option>
+              <option value="2">2 - Poor (Unnatural pauses)</option>
+              <option value="1">1 - Bad (Highly distorted)</option>
+            </select>
+          </div>
+          <div class="space-y-1">
+            <label class="text-zinc-400 block">Intelligibility (1–5 MOS):</label>
+            <select id="intelligibilityScore" class="w-full p-2 bg-[#0d0d0f] border border-white/10 rounded-lg text-zinc-200">
+              <option value="5" selected>5 - Perfect (100% dosage clarity)</option>
+              <option value="4">4 - High (Clear numbers/units)</option>
+              <option value="3">3 - Moderate (Slight ambiguity)</option>
+              <option value="2">2 - Low (Misread dosage/numbers)</option>
+              <option value="1">1 - Unintelligible (Dangerous error)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Submit & Reveal Button -->
+        <button 
+          id="submitBlindMosBtn" 
+          class="w-full py-3 bg-amber-500 hover:bg-amber-400 text-zinc-950 font-bold text-xs font-mono rounded-xl transition-all shadow-lg shadow-amber-500/20 cursor-pointer"
+        >
+          Submit Rating & Reveal Identities
+        </button>
+
+        <!-- Revealed Results Box -->
+        <div id="blindRevealedBox" class="hidden p-4 bg-teal-500/10 border border-teal-500/30 rounded-xl space-y-2 text-xs font-mono">
+          <div class="text-teal-400 font-bold">// IDENTITIES REVEALED</div>
+          <div id="blindRevealedText" class="text-zinc-200"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- PERSISTENT TRUST BAR (STICKY FOOTER PILL BADGE) -->
   <footer class="fixed bottom-0 left-0 right-0 bg-[#0a0a0c]/90 backdrop-blur border-t border-white/10 py-2.5 px-4 z-40">
     <div class="max-w-6xl mx-auto flex items-center justify-between text-xs font-mono">
@@ -612,7 +722,7 @@
     <span id="toastMessage">Notification message</span>
   </div>
 
-  <!-- JAVASCRIPT LOGIC (CLEAN PIPELINE WITH EXACT AUDIO_ID WER EVALUATION) -->
+  <!-- JAVASCRIPT LOGIC (CLEAN PIPELINE WITH EXACT AUDIO_ID WER EVALUATION & BLIND MOS TEST) -->
   <script>
     // --- CONFIGURATION STATE ---
     let PER_THRESHOLD = 5.0; // Fetched dynamically from GET /api/config
@@ -621,11 +731,8 @@
     let sessionLogs = [];
     let lastAudioDefId = null;
     let lastAudioTunedId = null;
+    let currentBlindSessionId = null;
 
-    /**
-     * countUpOnce — animates a number from 0 to a target, triggered once when element enters viewport.
-     * Guarantees exact final value is always displayed correctly.
-     */
     function countUpOnce(el, { duration = 700 } = {}) {
       const target = parseFloat(el.dataset.target);
       const decimals = parseInt(el.dataset.decimals || "0", 10);
@@ -704,7 +811,6 @@
     });
 
     async function initApp() {
-      // 1. Fetch Dynamic Backend Configuration (/api/config)
       try {
         const configResp = await fetch("/api/config");
         if (configResp.ok) {
@@ -719,7 +825,6 @@
         console.warn("Could not load /api/config:", err);
       }
 
-      // 2. Fetch Backend Cases (/api/cases)
       try {
         const resp = await fetch("/api/cases");
         if (!resp.ok) throw new Error(`HTTP ${resp.status}: Failed to fetch cases`);
@@ -727,32 +832,12 @@
       } catch (err) {
         console.warn("Backend cases fetch failed, fallback to defaults:", err);
         preloadedCases = [
-          {
-            id: "rx_001",
-            domain: "Pharmacy",
-            text: "Tab. Augmentin 625mg 1-0-1 x 5 days. Dr. Reddy's Lab, Hyderabad. Ph: 98765-43210"
-          },
-          {
-            id: "addr_001",
-            domain: "Delivery",
-            text: "Deliver to: 12/3, 2nd Cross, BTM 2nd Stage, Bengaluru - 560076. Landmark: Near Axis Bank ATM."
-          },
-          {
-            id: "rx_002",
-            domain: "Pharmacy",
-            text: "Syp. Azithral 200mg/5ml - 5ml BD. Mfg: Alembic. Exp: 03/26."
-          },
-          {
-            id: "edge_001",
-            domain: "Pharmacy (Edge Case)",
-            is_edge_case: true,
-            text: "Take Paracetamol 500 mg orally every 6 hours as needed for fever."
-          }
+          { id: "rx_001", domain: "Pharmacy", text: "Tab. Augmentin 625mg 1-0-1 x 5 days. Dr. Reddy's Lab, Hyderabad. Ph: 98765-43210" },
+          { id: "addr_001", domain: "Delivery", text: "Deliver to: 12/3, 2nd Cross, BTM 2nd Stage, Bengaluru - 560076. Landmark: Near Axis Bank ATM." }
         ];
       }
 
       renderChips();
-      
       if (preloadedCases.length > 0) {
         selectCase(preloadedCases[0].id);
       }
@@ -762,18 +847,20 @@
       const textInput = document.getElementById("rawTextInput");
       textInput.addEventListener("input", (e) => {
         updateCharCount(e.target.value);
-        currentCase = {
-          id: "custom",
-          domain: "Custom Input",
-          text: e.target.value
-        };
+        currentCase = { id: "custom", domain: "Custom Input", text: e.target.value };
         deselectAllChips();
       });
 
       document.getElementById("synthesizeBtn").addEventListener("click", runSynthesizeAndCompare);
-
       document.getElementById("werDefaultBtn").addEventListener("click", () => runAcousticWerCheck("default"));
       document.getElementById("werTunedBtn").addEventListener("click", () => runAcousticWerCheck("tuned"));
+
+      document.getElementById("startBlindBtn").addEventListener("click", startBlindTestFlow);
+      document.getElementById("closeBlindModalBtn").addEventListener("click", () => {
+        document.getElementById("blindModal").classList.add("hidden");
+      });
+
+      document.getElementById("submitBlindMosBtn").addEventListener("click", submitBlindMosRating);
 
       document.getElementById("slowDefaultToggle").addEventListener("change", (e) => {
         const audio = document.getElementById("audioDefault");
@@ -790,15 +877,8 @@
       document.getElementById("toggleTuningDetailsBtn").addEventListener("click", () => {
         const content = document.getElementById("tuningDetailsContent");
         const chevron = document.getElementById("tuningDetailsChevron");
-        const isHidden = content.classList.contains("hidden");
-        
-        if (isHidden) {
-          content.classList.remove("hidden");
-          chevron.classList.add("rotate-180");
-        } else {
-          content.classList.add("hidden");
-          chevron.classList.remove("rotate-180");
-        }
+        content.classList.toggle("hidden");
+        chevron.classList.toggle("rotate-180");
       });
 
       document.getElementById("toggleBlindSectionBtn").addEventListener("click", () => {
@@ -849,18 +929,12 @@
         if (isEdge) {
           chip.className = "case-chip px-3.5 py-2 rounded-lg border-l-4 border-l-amber-500 border-t border-r border-b border-amber-500/30 bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 font-mono text-xs transition-all flex items-center gap-2 cursor-pointer";
           chip.dataset.caseId = c.id;
-          chip.innerHTML = `
-            <span class="px-1.5 py-0.5 rounded bg-amber-500 text-zinc-950 font-bold text-[10px] uppercase">Edge Case</span>
-            <span>${c.text.substring(0, 26)}...</span>
-          `;
+          chip.innerHTML = `<span class="px-1.5 py-0.5 rounded bg-amber-500 text-zinc-950 font-bold text-[10px] uppercase">Edge Case</span><span>${c.text.substring(0, 26)}...</span>`;
         } else {
           chip.className = "case-chip px-3.5 py-2 rounded-lg border border-white/10 bg-[#0d0d0f] hover:bg-zinc-800 hover:border-teal-500/40 text-zinc-300 font-mono text-xs transition-all flex items-center gap-2 cursor-pointer";
           chip.dataset.caseId = c.id;
           const isRx = c.domain && c.domain.includes("Pharmacy");
-          chip.innerHTML = `
-            <i class="${isRx ? 'fa-solid fa-capsules text-teal-400' : 'fa-solid fa-location-dot text-indigo-400'} text-[11px]"></i>
-            <span>${c.id.toUpperCase()}: ${c.domain}</span>
-          `;
+          chip.innerHTML = `<i class="${isRx ? 'fa-solid fa-capsules text-teal-400' : 'fa-solid fa-location-dot text-indigo-400'} text-[11px]"></i><span>${c.id.toUpperCase()}: ${c.domain}</span>`;
         }
 
         chip.addEventListener("click", () => selectCase(c.id));
@@ -898,11 +972,15 @@
       document.getElementById("charCount").textContent = `${text.length} chars`;
     }
 
-    // --- MAIN SYNTHESIS & COMPARISON EXECUTION ---
     async function runSynthesizeAndCompare() {
       const text = document.getElementById("rawTextInput").value.trim();
       if (!text) {
         showToast("Please enter prescription instructions to synthesize.", "warning");
+        return;
+      }
+
+      if (text.length > 2500) {
+        showToast("Text exceeds maximum benchmark limit of 2500 characters.", "error");
         return;
       }
 
@@ -922,7 +1000,6 @@
       if (cerDefEl) cerDefEl.textContent = "-- %";
       if (cerTunedEl) cerTunedEl.textContent = "-- %";
 
-      // Reset WER elements & containers
       document.getElementById("werDefault").textContent = "-- %";
       document.getElementById("werTuned").textContent = "-- %";
       document.getElementById("werDefaultContainer").classList.add("hidden");
@@ -961,7 +1038,6 @@
       el.textContent = parts.length > 0 ? parts.join(" · ") : "";
     }
 
-        // 1. Instant Audio Player Display & Store Audio IDs
         lastAudioDefId = resRenderDef.audio_id;
         lastAudioTunedId = resRenderTuned.audio_id;
 
@@ -975,11 +1051,9 @@
         document.getElementById("promptTunedText").textContent = resRenderTuned.prompt_used;
         renderLatencyCaption(document.getElementById("latencyTuned"), resRenderTuned);
 
-        // Enable WER Buttons
         document.getElementById("werDefaultBtn").disabled = false;
         document.getElementById("werTunedBtn").disabled = false;
 
-        // 2. Metric Scores Calculation (PER)
         const defaultPER = typeof resEvalDef.PER === "number" ? resEvalDef.PER : 0;
         const tunedPER = typeof resEvalTuned.PER === "number" ? resEvalTuned.PER : 0;
         const delta = Math.round((defaultPER - tunedPER) * 10) / 10;
@@ -987,23 +1061,21 @@
         const defaultCER = typeof resEvalDef.CER === "number" ? resEvalDef.CER : 0;
         const tunedCER = typeof resEvalTuned.CER === "number" ? resEvalTuned.CER : 0;
 
-        // 3. Render PER Metrics via renderDelta exact pattern
         renderDelta(perDefEl, defaultPER);
         renderDelta(perTunedEl, tunedPER);
         renderDelta(document.getElementById("cerDefault"), defaultCER);
         renderDelta(document.getElementById("cerTuned"), tunedCER);
         
-        // 4. Update Delta Badge strictly according to real delta & PER_THRESHOLD
+        // Show SEMANTICS PRESERVED badge on Tuned card if semantic preservation check passed
+        const semanticsBadge = document.getElementById("semanticsBadge");
+        if (semanticsBadge && resEvalTuned.semantic_preservation && resEvalTuned.semantic_preservation.is_preserved !== false) {
+          semanticsBadge.classList.remove("hidden");
+        }
+
         const isSafe = delta >= PER_THRESHOLD;
         updateDeltaBadge(delta, isSafe);
-
-        // 5. Update Trust Badge dynamically
         updateTrustBadge(resRenderTuned);
-
-        // 6. Update Transformation Diff Box
         updateTransformationDiff(text, resRenderTuned.prompt_used);
-
-        // 7. Append Entry to Session Audit Log
         addSessionLog(text, defaultPER, tunedPER, delta, isSafe);
 
         showToast("Speech synthesis completed. Click 'Run Acoustic Check (WER)' for ASR evaluation.", "success");
@@ -1011,7 +1083,6 @@
       } catch (err) {
         console.error("Synthesis error:", err);
         showToast(`Backend API Error: ${err.message}`, "error");
-        
         document.getElementById("deltaMainText").textContent = "Synthesis Error";
         document.getElementById("deltaSubText").textContent = `Could not communicate with Rime API: ${err.message}`;
       } finally {
@@ -1020,7 +1091,6 @@
       }
     }
 
-    // --- ACOUSTIC CHECK (WER) VIA FASTER-WHISPER (small.en) ---
     async function runAcousticWerCheck(type) {
       const audioId = (type === "default") ? lastAudioDefId : lastAudioTunedId;
       if (!audioId) {
@@ -1032,6 +1102,7 @@
       const statEl = document.getElementById(type === "default" ? "werDefault" : "werTuned");
       const container = document.getElementById(type === "default" ? "werDefaultContainer" : "werTunedContainer");
       const wordsEl = document.getElementById(type === "default" ? "werDefaultWords" : "werTunedWords");
+      const entityAccEl = document.getElementById(type === "default" ? "entityAccDefault" : "entityAccTuned");
 
       btn.disabled = true;
       btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin text-xs"></i> Transcribing ASR (small.en)...`;
@@ -1042,10 +1113,13 @@
           : { audio_id: audioId, custom_text: document.getElementById("rawTextInput").value.trim(), prompt_type: type };
 
         const resWer = await fetchAPI("/api/wer", payload);
-
         renderDelta(statEl, resWer.WER);
 
-        // Build Highlighted Words HTML
+        if (entityAccEl && resWer.entity_verification) {
+          const ev = resWer.entity_verification;
+          entityAccEl.textContent = `Entity Recall: ${ev.recall_acc}% (${ev.verified_entities}/${ev.total_entities})`;
+        }
+
         if (Array.isArray(resWer.words) && resWer.words.length > 0) {
           const wordsHtml = resWer.words.map(w => {
             if (w.error) {
@@ -1071,6 +1145,77 @@
       }
     }
 
+    // --- BLIND TEST FLOW ---
+    async function startBlindTestFlow() {
+      const modal = document.getElementById("blindModal");
+      const rawTextEl = document.getElementById("blindRawText");
+      const audioA = document.getElementById("audioBlindA");
+      const audioB = document.getElementById("audioBlindB");
+      const revealedBox = document.getElementById("blindRevealedBox");
+      const submitBtn = document.getElementById("submitBlindMosBtn");
+
+      revealedBox.classList.add("hidden");
+      submitBtn.disabled = true;
+      rawTextEl.textContent = "Loading anonymized audio session...";
+      modal.classList.remove("hidden");
+
+      try {
+        const resp = await fetch("/api/blind/session", { method: "POST" });
+        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+        const data = await resp.json();
+
+        currentBlindSessionId = data.session_id;
+        rawTextEl.textContent = data.raw_text;
+
+        audioA.src = data.audio_a_url;
+        audioB.src = data.audio_b_url;
+        submitBtn.disabled = false;
+
+      } catch (err) {
+        console.error("Blind session error:", err);
+        showToast(`Failed to start blind session: ${err.message}`, "error");
+        modal.classList.add("hidden");
+      }
+    }
+
+    async function submitBlindMosRating() {
+      if (!currentBlindSessionId) return;
+
+      const target = document.querySelector('input[name="blindTarget"]:checked').value;
+      const naturalness = parseInt(document.getElementById("naturalnessScore").value, 10);
+      const intelligibility = parseInt(document.getElementById("intelligibilityScore").value, 10);
+
+      const submitBtn = document.getElementById("submitBlindMosBtn");
+      submitBtn.disabled = true;
+
+      try {
+        const payload = {
+          session_id: currentBlindSessionId,
+          target: target,
+          naturalness: naturalness,
+          intelligibility: intelligibility
+        };
+
+        const res = await fetchAPI("/api/mos", payload);
+
+        const revealedBox = document.getElementById("blindRevealedBox");
+        const revealedText = document.getElementById("blindRevealedText");
+
+        revealedText.innerHTML = `
+          Option <strong>${res.target}</strong> was synthesized using provider <strong class="text-teal-400 font-mono">${res.revealed_provider.toUpperCase()}</strong> (${res.revealed_variant}).<br>
+          Submitted Ratings: Naturalness ${res.naturalness}/5 &bull; Intelligibility ${res.intelligibility}/5.
+        `;
+        revealedBox.classList.remove("hidden");
+        showToast("Rating saved to SQLite DB (results/benchmark.db). Provider revealed!", "success");
+
+      } catch (err) {
+        console.error("MOS submit error:", err);
+        showToast(`MOS Submission Error: ${err.message}`, "error");
+      } finally {
+        submitBtn.disabled = false;
+      }
+    }
+
     async function fetchAPI(url, payload) {
       const resp = await fetch(url, {
         method: "POST",
@@ -1090,21 +1235,16 @@
       const subText = document.getElementById("deltaSubText");
 
       if (isSafe) {
-        // GREEN SUCCESS BADGE (>= PER_THRESHOLD)
         container.className = "w-full rounded-2xl p-8 sm:p-10 border border-teal-500/40 text-center transition-all duration-300 bg-teal-500/10 shadow-xl shadow-teal-500/5";
         mainText.className = "text-4xl sm:text-6xl font-black font-grotesk tracking-tight my-2 text-teal-400 flex items-center justify-center gap-3";
-        
         mainText.innerHTML = `<i class="fa-solid fa-shield-check text-teal-400"></i> <span id="deltaStatVal" class="stat" data-prefix="&darr; " data-target="${delta}" data-suffix=" points clearer" data-decimals="1">--</span>`;
         renderDelta(document.getElementById("deltaStatVal"), delta);
-        
         subText.className = "text-sm font-mono text-teal-300/80 max-w-xl mx-auto";
         subText.textContent = `SAFETY VERIFIED: Speech clarity improvement exceeds safety threshold (+${delta.toFixed(1)} pts clarity gain). Safe for patient playback.`;
       } else {
-        // AMBER WARNING BADGE (< PER_THRESHOLD or negative delta) — APPEARS INSTANTLY
         container.className = "w-full rounded-2xl p-8 sm:p-10 border border-amber-500/40 text-center transition-all duration-300 bg-amber-500/10 shadow-xl shadow-amber-500/5";
         mainText.className = "text-2xl sm:text-4xl font-extrabold font-grotesk tracking-tight my-2 text-amber-400 flex items-center justify-center gap-3";
         mainText.innerHTML = `<span>&#9888;&#65039; Limited tuning confidence &mdash; verify manually</span>`;
-        
         subText.className = "text-sm font-mono text-amber-300/80 max-w-xl mx-auto";
         subText.textContent = `LOW CONFIDENCE: Tuning improvement (${delta.toFixed(1)} pts delta) is below the ${PER_THRESHOLD.toFixed(1)} pt threshold. Potential edge case — manual pharmacist verification required.`;
       }
@@ -1127,7 +1267,6 @@
 
     function addSessionLog(rawText, defPer, tunedPer, delta, isSafe) {
       const logBody = document.getElementById("sessionLogBody");
-      
       if (sessionLogs.length === 0) {
         logBody.innerHTML = "";
       }
@@ -1175,7 +1314,6 @@
       }
 
       toast.classList.remove("translate-y-[-100px]", "opacity-0");
-      
       setTimeout(() => {
         toast.classList.add("translate-y-[-100px]", "opacity-0");
       }, 4000);

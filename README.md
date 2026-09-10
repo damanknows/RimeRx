@@ -10,7 +10,7 @@ In fast-paced telehealth, e-pharmacy dispatch, and last-mile delivery across Ind
 
 ---
 
-## System Architecture
+## System Architecture: 9-Step Voice Safety Pipeline
 
 ```
                                   +---------------------------------------+
@@ -28,17 +28,18 @@ In fast-paced telehealth, e-pharmacy dispatch, and last-mile delivery across Ind
                  |                                    |                                    |
                  v                                    v                                    v
    +-------------+-------------+        +-------------+-------------+        +-------------+-------------+
-   |   Tuning Engine (data.py) |        | Multi-TTS (tts/providers.py)|        |  ASR Eval Engine (asr.py)   |
-   |   - Dosage Rules (1-0-1)  |        | - Rime TTS (mist/v1)      |        | - faster-whisper (small.en) |
-   |   - Date Rules (03/26)    |        | - OpenAI TTS (tts-1)      |        | - EVAL_BEAM_SIZE = 5        |
-   |   - Digit Speller         |        | - ElevenLabs (flash v2.5) |        | - jiwer (Word Error Rate)   |
-   +-------------+-------------+        +-------------+-------------+        +-------------+-------------+
-                 |                                    |                                    |
-                 |                                    v                                    v
-                 |                      +-------------+-------------+        +-------------+-------------+
-                 |                      |   Reliability & Metrics   |        |   SQLite Ratings Database   |
-                 |                      | (TTFB, Warm/Cold, Status) |        |    (results/benchmark.db)   |
-                 +--------------------> +---------------------------+ <----- +-----------------------------+
+   |  Voice Safety Pipeline    |        | Multi-TTS (tts/providers.py)|        |  ASR Eval Engine (asr.py)   |
+   | 1. Text Input             |        | - Rime TTS (mist/v1)      |        | - faster-whisper (small.en) |
+   | 2. Critical Entity Extr.  |        | - OpenAI TTS (tts-1)      |        | - EVAL_BEAM_SIZE = 5        |
+   | 3. Semantic Preservation  |        | - ElevenLabs (flash v2.5) |        | - jiwer (Word Error Rate)   |
+   | 4. Speech Normalization   |        +-------------+-------------+        | - Critical Entity Recall    |
+   | 5. Rime TTS (mist/v1)     |                      |                      +-------------+-------------+
+   | 6. Audio Generation       |                      |                                    |
+   | 7. ASR Transcription      |                      v                                    v
+   | 8. Entity Verification    |        +-------------+-------------+        +-------------+-------------+
+   | 9. Multi-Metric Scoring   |        |   Reliability & Metrics   |        |   SQLite Ratings Database   |
+   +---------------------------+        | (TTFB, Warm/Cold, Status) |        |    (results/benchmark.db)   |
+                                        +---------------------------+ <----- +-----------------------------+
 ```
 
 ---

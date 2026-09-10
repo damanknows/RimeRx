@@ -218,7 +218,10 @@
 
               <!-- ASR Hypothesis with Highlighted Errors -->
               <div id="werDefaultContainer" class="hidden pt-2 border-t border-white/5 space-y-1">
-                <span class="text-[11px] font-mono text-zinc-400 uppercase block">ASR Transcript (Misrecognized Words Highlighted):</span>
+                <div class="flex items-center justify-between">
+                  <span class="text-[11px] font-mono text-zinc-400 uppercase block">ASR Transcript (Misrecognized Words Highlighted):</span>
+                  <span id="entityAccDefault" class="text-[10px] font-mono font-bold text-zinc-400"></span>
+                </div>
                 <div id="werDefaultWords" class="p-2.5 bg-[#121216] text-zinc-300 rounded-lg text-xs font-mono break-words leading-relaxed border border-white/5">
                 </div>
               </div>
@@ -256,9 +259,14 @@
                 <span class="text-xs font-mono text-teal-400 uppercase tracking-wider block">PROCESS STEP 02</span>
                 <h3 class="font-bold text-zinc-100 text-base font-grotesk">Tuned Rime Output</h3>
               </div>
-              <span class="px-2.5 py-1 rounded text-xs font-mono bg-teal-500/10 text-teal-400 border border-teal-500/30">
-                Safety Tuned
-              </span>
+              <div class="flex items-center gap-2">
+                <span id="semanticsBadge" class="hidden px-2 py-0.5 rounded text-[10px] font-mono bg-teal-500/20 text-teal-300 border border-teal-500/40 font-bold flex items-center gap-1">
+                  <i class="fa-solid fa-shield-check text-teal-400"></i> SEMANTICS PRESERVED
+                </span>
+                <span class="px-2.5 py-1 rounded text-xs font-mono bg-teal-500/10 text-teal-400 border border-teal-500/30">
+                  Safety Tuned
+                </span>
+              </div>
             </div>
 
             <!-- Audio Player & Slow Toggle -->
@@ -294,7 +302,10 @@
 
               <!-- ASR Hypothesis with Highlighted Errors -->
               <div id="werTunedContainer" class="hidden pt-2 border-t border-teal-500/20 space-y-1">
-                <span class="text-[11px] font-mono text-teal-300/80 uppercase block">ASR Transcript (Misrecognized Words Highlighted):</span>
+                <div class="flex items-center justify-between">
+                  <span class="text-[11px] font-mono text-teal-300/80 uppercase block">ASR Transcript (Misrecognized Words Highlighted):</span>
+                  <span id="entityAccTuned" class="text-[10px] font-mono font-bold text-teal-300"></span>
+                </div>
                 <div id="werTunedWords" class="p-2.5 bg-[#0d0d0f] text-teal-200 rounded-lg text-xs font-mono break-words leading-relaxed border border-teal-500/20">
                 </div>
               </div>
@@ -1055,6 +1066,12 @@
         renderDelta(document.getElementById("cerDefault"), defaultCER);
         renderDelta(document.getElementById("cerTuned"), tunedCER);
         
+        // Show SEMANTICS PRESERVED badge on Tuned card if semantic preservation check passed
+        const semanticsBadge = document.getElementById("semanticsBadge");
+        if (semanticsBadge && resEvalTuned.semantic_preservation && resEvalTuned.semantic_preservation.is_preserved !== false) {
+          semanticsBadge.classList.remove("hidden");
+        }
+
         const isSafe = delta >= PER_THRESHOLD;
         updateDeltaBadge(delta, isSafe);
         updateTrustBadge(resRenderTuned);
@@ -1085,6 +1102,7 @@
       const statEl = document.getElementById(type === "default" ? "werDefault" : "werTuned");
       const container = document.getElementById(type === "default" ? "werDefaultContainer" : "werTunedContainer");
       const wordsEl = document.getElementById(type === "default" ? "werDefaultWords" : "werTunedWords");
+      const entityAccEl = document.getElementById(type === "default" ? "entityAccDefault" : "entityAccTuned");
 
       btn.disabled = true;
       btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin text-xs"></i> Transcribing ASR (small.en)...`;
@@ -1096,6 +1114,11 @@
 
         const resWer = await fetchAPI("/api/wer", payload);
         renderDelta(statEl, resWer.WER);
+
+        if (entityAccEl && resWer.entity_verification) {
+          const ev = resWer.entity_verification;
+          entityAccEl.textContent = `Entity Recall: ${ev.recall_acc}% (${ev.verified_entities}/${ev.total_entities})`;
+        }
 
         if (Array.isArray(resWer.words) && resWer.words.length > 0) {
           const wordsHtml = resWer.words.map(w => {

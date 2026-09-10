@@ -4,11 +4,11 @@
 
 ## Executive Summary
 
-| Provider | Model | Voice | Total Calls | Reliability Rate | Default WER (Mean / Med) | Tuned WER (Mean / Med) | Default PER (Mean) | Tuned PER (Mean) |
-|---|---|---|---|---|---|---|---|---|
-| **ELEVENLABS** | `elevenlabs` | standard | 6 | 0.0% | N/A | N/A | N/A | N/A |
-| **OPENAI** | `openai` | standard | 6 | 0.0% | N/A | N/A | N/A | N/A |
-| **RIME** | `rime` | standard | 6 | 100.0% | 93.31% / 94.74% | 65.89% / 74.07% | 92.08% | 0.0% |
+| Provider | Model | Voice | Total Calls | Reliability Rate | Default WER (Mean) | Tuned WER (Mean) | Default PER (Mean) | Tuned PER (Mean) | Entity Accuracy (Default / Tuned) |
+|---|---|---|---|---|---|---|---|---|---|
+| **ELEVENLABS** | `elevenlabs` | standard | 10 | 0.0% | N/A | N/A | N/A | N/A | **N/A** |
+| **OPENAI** | `openai` | standard | 10 | 0.0% | N/A | N/A | N/A | N/A | **N/A** |
+| **RIME** | `rime` | standard | 10 | 100.0% | 85.34% | 62.68% | 89.83% | 0.0% | **81.58% / 50.84%** |
 
 ## Latency Breakdown (Warm vs Cold Runs)
 
@@ -16,15 +16,16 @@
 |---|---|---|---|---|
 | **ELEVENLABS** | N/A | N/A | N/A | N/A |
 | **OPENAI** | N/A | N/A | N/A | N/A |
-| **RIME** | 1312.87 ms | 1405.89 ms | 2641.89 ms | 4199.17 ms |
+| **RIME** | 1378.17 ms | 1906.67 ms | 2678.94 ms | 6753.47 ms |
 
 ## Per-Category Error Rate Breakdown
 
-| Category | Total Evaluated | Mean Default WER | Mean Tuned WER | Mean Default PER | Mean Tuned PER | Delta (WER) |
-|---|---|---|---|---|---|---|
-| `code_switched` | 6 | 96.3% | 81.48% | 85.19% | 0.0% | **-14.82 pts** |
-| `dosages` | 6 | 88.89% | 74.07% | 96.3% | 0.0% | **-14.82 pts** |
-| `quantities` | 6 | 94.74% | 42.11% | 94.74% | 0.0% | **-52.63 pts** |
+| Category | Total Evaluated | Mean Default WER | Mean Tuned WER | Mean Default PER | Mean Tuned PER | Entity Recall (Tuned) | Delta (WER) |
+|---|---|---|---|---|---|---|---|
+| `code_switched` | 6 | 92.59% | 81.48% | 85.19% | 0.0% | **57.1%** | **-11.11 pts** |
+| `dosages` | 12 | 82.18% | 76.16% | 93.98% | 0.0% | **53.55%** | **-6.02 pts** |
+| `drug_names` | 6 | 75.0% | 37.5% | 81.25% | 0.0% | **40.0%** | **-37.5 pts** |
+| `quantities` | 6 | 94.74% | 42.11% | 94.74% | 0.0% | **50.0%** | **-52.63 pts** |
 
 ## Benchmark Methodology & Caveats
 

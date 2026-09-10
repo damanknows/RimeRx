@@ -32,6 +32,8 @@ def analyze():
             "wer_tuned": [],
             "per_default": [],
             "per_tuned": [],
+            "entity_acc_default": [],
+            "entity_acc_tuned": [],
             "ttfb_cold": [],
             "ttfb_warm": [],
             "total_cold": [],
@@ -47,7 +49,7 @@ def analyze():
         status = r["status"]
 
         if cat not in category_stats:
-            category_stats[cat] = {"total": 0, "default_wer": [], "tuned_wer": [], "default_per": [], "tuned_per": []}
+            category_stats[cat] = {"total": 0, "default_wer": [], "tuned_wer": [], "default_per": [], "tuned_per": [], "default_ent": [], "tuned_ent": []}
         category_stats[cat]["total"] += 1
 
         st = provider_stats[p]
@@ -57,6 +59,7 @@ def analyze():
             st["success"] += 1
             wer_val = float(r["wer"])
             per_val = float(r["per"])
+            ent_val = float(r.get("entity_acc", 100.0))
             ttfb = float(r["ttfb_ms"])
             total_t = float(r["total_ms"])
             is_cold = (r["cold"].lower() == "true")
@@ -64,13 +67,17 @@ def analyze():
             if variant == "default":
                 st["wer_default"].append(wer_val)
                 st["per_default"].append(per_val)
+                st["entity_acc_default"].append(ent_val)
                 category_stats[cat]["default_wer"].append(wer_val)
                 category_stats[cat]["default_per"].append(per_val)
+                category_stats[cat]["default_ent"].append(ent_val)
             else:
                 st["wer_tuned"].append(wer_val)
                 st["per_tuned"].append(per_val)
+                st["entity_acc_tuned"].append(ent_val)
                 category_stats[cat]["tuned_wer"].append(wer_val)
                 category_stats[cat]["tuned_per"].append(per_val)
+                category_stats[cat]["tuned_ent"].append(ent_val)
 
             if is_cold:
                 st["ttfb_cold"].append(ttfb)
@@ -93,18 +100,19 @@ def analyze():
     md.append("> **Exploratory &mdash; Small Sample Notice**: Results reported below are generated from exploratory benchmark runs on synthetic domain prescriptions and addresses. Metrics serve as relative performance indicators under provider-recommended configurations.\n")
 
     md.append("## Executive Summary\n")
-    md.append("| Provider | Model | Voice | Total Calls | Reliability Rate | Default WER (Mean / Med) | Tuned WER (Mean / Med) | Default PER (Mean) | Tuned PER (Mean) |")
-    md.append("|---|---|---|---|---|---|---|---|---|")
+    md.append("| Provider | Model | Voice | Total Calls | Reliability Rate | Default WER (Mean) | Tuned WER (Mean) | Default PER (Mean) | Tuned PER (Mean) | Entity Accuracy (Default / Tuned) |")
+    md.append("|---|---|---|---|---|---|---|---|---|---|")
 
     for p in providers:
         st = provider_stats[p]
         rel_rate = round((st["success"] / st["total"] * 100), 1) if st["total"] > 0 else 0.0
-        def_wer = f"{mean_val(st['wer_default'])}% / {median_val(st['wer_default'])}%" if st['wer_default'] else "N/A"
-        tun_wer = f"{mean_val(st['wer_tuned'])}% / {median_val(st['wer_tuned'])}%" if st['wer_tuned'] else "N/A"
+        def_wer = f"{mean_val(st['wer_default'])}%" if st['wer_default'] else "N/A"
+        tun_wer = f"{mean_val(st['wer_tuned'])}%" if st['wer_tuned'] else "N/A"
         def_per = f"{mean_val(st['per_default'])}%" if st['per_default'] else "N/A"
         tun_per = f"{mean_val(st['per_tuned'])}%" if st['per_tuned'] else "N/A"
+        ent_acc = f"{mean_val(st['entity_acc_default'])}% / {mean_val(st['entity_acc_tuned'])}%" if st['entity_acc_default'] else "N/A"
 
-        md.append(f"| **{p.upper()}** | `{p}` | standard | {st['total']} | {rel_rate}% | {def_wer} | {tun_wer} | {def_per} | {tun_per} |")
+        md.append(f"| **{p.upper()}** | `{p}` | standard | {st['total']} | {rel_rate}% | {def_wer} | {tun_wer} | {def_per} | {tun_per} | **{ent_acc}** |")
 
     md.append("\n## Latency Breakdown (Warm vs Cold Runs)\n")
     md.append("| Provider | Cold TTFB (Mean) | Warm TTFB (Mean) | Cold Total (Mean) | Warm Total (Mean) |")
@@ -119,16 +127,17 @@ def analyze():
         md.append(f"| **{p.upper()}** | {c_ttfb} | {w_ttfb} | {c_tot} | {w_tot} |")
 
     md.append("\n## Per-Category Error Rate Breakdown\n")
-    md.append("| Category | Total Evaluated | Mean Default WER | Mean Tuned WER | Mean Default PER | Mean Tuned PER | Delta (WER) |")
-    md.append("|---|---|---|---|---|---|---|")
+    md.append("| Category | Total Evaluated | Mean Default WER | Mean Tuned WER | Mean Default PER | Mean Tuned PER | Entity Recall (Tuned) | Delta (WER) |")
+    md.append("|---|---|---|---|---|---|---|---|")
 
     for cat, st in sorted(category_stats.items()):
         d_wer = mean_val(st["default_wer"])
         t_wer = mean_val(st["tuned_wer"])
         d_per = mean_val(st["default_per"])
         t_per = mean_val(st["tuned_per"])
+        t_ent = mean_val(st["tuned_ent"])
         delta_wer = round(d_wer - t_wer, 2)
-        md.append(f"| `{cat}` | {st['total']} | {d_wer}% | {t_wer}% | {d_per}% | {t_per}% | **-{delta_wer} pts** |")
+        md.append(f"| `{cat}` | {st['total']} | {d_wer}% | {t_wer}% | {d_per}% | {t_per}% | **{t_ent}%** | **-{delta_wer} pts** |")
 
     md.append("\n## Benchmark Methodology & Caveats\n")
     md.append("- **ASR Engine**: `faster-whisper` (`small.en`, `int8`, `beam_size=5` for evaluation).\n")
