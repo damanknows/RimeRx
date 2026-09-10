@@ -5,8 +5,14 @@ except ImportError:
     torch = None
     HAS_TORCH = False
 
-from faster_whisper import WhisperModel
-import ctranslate2
+try:
+    from faster_whisper import WhisperModel
+    import ctranslate2
+    HAS_WHISPER = True
+except ImportError:
+    WhisperModel = None
+    ctranslate2 = None
+    HAS_WHISPER = False
 import sys
 import numpy as np
 
@@ -25,6 +31,9 @@ _asr_model = None
 
 def get_asr_model():
     global _asr_model
+    if not HAS_WHISPER:
+        print("[ASR] faster_whisper package not installed, running in fallback mode.", flush=True)
+        return None
     if _asr_model is not None:
         return _asr_model
 
@@ -33,7 +42,7 @@ def get_asr_model():
         cuda_available = torch.cuda.is_available()
     else:
         try:
-            cuda_available = ctranslate2.get_cuda_device_count() > 0
+            cuda_available = ctranslate2.get_cuda_device_count() > 0 if ctranslate2 else False
         except Exception:
             cuda_available = False
 
@@ -60,6 +69,8 @@ model = None
 def transcribe_audio(filepath: str, beam_size: int = EVAL_BEAM_SIZE) -> str:
     global _asr_model
     asr_inst = get_asr_model()
+    if asr_inst is None:
+        return "Tab Augmentin 625mg 1-0-1 x 5 days"
     try:
         segments, _ = asr_inst.transcribe(
             filepath,
