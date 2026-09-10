@@ -388,6 +388,168 @@
 
     </section>
 
+    <!-- BLIND LISTENING TEST SECTION -->
+    <section class="bg-[#121216] rounded-2xl border border-amber-500/30 overflow-hidden divide-y divide-white/5">
+      
+      <!-- Collapsible Panel Header / Toggle -->
+      <div class="w-full px-6 py-4 flex flex-wrap items-center justify-between bg-[#121216] gap-3 text-left font-mono text-xs text-amber-300">
+        <button 
+          id="toggleBlindSectionBtn"
+          class="flex items-center gap-2 hover:text-amber-200 transition-colors cursor-pointer select-none"
+        >
+          <i class="fa-solid fa-eye-slash text-amber-400"></i>
+          <span class="font-bold tracking-wider">BLIND LISTENING TEST // MOS EVALUATION</span>
+          <i id="blindSectionChevron" class="fa-solid fa-chevron-down text-zinc-500 transition-transform duration-200 ml-1"></i>
+        </button>
+
+        <div class="flex items-center gap-3">
+          <a href="/api/mos/export" target="_blank" class="px-2.5 py-1 rounded bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 font-mono text-xs border border-amber-500/30 transition-all flex items-center gap-1.5 cursor-pointer">
+            <i class="fa-solid fa-download text-amber-400"></i> Export all ratings (CSV)
+          </a>
+          <button 
+            id="startBlindSectionBtn" 
+            class="px-3.5 py-1.5 rounded-lg font-mono font-bold text-xs bg-amber-500 hover:bg-amber-400 text-zinc-950 shadow-md shadow-amber-500/20 transition-all cursor-pointer flex items-center gap-1.5"
+          >
+            <i class="fa-solid fa-play text-[10px]"></i>
+            <span>Start Blind Test</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Collapsible Section Content -->
+      <div id="blindSectionContent" class="hidden p-6 bg-[#0d0d0f] space-y-6 text-xs text-zinc-400">
+        
+        <!-- Case Info Header -->
+        <div id="blindSectionHeader" class="p-4 bg-[#121216] rounded-xl border border-white/5 space-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] font-mono text-amber-400 uppercase font-bold tracking-wider">// PRESCRIPTION CASE TEXT</span>
+            <span id="blindCaseIdBadge" class="text-[10px] font-mono text-zinc-500 uppercase">Click "Start Blind Test" to begin</span>
+          </div>
+          <div id="blindSectionCaseText" class="text-sm font-mono text-zinc-200 leading-relaxed italic">
+            No active blind evaluation session. Click "Start Blind Test" above to load anonymized clips.
+          </div>
+        </div>
+
+        <!-- Audio Player Cards Grid (Clip A & Clip B) -->
+        <div id="blindClipsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-6 opacity-60 pointer-events-none transition-all">
+          
+          <!-- CLIP A CARD -->
+          <div id="cardBlindA" class="bg-[#121216] p-5 rounded-xl border border-white/10 space-y-4 flex flex-col justify-between relative">
+            <div class="space-y-3">
+              <div class="flex items-center justify-between border-b border-white/5 pb-2">
+                <span class="font-mono font-bold text-amber-400 text-sm flex items-center gap-2">
+                  <i class="fa-solid fa-headphones text-amber-400"></i> Clip A
+                </span>
+                <span id="badgeRevealA" class="px-2 py-0.5 rounded text-[10px] font-mono bg-zinc-800 text-zinc-500 border border-white/5 uppercase">
+                  Blind (Hidden)
+                </span>
+              </div>
+
+              <audio id="audioSectionBlindA" controls class="w-full h-9"></audio>
+              <span id="listenPromptA" class="text-[10px] font-mono text-amber-400/80 block italic">Listen to audio to unlock rating submission</span>
+
+              <!-- Rating Form A -->
+              <div class="space-y-3 pt-2 border-t border-white/5">
+                <div class="space-y-1">
+                  <label class="text-[11px] font-mono text-zinc-300 block">Naturalness (1-5 MOS):</label>
+                  <select id="natScoreA" class="w-full p-2 bg-[#0d0d0f] border border-white/10 rounded-lg text-zinc-200 font-mono text-xs focus:border-amber-500/50 outline-none">
+                    <option value="5" selected>5 - Excellent (Human-like)</option>
+                    <option value="4">4 - Good (Minor robotic tone)</option>
+                    <option value="3">3 - Fair (Noticeable synthesis)</option>
+                    <option value="2">2 - Poor (Unnatural pauses)</option>
+                    <option value="1">1 - Bad (Highly distorted)</option>
+                  </select>
+                </div>
+
+                <div class="space-y-1">
+                  <label class="text-[11px] font-mono text-zinc-300 block">Intelligibility (1-5 MOS):</label>
+                  <select id="intelScoreA" class="w-full p-2 bg-[#0d0d0f] border border-white/10 rounded-lg text-zinc-200 font-mono text-xs focus:border-amber-500/50 outline-none">
+                    <option value="5" selected>5 - Perfect (100% dosage clarity)</option>
+                    <option value="4">4 - High (Clear numbers/units)</option>
+                    <option value="3">3 - Moderate (Slight ambiguity)</option>
+                    <option value="2">2 - Low (Misread dosage/numbers)</option>
+                    <option value="1">1 - Unintelligible (Dangerous error)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <button 
+              id="submitRatingABtn" 
+              disabled 
+              class="w-full py-2.5 px-4 bg-amber-500 hover:bg-amber-400 active:bg-amber-600 disabled:opacity-40 disabled:cursor-not-allowed text-zinc-950 font-mono font-bold text-xs rounded-lg transition-all shadow-md cursor-pointer flex items-center justify-center gap-2"
+            >
+              <i class="fa-solid fa-check text-[10px]"></i> Submit Rating A
+            </button>
+          </div>
+
+          <!-- CLIP B CARD -->
+          <div id="cardBlindB" class="bg-[#121216] p-5 rounded-xl border border-white/10 space-y-4 flex flex-col justify-between relative">
+            <div class="space-y-3">
+              <div class="flex items-center justify-between border-b border-white/5 pb-2">
+                <span class="font-mono font-bold text-amber-400 text-sm flex items-center gap-2">
+                  <i class="fa-solid fa-headphones text-amber-400"></i> Clip B
+                </span>
+                <span id="badgeRevealB" class="px-2 py-0.5 rounded text-[10px] font-mono bg-zinc-800 text-zinc-500 border border-white/5 uppercase">
+                  Blind (Hidden)
+                </span>
+              </div>
+
+              <audio id="audioSectionBlindB" controls class="w-full h-9"></audio>
+              <span id="listenPromptB" class="text-[10px] font-mono text-amber-400/80 block italic">Listen to audio to unlock rating submission</span>
+
+              <!-- Rating Form B -->
+              <div class="space-y-3 pt-2 border-t border-white/5">
+                <div class="space-y-1">
+                  <label class="text-[11px] font-mono text-zinc-300 block">Naturalness (1-5 MOS):</label>
+                  <select id="natScoreB" class="w-full p-2 bg-[#0d0d0f] border border-white/10 rounded-lg text-zinc-200 font-mono text-xs focus:border-amber-500/50 outline-none">
+                    <option value="5" selected>5 - Excellent (Human-like)</option>
+                    <option value="4">4 - Good (Minor robotic tone)</option>
+                    <option value="3">3 - Fair (Noticeable synthesis)</option>
+                    <option value="2">2 - Poor (Unnatural pauses)</option>
+                    <option value="1">1 - Bad (Highly distorted)</option>
+                  </select>
+                </div>
+
+                <div class="space-y-1">
+                  <label class="text-[11px] font-mono text-zinc-300 block">Intelligibility (1-5 MOS):</label>
+                  <select id="intelScoreB" class="w-full p-2 bg-[#0d0d0f] border border-white/10 rounded-lg text-zinc-200 font-mono text-xs focus:border-amber-500/50 outline-none">
+                    <option value="5" selected>5 - Perfect (100% dosage clarity)</option>
+                    <option value="4">4 - High (Clear numbers/units)</option>
+                    <option value="3">3 - Moderate (Slight ambiguity)</option>
+                    <option value="2">2 - Low (Misread dosage/numbers)</option>
+                    <option value="1">1 - Unintelligible (Dangerous error)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <button 
+              id="submitRatingBBtn" 
+              disabled 
+              class="w-full py-2.5 px-4 bg-amber-500 hover:bg-amber-400 active:bg-amber-600 disabled:opacity-40 disabled:cursor-not-allowed text-zinc-950 font-mono font-bold text-xs rounded-lg transition-all shadow-md cursor-pointer flex items-center justify-center gap-2"
+            >
+              <i class="fa-solid fa-check text-[10px]"></i> Submit Rating B
+            </button>
+          </div>
+
+        </div>
+
+        <!-- POST-RATING REVEAL SUMMARY BOX -->
+        <div id="blindSummaryBox" class="hidden p-5 bg-teal-500/10 border border-teal-500/30 rounded-xl space-y-3 font-mono text-xs">
+          <div class="flex items-center justify-between">
+            <span class="text-teal-400 font-bold text-sm flex items-center gap-2">
+              <i class="fa-solid fa-eye text-teal-400"></i> BLIND TEST EVALUATION REVEALED
+            </span>
+            <span class="px-2 py-0.5 rounded bg-teal-500/20 text-teal-300 text-[10px]">COMPLETE</span>
+          </div>
+          <div id="blindSummaryContent" class="text-zinc-200 leading-relaxed"></div>
+        </div>
+
+      </div>
+
+    </section>
+
     <!-- SESSION AUDIT LOG TABLE -->
     <section class="bg-[#121216] rounded-2xl p-6 border border-white/10 space-y-4">
       <div class="flex items-center justify-between border-b border-white/5 pb-3">
@@ -707,6 +869,42 @@
         content.classList.toggle("hidden");
         chevron.classList.toggle("rotate-180");
       });
+
+      document.getElementById("toggleBlindSectionBtn").addEventListener("click", () => {
+        const content = document.getElementById("blindSectionContent");
+        const chevron = document.getElementById("blindSectionChevron");
+        content.classList.toggle("hidden");
+        chevron.classList.toggle("rotate-180");
+      });
+
+      document.getElementById("startBlindSectionBtn").addEventListener("click", startBlindSectionTest);
+      document.getElementById("submitRatingABtn").addEventListener("click", () => submitBlindSectionRating("A"));
+      document.getElementById("submitRatingBBtn").addEventListener("click", () => submitBlindSectionRating("B"));
+
+      const audioSecA = document.getElementById("audioSectionBlindA");
+      const audioSecB = document.getElementById("audioSectionBlindB");
+
+      const unlockA = () => {
+        hasListenedA = true;
+        document.getElementById("submitRatingABtn").disabled = false;
+        const prompt = document.getElementById("listenPromptA");
+        if (prompt) prompt.classList.add("hidden");
+      };
+      const unlockB = () => {
+        hasListenedB = true;
+        document.getElementById("submitRatingBBtn").disabled = false;
+        const prompt = document.getElementById("listenPromptB");
+        if (prompt) prompt.classList.add("hidden");
+      };
+
+      if (audioSecA) {
+        audioSecA.addEventListener("play", unlockA);
+        audioSecA.addEventListener("ended", unlockA);
+      }
+      if (audioSecB) {
+        audioSecB.addEventListener("play", unlockB);
+        audioSecB.addEventListener("ended", unlockB);
+      }
     }
 
     function renderChips() {
@@ -1096,6 +1294,161 @@
       setTimeout(() => {
         toast.classList.add("translate-y-[-100px]", "opacity-0");
       }, 4000);
+    }
+
+    // --- BLIND SECTION LISTENING TEST LOGIC ---
+    let currentSectionBlindSessionId = null;
+    let hasListenedA = false;
+    let hasListenedB = false;
+    let ratingResponseA = null;
+    let ratingResponseB = null;
+
+    async function startBlindSectionTest() {
+      const startBtn = document.getElementById("startBlindSectionBtn");
+      startBtn.disabled = true;
+      startBtn.innerHTML = `<i class="fa-solid fa-spinner animate-spin text-[10px]"></i> Loading...`;
+
+      document.getElementById("blindSectionContent").classList.remove("hidden");
+      document.getElementById("blindSectionChevron").classList.add("rotate-180");
+
+      hasListenedA = false;
+      hasListenedB = false;
+      ratingResponseA = null;
+      ratingResponseB = null;
+
+      document.getElementById("submitRatingABtn").disabled = true;
+      document.getElementById("submitRatingBBtn").disabled = true;
+      document.getElementById("submitRatingABtn").innerHTML = `<i class="fa-solid fa-check text-[10px]"></i> Submit Rating A`;
+      document.getElementById("submitRatingBBtn").innerHTML = `<i class="fa-solid fa-check text-[10px]"></i> Submit Rating B`;
+
+      const promptA = document.getElementById("listenPromptA");
+      const promptB = document.getElementById("listenPromptB");
+      if (promptA) promptA.classList.remove("hidden");
+      if (promptB) promptB.classList.remove("hidden");
+
+      const badgeA = document.getElementById("badgeRevealA");
+      const badgeB = document.getElementById("badgeRevealB");
+      badgeA.textContent = "Blind (Hidden)";
+      badgeA.className = "px-2 py-0.5 rounded text-[10px] font-mono bg-zinc-800 text-zinc-500 border border-white/5 uppercase";
+      badgeB.textContent = "Blind (Hidden)";
+      badgeB.className = "px-2 py-0.5 rounded text-[10px] font-mono bg-zinc-800 text-zinc-500 border border-white/5 uppercase";
+
+      document.getElementById("blindSummaryBox").classList.add("hidden");
+
+      try {
+        const resp = await fetch("/api/blind/session", { method: "POST" });
+        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+        const data = await resp.json();
+
+        currentSectionBlindSessionId = data.session_id;
+
+        document.getElementById("blindCaseIdBadge").textContent = `CASE ID: ${data.case_id.toUpperCase()}`;
+        document.getElementById("blindSectionCaseText").textContent = `"${data.raw_text}"`;
+
+        const audioA = document.getElementById("audioSectionBlindA");
+        const audioB = document.getElementById("audioSectionBlindB");
+        audioA.src = data.audio_a_url;
+        audioB.src = data.audio_b_url;
+
+        const grid = document.getElementById("blindClipsGrid");
+        grid.classList.remove("opacity-60", "pointer-events-none");
+
+        showToast("Blind test session loaded. Listen to Clip A and Clip B to rate.", "info");
+
+      } catch (err) {
+        console.error("Blind section session error:", err);
+        showToast(`Failed to start blind session: ${err.message}`, "error");
+      } finally {
+        startBtn.disabled = false;
+        startBtn.innerHTML = `<i class="fa-solid fa-play text-[10px]"></i> <span>Start Blind Test</span>`;
+      }
+    }
+
+    async function submitBlindSectionRating(target) {
+      if (!currentSectionBlindSessionId) return;
+
+      const isA = target === "A";
+      const submitBtn = document.getElementById(isA ? "submitRatingABtn" : "submitRatingBBtn");
+      const natSelect = document.getElementById(isA ? "natScoreA" : "natScoreB");
+      const intelSelect = document.getElementById(isA ? "intelScoreA" : "intelScoreB");
+
+      const naturalness = parseInt(natSelect.value, 10);
+      const intelligibility = parseInt(intelSelect.value, 10);
+
+      submitBtn.disabled = true;
+
+      try {
+        const payload = {
+          session_id: currentSectionBlindSessionId,
+          target: target,
+          naturalness: naturalness,
+          intelligibility: intelligibility
+        };
+
+        const res = await fetchAPI("/api/mos", payload);
+        if (isA) {
+          ratingResponseA = res;
+        } else {
+          ratingResponseB = res;
+        }
+
+        submitBtn.innerHTML = `<i class="fa-solid fa-check-double text-teal-400"></i> Rated ${naturalness}/5 & ${intelligibility}/5`;
+        showToast(`Rating recorded for Clip ${target}. Saved to results/benchmark.db`, "success");
+
+        checkAndRevealBlindResults();
+      } catch (err) {
+        console.error(`Rating submission error for Clip ${target}:`, err);
+        showToast(`MOS Submission Error: ${err.message}`, "error");
+        submitBtn.disabled = false;
+      }
+    }
+
+    function checkAndRevealBlindResults() {
+      if (!ratingResponseA || !ratingResponseB) return;
+
+      const badgeA = document.getElementById("badgeRevealA");
+      const badgeB = document.getElementById("badgeRevealB");
+
+      const isTunedA = ratingResponseA.revealed_variant === "tuned";
+      badgeA.textContent = isTunedA ? "Safety Tuned" : "Untuned (Default)";
+      badgeA.className = isTunedA 
+        ? "px-2 py-0.5 rounded text-[10px] font-mono bg-teal-500/20 text-teal-400 border border-teal-500/40 uppercase font-bold"
+        : "px-2 py-0.5 rounded text-[10px] font-mono bg-amber-500/20 text-amber-400 border border-amber-500/40 uppercase font-bold";
+
+      const isTunedB = ratingResponseB.revealed_variant === "tuned";
+      badgeB.textContent = isTunedB ? "Safety Tuned" : "Untuned (Default)";
+      badgeB.className = isTunedB 
+        ? "px-2 py-0.5 rounded text-[10px] font-mono bg-teal-500/20 text-teal-400 border border-teal-500/40 uppercase font-bold"
+        : "px-2 py-0.5 rounded text-[10px] font-mono bg-amber-500/20 text-amber-400 border border-amber-500/40 uppercase font-bold";
+
+      const summaryBox = document.getElementById("blindSummaryBox");
+      const summaryContent = document.getElementById("blindSummaryContent");
+
+      const tunedResp = isTunedA ? ratingResponseA : ratingResponseB;
+      const defaultResp = isTunedA ? ratingResponseB : ratingResponseA;
+      const tunedSlot = isTunedA ? "Clip A" : "Clip B";
+      const defaultSlot = isTunedA ? "Clip B" : "Clip A";
+
+      summaryContent.innerHTML = `
+        <div class="space-y-2">
+          <div>
+            <strong>Identity Revealed:</strong> <span class="text-teal-400 font-bold">${tunedSlot}</span> was synthesized using the <strong class="text-teal-300">Safety Tuned Rime prompt</strong>, and <span class="text-amber-400 font-bold">${defaultSlot}</span> was synthesized using the <strong class="text-amber-300">Untuned Default prompt</strong>.
+          </div>
+          <div class="p-3 bg-[#0d0d0f] rounded-lg border border-white/5 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+            <div>
+              <span class="text-teal-400 font-bold block">// SAFETY TUNED (${tunedSlot})</span>
+              Naturalness: <strong>${tunedResp.naturalness}/5</strong> &bull; Intelligibility: <strong>${tunedResp.intelligibility}/5</strong>
+            </div>
+            <div>
+              <span class="text-amber-400 font-bold block">// UNTUNED DEFAULT (${defaultSlot})</span>
+              Naturalness: <strong>${defaultResp.naturalness}/5</strong> &bull; Intelligibility: <strong>${defaultResp.intelligibility}/5</strong>
+            </div>
+          </div>
+        </div>
+      `;
+
+      summaryBox.classList.remove("hidden");
+      showToast("Both clips rated! Provider variants revealed.", "success");
     }
 
     function escapeHtml(str) {
