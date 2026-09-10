@@ -10,15 +10,16 @@ import ctranslate2
 import sys
 import numpy as np
 
-# 1. MODEL CHOICE: small.en for robust pronunciation quality measurement.
-MODEL_SIZE = "small.en"
+import os
+# 1. MODEL CHOICE: configurable via ASR_MODEL_SIZE (defaults to base.en for free cloud tier 512MB RAM compatibility, small.en for local/GPU)
+MODEL_SIZE = os.getenv("ASR_MODEL_SIZE", "base.en")
 
 # 2. QUANTIZATION: int8 is mandatory for memory efficiency.
 COMPUTE_TYPE = "int8"
 
 # 3. BEAM SIZE: 1 (Greedy) for interactive use; 5 for WER benchmark evaluation.
 BEAM_SIZE = 1
-EVAL_BEAM_SIZE = 5
+EVAL_BEAM_SIZE = 1 if MODEL_SIZE.startswith("base") else 5
 
 _asr_model = None
 
