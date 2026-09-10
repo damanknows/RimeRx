@@ -15,8 +15,6 @@
 ## Demo
 
 - **Demo video**: `<PLACEHOLDER — paste link here>`
-- **Demo script**: [docs/demo/VIDEO_SCRIPT.md](docs/demo/VIDEO_SCRIPT.md)
-- **Recording checklist**: [docs/demo/RECORDING_CHECKLIST.md](docs/demo/RECORDING_CHECKLIST.md)
 
 ---
 
