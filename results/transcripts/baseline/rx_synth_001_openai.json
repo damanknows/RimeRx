@@ -1,0 +1,58 @@
+{
+  "case_id": "rx_synth_001",
+  "domain": "Pharmacy",
+  "category": "drug_names",
+  "provider": "openai",
+  "variant": "default",
+  "raw_text": "Tab Augmentin 625mg 1-0-1 x 5 days Exp: 03/26",
+  "normalized_text": "Tab Augmentin 625mg 1-0-1 x 5 days Exp: 03/26",
+  "expected_pronunciation": "Tablet Augmentin six two five milligram one zero one times five days Expiry March twenty six",
+  "expected_critical_entities": {
+    "drug": "Augmentin",
+    "strength": "625mg",
+    "dose": "1-0-1",
+    "frequency": "1-0-1",
+    "schedule": "1-0-1",
+    "duration": "5 days",
+    "quantity": null,
+    "date": null,
+    "expiry": "03/26",
+    "abbreviations": [
+      "Tab",
+      "Exp"
+    ],
+    "drugs": [
+      "Augmentin"
+    ],
+    "strengths": [
+      "625mg"
+    ],
+    "schedules": [
+      "1-0-1"
+    ],
+    "dates": [
+      "03/26"
+    ],
+    "numbers": [
+      "0",
+      "26",
+      "625",
+      "5",
+      "03",
+      "1"
+    ]
+  },
+  "rime_configuration": {
+    "model_id": "mistv3",
+    "voice": "sirius",
+    "language": "en-IN",
+    "audio_format": "mp3"
+  },
+  "audio_clip_path": "results/clips/baseline/rx_synth_001_openai.mp3",
+  "hypothesis": "",
+  "wer": null,
+  "per": 87.5,
+  "critical_token_accuracy": 0.0,
+  "latency": {},
+  "status": "FAILED (400: OPENAI_API_KEY environment variable is missing or empty. Please set a valid)"
+}

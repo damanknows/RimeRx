@@ -1,0 +1,53 @@
+{
+  "case_id": "rx_synth_005",
+  "domain": "Pharmacy",
+  "category": "dosage_schedules",
+  "provider": "elevenlabs",
+  "variant": "default",
+  "raw_text": "Cap Pantocid 40mg 0-1-0 before meals x 14 days",
+  "normalized_text": "Cap Pantocid 40mg 0-1-0 before meals x 14 days",
+  "expected_pronunciation": "Capsule Pantocid forty milligram zero one zero before meals times fourteen days",
+  "expected_critical_entities": {
+    "drug": "Pantocid",
+    "strength": "40mg",
+    "dose": "0-1-0",
+    "frequency": "0-1-0",
+    "schedule": "0-1-0",
+    "duration": "14 days",
+    "quantity": null,
+    "date": null,
+    "expiry": null,
+    "abbreviations": [
+      "Cap"
+    ],
+    "drugs": [
+      "Pantocid"
+    ],
+    "strengths": [
+      "40mg"
+    ],
+    "schedules": [
+      "0-1-0"
+    ],
+    "dates": [],
+    "numbers": [
+      "0",
+      "14",
+      "1",
+      "40"
+    ]
+  },
+  "rime_configuration": {
+    "model_id": "mistv3",
+    "voice": "sirius",
+    "language": "en-IN",
+    "audio_format": "mp3"
+  },
+  "audio_clip_path": "results/clips/baseline/rx_synth_005_elevenlabs.mp3",
+  "hypothesis": "",
+  "wer": null,
+  "per": 66.67,
+  "critical_token_accuracy": 0.0,
+  "latency": {},
+  "status": "FAILED (400: ELEVENLABS_API_KEY environment variable is missing or empty. Please set a v)"
+}

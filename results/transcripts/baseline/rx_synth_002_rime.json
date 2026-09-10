@@ -1,0 +1,52 @@
+{
+  "case_id": "rx_synth_002",
+  "domain": "Pharmacy",
+  "category": "strengths",
+  "provider": "rime",
+  "variant": "default",
+  "raw_text": "Paracetamol 0.5 mg orally twice daily for 3 days",
+  "normalized_text": "Paracetamol 0.5 mg orally twice daily for 3 days",
+  "expected_pronunciation": "Paracetamol zerofive milligram orally twice daily for three days",
+  "expected_critical_entities": {
+    "drug": "Paracetamol",
+    "strength": "0.5 mg",
+    "dose": null,
+    "frequency": "twice daily",
+    "schedule": null,
+    "duration": "3 days",
+    "quantity": null,
+    "date": null,
+    "expiry": null,
+    "abbreviations": [],
+    "drugs": [
+      "Paracetamol"
+    ],
+    "strengths": [
+      "0.5 mg"
+    ],
+    "schedules": [],
+    "dates": [],
+    "numbers": [
+      "0",
+      "3",
+      "5"
+    ]
+  },
+  "rime_configuration": {
+    "model_id": "mistv3",
+    "voice": "sirius",
+    "language": "en-IN",
+    "audio_format": "mp3"
+  },
+  "audio_clip_path": "results/clips/baseline/rx_synth_002_rime.mp3",
+  "hypothesis": "paracetamol 0.5 milligrams orally twice daily for three days",
+  "wer": 22.22,
+  "per": 33.33,
+  "critical_token_accuracy": 100.0,
+  "latency": {
+    "ttfb_ms": 1202.98,
+    "total_ms": 2022.39,
+    "cold": false
+  },
+  "status": "SUCCESS"
+}

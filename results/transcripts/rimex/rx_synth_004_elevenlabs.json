@@ -1,0 +1,53 @@
+{
+  "case_id": "rx_synth_004",
+  "domain": "Pharmacy",
+  "category": "dosage_schedules",
+  "provider": "elevenlabs",
+  "variant": "tuned",
+  "raw_text": "Tab Dolo 650mg 1-0-1 after meals for 3 days",
+  "normalized_text": "Tablet Dolo six five zero milligram one zero one after meals for three days",
+  "expected_pronunciation": "Tablet Dolo six five zero milligram one zero one after meals for three days",
+  "expected_critical_entities": {
+    "drug": "Dolo",
+    "strength": "650mg",
+    "dose": "1-0-1",
+    "frequency": "1-0-1",
+    "schedule": "1-0-1",
+    "duration": "3 days",
+    "quantity": null,
+    "date": null,
+    "expiry": null,
+    "abbreviations": [
+      "Tab"
+    ],
+    "drugs": [
+      "Dolo"
+    ],
+    "strengths": [
+      "650mg"
+    ],
+    "schedules": [
+      "1-0-1"
+    ],
+    "dates": [],
+    "numbers": [
+      "0",
+      "3",
+      "1",
+      "650"
+    ]
+  },
+  "rime_configuration": {
+    "model_id": "mistv3",
+    "voice": "sirius",
+    "language": "en-IN",
+    "audio_format": "mp3"
+  },
+  "audio_clip_path": "results/clips/rimex/rx_synth_004_elevenlabs.mp3",
+  "hypothesis": "",
+  "wer": null,
+  "per": 0.0,
+  "critical_token_accuracy": 0.0,
+  "latency": {},
+  "status": "FAILED (400: ELEVENLABS_API_KEY environment variable is missing or empty. Please set a v)"
+}

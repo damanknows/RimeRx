@@ -1,0 +1,48 @@
+{
+  "case_id": "rx_synth_002",
+  "domain": "Pharmacy",
+  "category": "strengths",
+  "provider": "openai",
+  "variant": "tuned",
+  "raw_text": "Paracetamol 0.5 mg orally twice daily for 3 days",
+  "normalized_text": "Paracetamol zerofive milligram orally twice daily for three days",
+  "expected_pronunciation": "Paracetamol zerofive milligram orally twice daily for three days",
+  "expected_critical_entities": {
+    "drug": "Paracetamol",
+    "strength": "0.5 mg",
+    "dose": null,
+    "frequency": "twice daily",
+    "schedule": null,
+    "duration": "3 days",
+    "quantity": null,
+    "date": null,
+    "expiry": null,
+    "abbreviations": [],
+    "drugs": [
+      "Paracetamol"
+    ],
+    "strengths": [
+      "0.5 mg"
+    ],
+    "schedules": [],
+    "dates": [],
+    "numbers": [
+      "0",
+      "3",
+      "5"
+    ]
+  },
+  "rime_configuration": {
+    "model_id": "mistv3",
+    "voice": "sirius",
+    "language": "en-IN",
+    "audio_format": "mp3"
+  },
+  "audio_clip_path": "results/clips/rimex/rx_synth_002_openai.mp3",
+  "hypothesis": "",
+  "wer": null,
+  "per": 0.0,
+  "critical_token_accuracy": 0.0,
+  "latency": {},
+  "status": "FAILED (400: OPENAI_API_KEY environment variable is missing or empty. Please set a valid)"
+}

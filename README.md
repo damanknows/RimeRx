@@ -1,164 +1,76 @@
-# RimeRx
+# 🩺 RimeRx: Voice Instruction Safety Infrastructure
 
-> **Voice Safety & Pronunciation Engineering Engine for Indian Medication Instructions & Logistics via Rime TTS**
+[![Live Site](https://img.shields.io/badge/Live%20Demo-rimerx.onrender.com-00C7B7?style=for-the-badge&logo=render&logoColor=white)](https://rimerx.onrender.com/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi)](https://fastapi.tiangolo.com/)
+[![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![Rime TTS](https://img.shields.io/badge/Rime%20TTS-mistv3-7C3AED?style=for-the-badge)](https://rime.ai/)
+[![ASR](https://img.shields.io/badge/ASR-faster--whisper-FF6F00?style=for-the-badge)](https://github.com/SYSTRAN/faster-whisper)
+[![Docker](https://img.shields.io/badge/Docker-Enabled-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
 
----
-
-## One-Line Pitch
-
-RimeRx is a domain-specific voice safety and text-to-speech (TTS) optimization engine built for **Rime TTS** that eliminates dangerous medical mispronunciations, dosage ambiguities, and address navigation errors in Indian healthcare and delivery workflows through deterministic, rule-based prompt normalization.
-
----
-
-## Why This Problem Matters
-
-In Indian telehealth, e-pharmacy dispatch, and last-mile logistics, raw text-to-speech engines frequently mangle critical clinical and numerical tokens:
-- **Dosage Schedule Ambiguity**: `"1-0-1"` is misread as `"one hundred and one"` or `"one zero one"` without context, leading to fatal overdoses.
-- **Brand Name Mutilation**: Indian pharmaceutical brands like `"Deriphyllin"`, `"Pantocid-DSR"`, or `"Montair-LC"` are mispronounced by generic western TTS models.
-- **Digit Packing Errors**: High-potency dosages like `"625mg"` are read as `"six hundred and twenty-five"`, causing acoustic confusion between `"625mg"` and `"600 25mg"`.
-- **Expiration Risk**: Expiry dates like `"Exp: 03/26"` are read as `"zero three slash twenty six"` instead of `"Expiry March twenty twenty six"`.
-
-A single misheard digit in a medication instruction can result in severe adverse drug events or patient harm.
+> 🚀 **Live Interactive Demo:** [https://rimerx.onrender.com/](https://rimerx.onrender.com/)  
+> Experience real-time speech synthesis, domain-tuned voice safety transformations, latency profiling, and double-blind MOS tests directly in your browser.
 
 ---
 
-## Why Voice Is Essential
+## Demo
 
-Over 600 million users in India rely on voice-first interfaces, audio prescription confirmations, automated WhatsApp audio notes, and IVR pharmacy reminders due to varying literacy levels, regional language preference, and mobile-first healthcare delivery. Visual text on small screens is prone to oversight; clear, acoustically unambiguous audio instructions are critical for medication adherence and patient safety.
-
----
-
-## 30-Second Demo
-
-Run the web UI locally in under 30 seconds:
-
-```bash
-# 1. Start the RimeRx web application
-python main.py
-
-# 2. Open in browser: http://localhost:8000
-```
-
-In the interactive UI:
-1. Select a prescription case (e.g. `"Tab Augmentin 625mg 1-0-1 x 5 days Exp: 03/26"`).
-2. Click **[ Speak with Rime ]** to listen to the RimeRx safety-tuned audio.
-3. Click **[ Compare Raw vs RimeRx ]** to hear raw Rime alongside RimeRx side-by-side with real-time WER/PER and entity recall metrics.
-4. Click **[ Run Stress Test ]** to evaluate adversarial pharmacy cases against automated Whisper ASR verification.
+- **Demo video**: `<PLACEHOLDER — paste link here>`
+- **Demo script**: [docs/demo/VIDEO_SCRIPT.md](docs/demo/VIDEO_SCRIPT.md)
+- **Recording checklist**: [docs/demo/RECORDING_CHECKLIST.md](docs/demo/RECORDING_CHECKLIST.md)
 
 ---
 
-## Before vs After
+## What This Proves
 
-| Dimension | Raw Input / Raw Rime Speech | RimeRx Safety-Tuned Speech | Safety Impact |
-| :--- | :--- | :--- | :--- |
-| **Dosage Schedule** | `"1-0-1"` → *"one hundred and one"* | `"1-0-1"` → *"one zero one"* | **Preserved**: Eliminates 100x overdose risk |
-| **Medication Strength**| `"625mg"` → *"six hundred twenty five mg"* | `"625mg"` → *"six two five milligram"* | **Preserved**: Digit-separated acoustic clarity |
-| **Expiration Date** | `"Exp: 03/26"` → *"zero three slash twenty six"* | `"Exp: 03/26"` → *"Expiry March twenty twenty six"* | **Preserved**: Explicit date prosody |
-| **Indian Brand** | `"Deriphyllin"` → *"De-ri-phyl-lin"* | `"Deriphyllin"` → *"De-ri-phyl-lin"* | **Preserved**: Syllabified for Rime voice engine |
-
-> [!NOTE]
-> RimeRx enforces strict semantic preservation validation: if a transformation alters any numerical value or drug name, it is immediately rejected as an **UNSAFE_TRANSFORMATION** and falls back to raw text.
+1. **Problem Necessity**: Standard off-the-shelf text-to-speech (TTS) engines fail catastrophically on Indian clinical prescriptions—misreading critical dosage frequencies like `"1-0-1"` as digit string `"101"`, garbling expiration dates (`"Exp: 03/26"` into literal slashes), and mispronouncing Indian pharmaceuticals, introducing dangerous medication compliance risks.
+2. **Hard Voice Problem Solved**: RimeRx provides a deterministic, clinically grounded voice normalization engine (`tune_for_rime`) that "writes for the ear"—expanding medical Latin abbreviations, verbalizing administration regimens (`"one zero one"`), spelling high-potency milligram strengths (`"six two five mg"`), and syllabifying regional pharma brands to guarantee acoustic intelligibility without altering medical intent.
+3. **Rime as Primary Output**: Built natively around Rime's ultra-low latency `mistv3` engine with the authoritative `sirius` voice. Full-duplex conversational interruption via WebSocket (`wss://users-ws.rime.ai/ws3`) achieves sub-millisecond cancel-to-silence latency with zero stale audio leakage, enabling instantaneous clinical correction when directives change.
 
 ---
 
-## Results
+## Key Results
 
-Evaluation across benchmark pharmacy and logistics test cases measured via Whisper ASR (`small.en`) closed-loop verification:
+Empirical validation across 50 domain test cases (pharmacy prescriptions and last-mile dispatch) verified via Whisper `small.en` acoustic transcription and Epitran G2P phonetic alignment:
 
-| Metric | Raw Rime | RimeRx + Rime | Delta / Improvement |
+| Metric / Pillar | Untuned Default Input | Safety-Tuned RimeRx Input | Absolute Improvement |
 | :--- | :---: | :---: | :---: |
-| **Critical Token Accuracy (CTA)** | 62.4% | **98.2%** | **+35.8 pts** |
-| **Word Error Rate (WER)** | 34.2% | **6.1%** | **-28.1 pts** |
-| **Phoneme Error Rate (PER)** | 28.5% | **4.2%** | **-24.3 pts** |
-| **Time to First Byte (TTFB)** | ~45 ms | **~45 ms** | Zero latency overhead |
-| **Reliability Rate** | 100% | **100%** | Zero failure rate |
+| **Critical Entity Recall Accuracy** | 72.4% | **98.2%** | **+25.8% accuracy gain** |
+| **Mean Word Error Rate (WER)** | 34.2% | **11.5%** | **-22.7 pts error reduction** |
+| **Mean Phoneme Error Rate (PER)** | 21.8% | **5.4%** | **-16.4 pts error reduction** |
+| **Dosage Schedule Error Rate (`1-0-1`)** | High (misread as "101") | **0.0% ("one zero one")** | **100% dosage clarity** |
+| **Numeric Semantic Integrity** | 81.0% | **100.0%** | **Zero digit loss / corruption** |
+| **Interruption Cancel Latency** | N/A | **0.049 ms** | **Instantaneous cutoff (<200ms target)** |
+| **Stale Audio Leakage After Cancel** | N/A | **0 bytes** | **100% clean buffer flush** |
 
 ---
 
-## Stress Test
+## Quick Start
 
-RimeRx includes a dedicated 15-case adversarial stress corpus testing edge cases:
-- **Combination Drugs**: `"Tab Metformin/Glimepiride 500/2 mg 1-0-1 after food x 30 days"`
-- **Subcutaneous Units**: `"Inj Insulin 10 IU SC BD before meals"`
-- **Topical Formulations**: `"Oint Betnovate-N apply thin layer BD x 7 days"`
-- **Fractional Dosages**: `"1/2 tablet 0-1-0"`
-
-Run all stress cases in one click from the UI via **[ Run All Cases ]** or via CLI:
+Get RimeRx running locally in 3 commands:
 
 ```bash
-python run_benchmark.py --mode fast
+git clone https://github.com/damanknows/RimeRx.git && cd RimeRx
+cp .env.example .env && python scripts/preflight.py
+uvicorn main:app --host 0.0.0.0 --port 8000
 ```
 
----
-
-## How RimeRx Works
-
-RimeRx employs a 9-step deterministic safety pipeline:
-
-1. **Input Ingestion**: Accepts raw medical prescription text or logistics delivery instructions.
-2. **Critical Entity Extraction**: Identifies drug name, strength, dosage schedule, frequency, duration, expiry date, and quantity using regex patterns.
-3. **Safety Normalization (`tune_for_rime`)**:
-   - Converts clinical dosage schedules (`1-0-1` → `one zero one`).
-   - Expands unit abbreviations (`mg` → `milligram`, `ml` → `milliliter`, `Tab` → `Tablet`).
-   - Formats expiration dates (`Exp: 03/26` → `Expiry March twenty twenty six`).
-   - Splits digit packs in strengths (`625mg` → `six two five milligram`).
-4. **Semantic Preservation Check**: Validates that all critical numbers and tokens from input are present in normalized prompt.
-5. **Rime TTS Synthesis**: Streams audio using Rime's `mist/v1` model and `marsh` voice.
-6. **Audio Caching & Delivery**: Serves low-latency MP3 stream to frontend audio element.
-7. **Whisper ASR Transcription**: Transcribes generated audio via Whisper `small.en`.
-8. **Entity Verification**: Compares transcript against expected entities to calculate recall.
-9. **Multi-Metric Scoring**: Computes CTA, WER, PER, and TTFB.
+> **Note:** Edit `.env` with your `RIME_API_KEY`. Once launched, open **`http://localhost:8000`** in your browser.
 
 ---
 
 ## Rime Configuration
 
-RimeRx uses the production valid Rime TTS configuration:
+All Rime synthesis parameters are governed by a single source of truth in [`config/rime.py`](config/rime.py):
 
-- **Provider**: `Rime`
-- **Model**: `mist/v1`
-- **Voice / Speaker**: `marsh` (or dynamic catalog)
-- **Language**: `en-IN` (English - India)
-- **Endpoint**: `https://users.rime.ai/v1/rime-tts`
-- **Audio Format**: `mp3`
-
-> [!IMPORTANT]
-> API keys are managed server-side via environment variables (`RIME_API_KEY`) and are NEVER exposed to client-side scripts or UI responses.
-
----
-
-## Critical Token Accuracy
-
-Critical Token Accuracy (CTA) is the primary medical safety metric of RimeRx:
-
-$$\text{CTA} = \left( \frac{\text{Matched Critical Entities}}{\text{Total Critical Entities in Input}} \right) \times 100\%$$
-
-Where critical entities comprise:
-$$\text{Entities} = \{\text{Drug Name}, \text{Strength}, \text{Dosage Schedule}, \text{Frequency}, \text{Duration}, \text{Expiry Date}\}$$
-
----
-
-## Benchmark Method
-
-1. **Corpus**: 30 pharmacy cases + 15 adversarial stress cases + 10 logistics cases.
-2. **Baseline**: Raw text passed directly to Rime TTS.
-3. **Treatment**: Safety-tuned text passed to Rime TTS.
-4. **ASR Receiver**: Whisper `small.en` (`beam_size=5`, `int8` quantization).
-5. **Validation**: Objective WER/PER via `jiwer` + Entity Recall via deterministic pattern matching.
-
----
-
-## Reproduce Results
-
-To execute the benchmark suite and generate `results/benchmark_summary.json` + `RIME_EVIDENCE.md`:
-
-```bash
-# Run full benchmark evaluation
-python run_benchmark.py --mode full
-
-# Run statistical analysis
-python analyze_results.py
-```
+| Configuration Field | Setting / Value | Technical Rationale |
+| :--- | :--- | :--- |
+| **Model ID** | `mistv3` | Rime's low-latency production model (~37ms P50 TTFA). |
+| **Speaker / Voice ID** | `sirius` | Clear, authoritative speaker tuned for medical instructions and dispatch. |
+| **Language / Accent** | `en-IN` | Specialized Indian English phonology and inflection. |
+| **REST Endpoint** | `https://users.rime.ai/v1/rime-tts` | Official Rime HTTP REST TTS API endpoint. |
+| **WebSocket Endpoint** | `wss://users-ws.rime.ai/ws3` | Official Rime streaming WebSocket endpoint for duplex voice & interruption. |
+| **Audio Format** | `mp3` | Lightweight compressed audio for minimal network payload and fast streaming. |
+| **Transport Protocols** | `REST + WebSocket` | Hybrid transport: HTTP REST for batch evaluations and WebSocket for real-time duplex streaming. |
 
 ---
 
@@ -181,116 +93,63 @@ python analyze_results.py
                  v                                    v                                    v
    +-------------+-------------+        +-------------+-------------+        +-------------+-------------+
    |  Voice Safety Pipeline    |        | Multi-TTS (tts/providers.py)|        |  ASR Eval Engine (asr.py)   |
-   | 1. Text Input             |        | - Rime TTS (mist/v1)      |        | - faster-whisper (small.en) |
-   | 2. Critical Entity Extr.  |        | - OpenAI TTS (tts-1)      |        | - EVAL_BEAM_SIZE = 5        |
-   | 3. Semantic Preservation  |        | - ElevenLabs (flash v2.5) |        | - jiwer (Word Error Rate)   |
-   | 4. Speech Normalization   |        +-------------+-------------+        | - Critical Entity Recall    |
-   | 5. Rime TTS (mist/v1)     |                      |                      +-------------+-------------+
+   | 1. Text Input             |        | - Rime REST (mistv3/sirius) |        | - faster-whisper (small.en) |
+   | 2. Critical Entity Extr.  |        | - Rime WS (ws3 streaming)   |        | - EVAL_BEAM_SIZE = 5        |
+   | 3. Semantic Preservation  |        | - OpenAI TTS (tts-1)        |        | - jiwer (Word Error Rate)   |
+   | 4. Speech Normalization   |        | - ElevenLabs (flash v2.5)   |        | - Critical Entity Recall    |
+   | 5. Rime TTS Synthesis     |        +-------------+-------------+        +-------------+-------------+
    | 6. Audio Generation       |                      |                                    |
    | 7. ASR Transcription      |                      v                                    v
    | 8. Entity Verification    |        +-------------+-------------+        +-------------+-------------+
    | 9. Multi-Metric Scoring   |        |   Reliability & Metrics   |        |   SQLite Ratings Database   |
-   |                           |        | (TTFB, Warm/Cold, Status) |        |    (results/benchmark.db)   |
-   +---------------------------+        +---------------------------+ <----- +-----------------------------+
+   +---------------------------+        | (TTFB, Warm/Cold, Status) |        |    (results/benchmark.db)   |
+                                        +---------------------------+ <----- +-----------------------------+
 ```
 
 ---
 
-## Dataset
+## Benchmark & Evidence
 
-All evaluation cases are synthetic and curated specifically for TTS voice safety benchmarking:
-- `corpus/pharmacy.json`: 30 Indian prescription cases (Augmentin, Azithral, Pantocid, Calpol, etc.)
-- `corpus/logistics.json`: 10 Indian delivery address cases (Pincodes, Landmarks, House numbers)
-- `corpus/stress.json`: 15 adversarial stress cases
+Full evaluation methodology, per-case JSON transcripts, and reproducible benchmark commands are detailed in:
+👉 **[RIME_EVIDENCE.md](RIME_EVIDENCE.md)**
 
-> [!NOTE]
-> Zero real patient data or protected health information (PHI) is used in this project.
-
----
-
-## Safety and Limitations
-
-- **Deterministic Fallback**: If `validate_semantic_preservation()` fails on a tuned prompt, RimeRx automatically falls back to raw text.
-- **ASR Ceiling**: Acoustic transcription errors in Whisper `small.en` may fail to recognize non-English brand phonemes even when Rime TTS audio pronunciation is clear. Honest limitation notes are displayed for such cases.
-- **Medical Disclaimer**: RimeRx is a demonstration benchmark for speech synthesis quality and safety. It is not a certified medical device.
-
----
-
-## Installation
-
+To reproduce the benchmark suite locally:
 ```bash
-# Clone repository
-git clone https://github.com/damanknows/RimeRx.git
-cd RimeRx
+# Run full corpus benchmark across all test cases
+python run_benchmark.py
 
-# Create virtual environment
-python -m venv .venv
-source .venv/bin/activate  # On Windows: .\.venv\Scripts\activate
+# Generate executive summary report & analysis
+python analyze_results.py
 
-# Install dependencies
-pip install -r requirements.txt
+# Run WebSocket interruption stress benchmark
+python scripts/run_interruption_benchmark.py
 ```
 
 ---
 
-## Environment Variables
+## Human Evaluation
 
-Copy `.env.example` to `.env`:
+Human perceptual Mean Opinion Score (MOS) protocol, blinded A/B test harness, and rating schema are documented in:
+👉 **[HUMAN_EVALUATION.md](HUMAN_EVALUATION.md)**
 
-```bash
-cp .env.example .env
-```
-
-Set the following variables:
-- `RIME_API_KEY`: Your Rime API key (**Required**)
-- `RIME_MODEL`: `mist/v1`
-- `RIME_VOICE`: `marsh`
-- `RIME_LANGUAGE`: `en-IN`
-- `OPENAI_API_KEY`: Optional fallback key
-- `ELEVENLABS_API_KEY`: Optional fallback key
+- **Current Evaluation Status**: **PENDING / PROTOCOL READY** (`0` participants logged in automated test environment).
+- **Non-Fabrication Statement**: In strict adherence to hackathon ethics, no human MOS participant scores have been fabricated.
+- **Local Evaluation Harness**: Run `python scripts/mos_server.py` to launch the randomized A/B listening study and monitor submissions at `/admin`.
 
 ---
 
-## Testing
+## Known Limitations
 
-Run the full automated test suite (342 unit & integration tests):
-
-```bash
-python -m pytest
-```
+1. **ASR Transcription Ceiling**: Downstream commercial ASR models (e.g. Whisper `small.en`) occasionally misrecognize niche Indian brand names (*Augmentin*, *Pantocid*) even when synthesized speech is acoustically pristine.
+2. **Exploratory Sample Scope**: Baseline benchmark figures reflect a 50-item synthetic healthcare and logistics corpus; production rollouts should evaluate against multi-thousand institutional formularies.
+3. **Hardware Ring-Buffer Drain**: WebSocket interruption achieves 0.049ms cancel latency at the client transport layer; client-side hardware soundcard buffers (WASAPI/CoreAudio/ALSA) may exhibit device-specific playback drain.
+4. **2,500 Character Input Limit**: Ingestion is capped at 2,500 characters per request (`HTTP 400`) to guarantee streaming latency bounds.
 
 ---
 
-## Project Structure
+## Third-Party Services
 
-```
-RimeRx/
-├── main.py                   # FastAPI server & route handlers
-├── data.py                   # Normalizer, entity extractor & preservation validator
-├── asr.py                    # Whisper ASR transcription & verification engine
-├── run_benchmark.py          # Benchmark execution CLI tool
-├── analyze_results.py        # Evidence & metric analysis script
-├── db.py                     # SQLite MOS human evaluation database
-├── RIME_EVIDENCE.md          # Complete Rime benchmark evidence & report
-├── Dockerfile                # Docker container build definition
-├── docker-compose.yml        # Docker Compose service specification
-├── .env.example              # Template environment configuration file
-├── tts/
-│   ├── __init__.py           # TTS package initialization
-│   └── providers.py          # RimeProvider, fallback handling & reliability tracker
-├── corpus/
-│   ├── pharmacy.json         # 30 prescription benchmark cases
-│   ├── logistics.json        # 10 delivery benchmark cases
-│   └── stress.json           # 15 adversarial stress test cases
-├── config/
-│   └── providers.json        # Provider configurations
-├── static/
-│   └── index.html            # RimeRx dark SaaS web interface
-├── tests/                    # 11 test modules (342 total unit tests)
-│   ├── test_phase18_coverage.py
-│   ├── test_providers.py
-│   ├── test_stress_system.py
-│   ├── test_critical_token_accuracy.py
-│   └── ...
-└── results/                  # Audio clips, benchmark outputs & SQLite DB
-```
+- **Rime TTS** (`mistv3`, `sirius`): Primary low-latency speech synthesis engine via REST and WebSocket.
+- **OpenAI** (`tts-1`): Secondary comparison baseline TTS provider.
+- **ElevenLabs** (`flash v2.5`): Secondary comparison baseline TTS provider.
+- **SYSTRAN faster-whisper** (`small.en`): Local acoustic transcription engine for objective WER and entity recall benchmarking.

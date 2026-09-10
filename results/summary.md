@@ -8,7 +8,7 @@
 |---|---|---|---|---|---|---|---|---|
 | **ELEVENLABS** | `elevenlabs` | 10 | 0.0% | **N/A** | N/A | N/A | N/A | N/A |
 | **OPENAI** | `openai` | 10 | 0.0% | **N/A** | N/A | N/A | N/A | N/A |
-| **RIME** | `rime` | 10 | 100.0% | **87.0% / 82.0%** | 86.08% | 65.92% | 89.83% | 0.0% |
+| **RIME** | `rime` | 10 | 100.0% | **96.0% / 96.0%** | 68.15% | 48.24% | 67.28% | 0.0% |
 
 ## Latency Breakdown (Warm vs Cold Runs)
 
@@ -16,16 +16,15 @@
 |---|---|---|---|---|
 | **ELEVENLABS** | N/A | N/A | N/A | N/A |
 | **OPENAI** | N/A | N/A | N/A | N/A |
-| **RIME** | 1078.82 ms | 1305.28 ms | 2230.54 ms | 2501.69 ms |
+| **RIME** | 1250.75 ms | 1171.17 ms | 2320.5 ms | 2024.91 ms |
 
 ## Per-Category Critical Token Accuracy & Error Rates
 
 | Category | Total Evaluated | Critical Token Acc (Tuned) | Mean Default WER | Mean Tuned WER | Mean Default PER | Mean Tuned PER | Delta (WER) |
 |---|---|---|---|---|---|---|---|
-| `code_switched` | 6 | **100.0%** | 96.3% | 88.89% | 85.19% | 0.0% | **-7.41 pts** |
-| `dosages` | 12 | **77.5%** | 82.18% | 80.56% | 93.98% | 0.0% | **-1.62 pts** |
-| `drug_names` | 6 | **75.0%** | 75.0% | 37.5% | 81.25% | 0.0% | **-37.5 pts** |
-| `quantities` | 6 | **80.0%** | 94.74% | 42.11% | 94.74% | 0.0% | **-52.63 pts** |
+| `dosage_schedules` | 12 | **90.0%** | 73.22% | 50.59% | 65.48% | 0.0% | **-22.63 pts** |
+| `drug_names` | 6 | **100.0%** | 87.5% | 56.25% | 87.5% | 0.0% | **-31.25 pts** |
+| `strengths` | 12 | **100.0%** | 53.42% | 41.88% | 58.98% | 0.0% | **-11.54 pts** |
 
 ## Benchmark Methodology & Primary Metrics
 
@@ -38,7 +37,7 @@
 
 ## Human Listening Evaluation (MOS & Comprehension)
 
-- **Status**: **SESSIONS LOGGED** (27 participants, 27 total ratings).
+- **Status**: **SESSIONS LOGGED** (26 participants, 26 total ratings).
 
 - **Baseline Naturalness / Intelligibility**: 5.0 / 4.0
 
@@ -47,7 +46,7 @@
 
 ## Stress-Test System (Phase 9 Hard Voice Cases)
 
-- **Total Stress Test Cases Configured**: 15 hard voice prescription cases (`Augmentin 625mg 1-0-1`, `Pantocid-DSR 40/30 mg`, `1/2 tablet 0-1-0`).
+- **Total Stress Test Cases Configured**: 10 hard voice prescription cases (`Augmentin 625mg 1-0-1`, `Pantocid-DSR 40/30 mg`, `1/2 tablet 0-1-0`).
 
 - **EXPECTED vs HEARD Protocol**: Evaluates side-by-side ASR transcript recall across `drug`, `strength`, `dose`, `frequency`, `duration`, and `date` with honest limitation flagging on acoustic misreads.
 

@@ -1,0 +1,57 @@
+{
+  "case_id": "rx_synth_005",
+  "domain": "Pharmacy",
+  "category": "dosage_schedules",
+  "provider": "rime",
+  "variant": "tuned",
+  "raw_text": "Cap Pantocid 40mg 0-1-0 before meals x 14 days",
+  "normalized_text": "Capsule Pantocid forty milligram zero one zero before meals times fourteen days",
+  "expected_pronunciation": "Capsule Pantocid forty milligram zero one zero before meals times fourteen days",
+  "expected_critical_entities": {
+    "drug": "Pantocid",
+    "strength": "40mg",
+    "dose": "0-1-0",
+    "frequency": "0-1-0",
+    "schedule": "0-1-0",
+    "duration": "14 days",
+    "quantity": null,
+    "date": null,
+    "expiry": null,
+    "abbreviations": [
+      "Cap"
+    ],
+    "drugs": [
+      "Pantocid"
+    ],
+    "strengths": [
+      "40mg"
+    ],
+    "schedules": [
+      "0-1-0"
+    ],
+    "dates": [],
+    "numbers": [
+      "0",
+      "14",
+      "1",
+      "40"
+    ]
+  },
+  "rime_configuration": {
+    "model_id": "mistv3",
+    "voice": "sirius",
+    "language": "en-IN",
+    "audio_format": "mp3"
+  },
+  "audio_clip_path": "results/clips/rimex/rx_synth_005_rime.mp3",
+  "hypothesis": "Hapsal pentosid 40 milligram 0 1 0 before meals times 14 days",
+  "wer": 58.33,
+  "per": 0.0,
+  "critical_token_accuracy": 80.0,
+  "latency": {
+    "ttfb_ms": 1075.25,
+    "total_ms": 1894.65,
+    "cold": false
+  },
+  "status": "SUCCESS"
+}

@@ -1,0 +1,53 @@
+{
+  "case_id": "rx_synth_003",
+  "domain": "Pharmacy",
+  "category": "strengths",
+  "provider": "elevenlabs",
+  "variant": "default",
+  "raw_text": "Tab Amoxicillin 1250 mg 1-0-1 x 7 days",
+  "normalized_text": "Tab Amoxicillin 1250 mg 1-0-1 x 7 days",
+  "expected_pronunciation": "Tablet Amoxicillin one two five zero milligram one zero one times seven days",
+  "expected_critical_entities": {
+    "drug": "Amoxicillin",
+    "strength": "1250 mg",
+    "dose": "1-0-1",
+    "frequency": "1-0-1",
+    "schedule": "1-0-1",
+    "duration": "7 days",
+    "quantity": null,
+    "date": null,
+    "expiry": null,
+    "abbreviations": [
+      "Tab"
+    ],
+    "drugs": [
+      "Amoxicillin"
+    ],
+    "strengths": [
+      "1250 mg"
+    ],
+    "schedules": [
+      "1-0-1"
+    ],
+    "dates": [],
+    "numbers": [
+      "1250",
+      "1",
+      "0",
+      "7"
+    ]
+  },
+  "rime_configuration": {
+    "model_id": "mistv3",
+    "voice": "sirius",
+    "language": "en-IN",
+    "audio_format": "mp3"
+  },
+  "audio_clip_path": "results/clips/baseline/rx_synth_003_elevenlabs.mp3",
+  "hypothesis": "",
+  "wer": null,
+  "per": 84.62,
+  "critical_token_accuracy": 0.0,
+  "latency": {},
+  "status": "FAILED (400: ELEVENLABS_API_KEY environment variable is missing or empty. Please set a v)"
+}

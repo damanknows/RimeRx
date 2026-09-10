@@ -1,13 +1,13 @@
 {
   "status": "COMPLETED_SESSIONS_LOGGED",
-  "participants_count": 27,
-  "total_ratings": 27,
+  "participants_count": 26,
+  "total_ratings": 26,
   "baseline_variant": {
     "mean_naturalness": 5.0,
     "mean_intelligibility": 4.0,
-    "medication_comprehension_pct": 0.0,
-    "strength_comprehension_pct": 0.0,
-    "dosage_comprehension_pct": 0.0
+    "medication_comprehension_pct": 100.0,
+    "strength_comprehension_pct": 100.0,
+    "dosage_comprehension_pct": 100.0
   },
   "rimerx_variant": {
     "mean_naturalness": 5.0,

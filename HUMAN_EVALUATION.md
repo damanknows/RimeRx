@@ -1,4 +1,4 @@
-﻿# RimeRx Human Listening Evaluation Protocol & Results (Phase 8)
+# RimeRx Human Listening Evaluation Protocol & Results (Phase 8)
 
 ## 1. Executive Status
 - **Current Evaluation Status**: **PENDING / PROTOCOL READY**
@@ -13,7 +13,7 @@
 1. **Endpoint**: `POST /api/blind/session`
 2. **Session Initialization**:
    - Selects a prescription test case from `corpus/pharmacy.json`.
-   - Synthesizes audio using Rime TTS (`mist/v1`, `marsh`, `en-IN` accent) for both **Baseline (Raw Text)** and **RimeRx (Safety-Tuned)** prompts.
+   - Synthesizes audio using Rime TTS (`mistv3`, `sirius`, `en-IN` accent) for both **Baseline (Raw Text)** and **RimeRx (Safety-Tuned)** prompts.
    - Assigns audio clips randomly to **"Option A"** and **"Option B"** using an independent coin-flip shuffle (`random.shuffle`).
    - Returns anonymized audio URLs (`/static/audio/blind_A_xxxx.mp3` & `/static/audio/blind_B_xxxx.mp3`).
 3. **Anonymity Guarantee**: Neither clip label ("Option A" or "Option B") reveals provider identity or tuning variant to the listener until ratings have been submitted.

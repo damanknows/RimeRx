@@ -1,29 +1,30 @@
 import os, httpx
 from dotenv import load_dotenv
+from config.rime import RIME_MODEL, RIME_SPEAKER, RIME_ENDPOINT, RIME_AUDIO_FORMAT
 
 load_dotenv()
 RIME_API_KEY = os.getenv("RIME_API_KEY")
-RIME_URL = os.getenv("RIME_URL", "https://users.rime.ai/v1/rime-tts")
+if not RIME_API_KEY:
+    raise RuntimeError("RIME_API_KEY environment variable is missing or empty. Please set it in .env")
+
+RIME_URL = RIME_ENDPOINT
 
 HEADERS = {
-    "Authorization": f"Bearer {RIME_API_KEY or ''}",
+    "Authorization": f"Bearer {RIME_API_KEY}",
     "Content-Type": "application/json",
-    "Accept": "audio/mp3"
+    "Accept": f"audio/{RIME_AUDIO_FORMAT}"
 }
 
-
 def test_speakers():
-    if not RIME_API_KEY:
-        print("[RIME TEST] RIME_API_KEY not set; skipping live test.")
-        return None
-    speakers = ["abbey", "allison", "celeste", "kendall", "marsh", "rex", "marissa", "ava", "logan"]
-
+    speakers = [RIME_SPEAKER, "abbey", "allison", "celeste", "kendall", "rex", "marissa", "ava", "logan"]
     
     for spk in speakers:
         payload = {
             "speaker": spk,
             "text": "Tablet Augmentin six two five milligram. Doctor Reddys Lab.",
-            "audioFormat": "mp3"
+            "modelId": RIME_MODEL,
+            "model": RIME_MODEL,
+            "audioFormat": RIME_AUDIO_FORMAT
         }
         try:
             with httpx.Client(timeout=15.0) as client:

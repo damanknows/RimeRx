@@ -11,3 +11,4 @@ openai>=1.14.0,<2.0.0
 elevenlabs>=1.0.0,<2.0.0
 aiofiles>=23.2.0,<26.0.0
 pytest>=8.0.0,<10.0.0
+websockets>=13.0.0,<18.0.0

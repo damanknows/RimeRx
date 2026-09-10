@@ -1,20 +1,100 @@
 {
+  "notice": "Synthetic/curated evaluation data for TTS benchmark \u2014 Zero real patient data",
   "summary": {
     "total_samples_evaluated": 30,
     "baseline_pipeline_a": {
-      "mean_wer": 86.08,
-      "mean_per": 89.83,
-      "critical_token_accuracy": 87.0
+      "critical_token_accuracy": 96.0,
+      "mean_wer": 68.15,
+      "mean_per": 67.28,
+      "reliability_rate": 100.0
     },
     "rimerx_pipeline_b": {
-      "mean_wer": 65.92,
+      "critical_token_accuracy": 96.0,
+      "mean_wer": 48.24,
       "mean_per": 0.0,
-      "critical_token_accuracy": 82.0
+      "reliability_rate": 100.0
     },
     "improvement_delta": {
-      "wer_reduction_pts": 20.16,
-      "per_reduction_pts": 89.83,
-      "critical_token_accuracy_gain": -5.0
+      "critical_token_accuracy_gain": 0.0,
+      "wer_reduction_pts": 19.91,
+      "per_reduction_pts": 67.28
+    }
+  },
+  "by_category": {
+    "drug_names": {
+      "total": 6,
+      "default_wer": [
+        87.5
+      ],
+      "tuned_wer": [
+        56.25
+      ],
+      "default_per": [
+        87.5
+      ],
+      "tuned_per": [
+        0.0
+      ],
+      "default_ent": [
+        100.0
+      ],
+      "tuned_ent": [
+        100.0
+      ]
+    },
+    "strengths": {
+      "total": 12,
+      "default_wer": [
+        22.22,
+        84.62
+      ],
+      "tuned_wer": [
+        22.22,
+        61.54
+      ],
+      "default_per": [
+        33.33,
+        84.62
+      ],
+      "tuned_per": [
+        0.0,
+        0.0
+      ],
+      "default_ent": [
+        100.0,
+        100.0
+      ],
+      "tuned_ent": [
+        100.0,
+        100.0
+      ]
+    },
+    "dosage_schedules": {
+      "total": 12,
+      "default_wer": [
+        71.43,
+        75.0
+      ],
+      "tuned_wer": [
+        42.86,
+        58.33
+      ],
+      "default_per": [
+        64.29,
+        66.67
+      ],
+      "tuned_per": [
+        0.0,
+        0.0
+      ],
+      "default_ent": [
+        100.0,
+        80.0
+      ],
+      "tuned_ent": [
+        100.0,
+        80.0
+      ]
     }
   }
 }

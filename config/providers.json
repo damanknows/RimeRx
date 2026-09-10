@@ -1,10 +1,10 @@
 {
   "rime": {
-    "model": "mist/v1",
-    "voice": "marsh",
+    "model": "mistv3",
+    "voice": "sirius",
     "endpoint": "https://users.rime.ai/v1/rime-tts",
     "language": "en-IN",
-    "notes": "Rime's provider-recommended fast speech model mist/v1 paired with the 'marsh' voice tuned for pharmacy and delivery prosody."
+    "notes": "Rime's current production fast speech model mistv3 paired with the 'sirius' voice tuned for pharmacy and delivery prosody."
   },
   "openai": {
     "model": "tts-1",
