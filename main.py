@@ -151,26 +151,20 @@ async def render_audio(req: RenderRequest):
 # --- BLIND MOS COMPARISON ENDPOINTS ---
 @app.post("/api/blind/session")
 async def create_blind_session():
-    """Generates a blinded comparison session picking a random case and two anonymized provider renders."""
+    """Generates a blinded comparison session evaluating Rime default vs. tuned output for a random case."""
     case = random.choice(TEST_CASES)
-    provider_options = ["rime", "openai", "elevenlabs"]
-    
-    # Pick two distinct providers or configurations
-    p_a_name, p_b_name = random.sample(provider_options, 2)
-    
-    p_a = get_provider(p_a_name)
-    p_b = get_provider(p_b_name)
+    rime_provider = get_provider("rime")
 
-    text = tune_for_rime(case["raw_text"])
+    raw_text = case["raw_text"]
+    tuned_text = tune_for_rime(raw_text)
 
-    try:
-        bytes_a, meta_a = await p_a.synthesize(text)
-        bytes_b, meta_b = await p_b.synthesize(text)
-    except Exception:
-        # Fallback if alternative API key missing
-        bytes_a, meta_a = await get_provider("rime").synthesize(case["raw_text"])
-        bytes_b, meta_b = await get_provider("rime").synthesize(text)
-        p_a_name, p_b_name = "rime_default", "rime_tuned"
+    bytes_default, _ = await rime_provider.synthesize(raw_text)
+    bytes_tuned, _ = await rime_provider.synthesize(tuned_text)
+
+    options = [("default", bytes_default), ("tuned", bytes_tuned)]
+    random.shuffle(options)
+
+    (variant_a, bytes_a), (variant_b, bytes_b) = options
 
     fname_a = f"blind_A_{uuid.uuid4().hex[:4]}.mp3"
     fname_b = f"blind_B_{uuid.uuid4().hex[:4]}.mp3"
@@ -187,8 +181,8 @@ async def create_blind_session():
     BLIND_SESSIONS[session_id] = {
         "case_id": case["id"],
         "raw_text": case["raw_text"],
-        "A": {"provider": p_a_name, "variant": "tuned" if "tuned" in p_a_name else "default", "audio_id": fname_a},
-        "B": {"provider": p_b_name, "variant": "tuned" if "tuned" in p_b_name else "default", "audio_id": fname_b}
+        "A": {"provider": "rime", "variant": variant_a, "audio_id": fname_a},
+        "B": {"provider": "rime", "variant": variant_b, "audio_id": fname_b}
     }
 
     return {
