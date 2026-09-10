@@ -5,6 +5,7 @@ except ImportError:
     torch = None
     HAS_TORCH = False
 
+from faster_whisper import WhisperModel
 import ctranslate2
 import sys
 import numpy as np
