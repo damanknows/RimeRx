@@ -61,15 +61,17 @@ async def run_single_interruption_trial(run_id: int) -> dict:
     bytes_at_cancel = sum(len(c) for c in first_emitted_chunks)
 
     # Trigger mid-synthesis cancellation
-    cancel_latency_ms = client.cancel()
+    client_cutoff_ms = client.cancel()
     buffer_len_at_cancel = len(client.buffer)
 
-    # Wait for potential stale in-flight packets
-    await asyncio.sleep(0.3)
+    # Monitor WebSocket reader loop to record the full network in-flight chunk drain
+    await asyncio.sleep(2.0)
 
     chunks_after_cancel = len(first_emitted_chunks)
     bytes_after_cancel = sum(len(c) for c in first_emitted_chunks)
-    stale_bytes = bytes_after_cancel - bytes_at_cancel
+    stale_bytes_emitted = bytes_after_cancel - bytes_at_cancel
+    network_drain_ms = client.cancel_signal_to_last_audio_ms
+    dropped_network_bytes = client.stale_audio_dropped_bytes
 
     # Verify subsequent synthesis for new medication instruction
     second_emitted_chunks = []
@@ -90,8 +92,8 @@ async def run_single_interruption_trial(run_id: int) -> dict:
 
     passed = (
         chunks_at_cancel >= 5
-        and cancel_latency_ms < 200.0
-        and stale_bytes == 0
+        and client_cutoff_ms < 200.0
+        and stale_bytes_emitted == 0
         and buffer_len_at_cancel == 0
         and completed
         and second_bytes > 5000
@@ -99,18 +101,24 @@ async def run_single_interruption_trial(run_id: int) -> dict:
 
     return {
         "run": run_id,
-        "cancel_latency_ms": round(cancel_latency_ms, 3),
-        "stale_audio_bytes_after_cancel": stale_bytes,
+        "client_cutoff_ms": round(client_cutoff_ms, 3),
+        "network_drain_ms": round(network_drain_ms, 1),
+        "stale_audio_bytes_emitted": stale_bytes_emitted,
+        "stale_network_bytes_dropped": dropped_network_bytes,
         "pass_fail": "PASS" if passed else "FAIL",
         "second_instruction_bytes": second_bytes,
     }
 
 
 async def main():
-    print("=" * 80)
-    print("        RimeRx WebSocket Interruption & Recovery Benchmark")
-    print("=" * 80)
+    print("=" * 95)
+    print("           RimeRx WebSocket Interruption & Recovery Benchmark")
+    print("=" * 95)
     print("[INFO] Target WebSocket Endpoint: wss://users-ws.rime.ai/ws3")
+    print("[INFO] Metrics Captured:")
+    print("       1. Client Cutoff Latency (Callback & Buffer Cutoff to Silence): Local synchronous return.")
+    print("       2. Network Drain Latency (Cancel Signal -> Last In-Flight Audio Byte): WAN + server queue drain.")
+    print("       3. Stale Audio Bytes Emitted to Audio Playback: Must strictly be 0 bytes.")
     print("[INFO] Executing 5 consecutive mid-synthesis interruption stress runs...\n")
 
     results = []
@@ -120,8 +128,10 @@ async def main():
         trial_result = await run_single_interruption_trial(run_id)
         elapsed = time.time() - t0
         print(
-            f"          Done in {elapsed:.2f}s | Cancel Latency: {trial_result['cancel_latency_ms']} ms "
-            f"| Stale Bytes: {trial_result['stale_audio_bytes_after_cancel']} "
+            f"          Done in {elapsed:.2f}s | Client Cutoff: {trial_result['client_cutoff_ms']} ms "
+            f"| Network Drain: {trial_result['network_drain_ms']} ms "
+            f"| Stale Bytes Emitted: {trial_result['stale_audio_bytes_emitted']} "
+            f"| Network Dropped: {trial_result['stale_network_bytes_dropped']} B "
             f"| Status: {trial_result['pass_fail']}"
         )
         results.append(trial_result)
@@ -135,7 +145,14 @@ async def main():
     with open(csv_path, "w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(
             f,
-            fieldnames=["run", "cancel_latency_ms", "stale_audio_bytes_after_cancel", "pass_fail"],
+            fieldnames=[
+                "run",
+                "client_cutoff_ms",
+                "network_drain_ms",
+                "stale_audio_bytes_emitted",
+                "stale_network_bytes_dropped",
+                "pass_fail",
+            ],
             extrasaction="ignore",
         )
         writer.writeheader()
@@ -145,12 +162,14 @@ async def main():
     print(f"\n[SUCCESS] Wrote benchmark results to {csv_path}\n")
 
     # Print summary table
-    print("+-----+--------------------+--------------------------------+-----------+")
-    print("| Run | Cancel Latency (ms)| Stale Audio Bytes After Cancel | Pass/Fail |")
-    print("+-----+--------------------+--------------------------------+-----------+")
+    print("+-----+--------------------+--------------------+---------------------------+-----------+")
+    print("| Run | Client Cutoff (ms) | Network Drain (ms) | Stale Audio Bytes Emitted | Pass/Fail |")
+    print("+-----+--------------------+--------------------+---------------------------+-----------+")
     for r in results:
-        print(f"|  {r['run']}  |       {r['cancel_latency_ms']:<12} |               {r['stale_audio_bytes_after_cancel']:<16} |   {r['pass_fail']}    |")
-    print("+-----+--------------------+--------------------------------+-----------+")
+        print(
+            f"|  {r['run']}  |       {r['client_cutoff_ms']:<12} |       {r['network_drain_ms']:<12} |             {r['stale_audio_bytes_emitted']:<13} |   {r['pass_fail']}    |"
+        )
+    print("+-----+--------------------+--------------------+---------------------------+-----------+")
 
 
 if __name__ == "__main__":

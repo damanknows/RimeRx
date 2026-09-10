@@ -70,8 +70,8 @@ def test_mid_synthesis_interruption():
         print(f"\n[INTERRUPTION AUDIT] Cancel-to-silence latency: {cancel_latency_ms:.4f} ms")
         assert cancel_latency_ms < 200.0, f"Cancel latency too high: {cancel_latency_ms} ms >= 200ms"
 
-        # Wait 300ms to allow any in-flight network packets to hit client
-        await asyncio.sleep(0.3)
+        # Wait to allow in-flight network packets to hit client and drain
+        await asyncio.sleep(1.5)
 
         # Assertion (a): Zero further audio chunks emitted to initial callback after cancel
         stale_chunks_emitted = len(first_emitted_chunks) - chunks_before_cancel

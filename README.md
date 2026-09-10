@@ -140,7 +140,7 @@ Human perceptual Mean Opinion Score (MOS) protocol, blinded A/B test harness, an
 
 1. **ASR Transcription Ceiling**: Downstream commercial ASR models (e.g. Whisper `small.en`) occasionally misrecognize niche Indian brand names (*Augmentin*, *Pantocid*) even when synthesized speech is acoustically pristine.
 2. **Exploratory Sample Scope**: Baseline benchmark figures reflect a 50-item synthetic healthcare and logistics corpus; production rollouts should evaluate against multi-thousand institutional formularies.
-3. **Hardware Ring-Buffer Drain**: WebSocket interruption achieves 0.049ms cancel latency at the client transport layer; client-side hardware soundcard buffers (WASAPI/CoreAudio/ALSA) may exhibit device-specific playback drain.
+3. **Audio Cutoff vs. WAN & Hardware Drain**: WebSocket interruption achieves 0.043ms client callback cutoff and buffer clearance at the application transport layer with 0 stale bytes emitted; WAN transit delivers in-flight frames to the client socket for ~1.8s (discarded by context-ID filtering), while hardware soundcard buffers (WASAPI/CoreAudio/ALSA) exhibit device-specific DAC drain.
 4. **2,500 Character Input Limit**: Ingestion is capped at 2,500 characters per request (`HTTP 400`) to guarantee streaming latency bounds.
 
 ---

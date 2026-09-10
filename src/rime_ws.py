@@ -68,10 +68,12 @@ class RimeWebSocketClient:
         self._active_timestamps_callback: Optional[Callable[[Dict[str, Any]], None]] = None
         self._done_events: Dict[str, asyncio.Event] = {}
 
-        # Interruption and buffer tracking
+        # Interruption and signal-path tracking
         self._buffer: collections.deque = collections.deque()
         self._last_cancel_time: Optional[float] = None
         self._last_cancel_latency_ms: float = 0.0
+        self._last_network_chunk_time: Optional[float] = None
+        self._cancel_signal_to_last_audio_ms: float = 0.0
         self._stale_audio_dropped_bytes: int = 0
         self._stale_audio_emitted_bytes: int = 0
 
@@ -79,6 +81,21 @@ class RimeWebSocketClient:
     def buffer(self) -> List[bytes]:
         """Return shallow copy of queued audio chunks in buffer."""
         return list(self._buffer)
+
+    @property
+    def last_cancel_latency_ms(self) -> float:
+        """Return local client callback severance and buffer flush latency in ms."""
+        return self._last_cancel_latency_ms
+
+    @property
+    def cancel_signal_to_last_audio_ms(self) -> float:
+        """Return duration in ms from cancel invocation to the last in-flight network chunk arrival."""
+        return self._cancel_signal_to_last_audio_ms
+
+    @property
+    def stale_audio_dropped_bytes(self) -> int:
+        """Return total in-flight audio bytes received from network after cancel and safely discarded."""
+        return self._stale_audio_dropped_bytes
 
     @property
     def queued_audio_bytes(self) -> int:
@@ -135,6 +152,10 @@ class RimeWebSocketClient:
                         payload = data.get("data", "")
                         chunk_len = len(base64.b64decode(payload)) if payload else 0
                         self._stale_audio_dropped_bytes += chunk_len
+                        now = time.perf_counter()
+                        self._last_network_chunk_time = now
+                        if self._last_cancel_time is not None:
+                            self._cancel_signal_to_last_audio_ms = (now - self._last_cancel_time) * 1000.0
                     elif msg_type in ("done", "error"):
                         if ctx_id in self._done_events:
                             self._done_events[ctx_id].set()
