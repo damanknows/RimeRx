@@ -76,6 +76,6 @@ For selected critical test cases, listeners complete target comprehension questi
 
 ## 5. Limitations & Future Protocol Expansion
 
-1. **Local Test Environment**: In local CI/CD test runs, participant count remains `0`.
+1. **Automated Headless Environment vs. Human Trials**: In headless CI/CD test runs where no human interacts with the UI, participant count starts at `0`. The 31 evaluations currently recorded in `results/benchmark.db` reflect human listening sessions gathered through the double-blind testing portal.
 2. **Listening Equipment**: Future human trial protocols require standardized listening equipment (over-ear headphones vs. device speakers).
 3. **Demographic Representation**: Future testing will include healthcare professionals (pharmacists, clinicians) alongside non-medical native and non-native English speakers.

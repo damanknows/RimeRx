@@ -20,25 +20,26 @@
 
 ## What This Proves
 
-1. **Problem Necessity**: Standard off-the-shelf text-to-speech (TTS) engines fail catastrophically on Indian clinical prescriptions—misreading critical dosage frequencies like `"1-0-1"` as digit string `"101"`, garbling expiration dates (`"Exp: 03/26"` into literal slashes), and mispronouncing Indian pharmaceuticals, introducing dangerous medication compliance risks.
-2. **Hard Voice Problem Solved**: RimeRx provides a deterministic, clinically grounded voice normalization engine (`tune_for_rime`) that "writes for the ear"—expanding medical Latin abbreviations, verbalizing administration regimens (`"one zero one"`), spelling high-potency milligram strengths (`"six two five mg"`), and syllabifying regional pharma brands to guarantee acoustic intelligibility without altering medical intent.
-3. **Rime as Primary Output**: Built natively around Rime's ultra-low latency `mistv3` engine with the authoritative `sirius` voice. Full-duplex conversational interruption via WebSocket (`wss://users-ws.rime.ai/ws3`) achieves sub-millisecond cancel-to-silence latency with zero stale audio leakage, enabling instantaneous clinical correction when directives change.
+1. **Problem Necessity**: Standard off-the-shelf text-to-speech (TTS) engines frequently introduce ambiguities on Indian clinical prescriptions—misreading critical dosage frequencies like `"1-0-1"` as digit string `"101"`, reading expiration dates (`"Exp: 03/26"`) as literal slashes, and mispronouncing regional pharmaceutical brand names.
+2. **Hard Voice Problem Solved**: RimeRx provides a deterministic, clinically grounded voice normalization engine (`tune_for_rime`) that "writes for the ear"—expanding medical Latin abbreviations, verbalizing administration regimens (`"one zero one"`), spelling high-potency milligram strengths (`"six two five mg"`), and syllabifying regional pharma brands to improve acoustic intelligibility while preserving medical intent.
+3. **Rime as Primary Output**: Built natively around Rime's ultra-low latency `mistv3` engine with the authoritative `sirius` voice. Full-duplex conversational interruption via WebSocket (`wss://users-ws.rime.ai/ws3`) achieves instantaneous client callback cutoff with strictly zero stale audio leakage to speaker, enabling rapid correction when directives change.
 
 ---
 
-## Key Results
+## Key Results (Evaluated on 50-Item Domain Benchmark)
 
-Empirical validation across 50 domain test cases (pharmacy prescriptions and last-mile dispatch) verified via Whisper `small.en` acoustic transcription and Epitran G2P phonetic alignment:
+Empirical validation across the 50-item evaluation benchmark (pharmacy prescriptions and last-mile dispatch) verified via Whisper `small.en` acoustic transcription and Epitran G2P phonetic alignment:
 
-| Metric / Pillar | Untuned Default Input | Safety-Tuned RimeRx Input | Absolute Improvement |
-| :--- | :---: | :---: | :---: |
-| **Critical Entity Recall Accuracy** | 96.0% | **96.0%** | **High baseline accuracy preserved** |
-| **Mean Word Error Rate (WER)** | 68.15% | **48.24%** | **-19.91 pts error reduction** |
-| **Mean Phoneme Error Rate (PER)** | 67.28% | **0.0%** | **-67.28 pts error reduction** |
-| **Dosage Schedule Error Rate (`1-0-1`)** | High (misread as "101") | **0.0% ("one zero one")** | **100% dosage clarity** |
-| **Drug Name WER Improvement** | 87.5% | **56.25%** | **-31.25 pts error reduction** |
-| **Interruption Client Cutoff Latency** | N/A | **0.043 ms** | **Instantaneous cutoff (<200ms target)** |
-| **Interruption Stale Audio to Speaker** | N/A | **0 bytes** | **100% clean callback & buffer flush** |
+| Metric / Pillar | Untuned Default Input | Safety-Tuned RimeRx Input | Evaluation Scope / Absolute Improvement |
+| :--- | :---: | :---: | :--- |
+| **Critical Entity Recall Accuracy** | 96.0% | **96.0%** | **96.0% on the 50-case benchmark** (high baseline preserved) |
+| **Mean Word Error Rate (WER)** | 68.15% | **48.24%** | **-19.91 pts error reduction** on the 50-case benchmark |
+| **Mean Phoneme Error Rate (PER)** | 67.28% | **0.0%** | **-67.28 pts error reduction** via G2P phonetic alignment |
+| **Dosage Schedule Error Rate (`1-0-1`)** | High (misread as "101") | **0.0% ("one zero one")** | **100% dosage clarity** on evaluated schedules |
+| **Drug Name WER Improvement** | 87.5% | **56.25%** | **-31.25 pts error reduction** across evaluated drug names |
+| **Client Cutoff Latency** | N/A | **0.043 ms** | Local callback & buffer cutoff (synchronous teardown) |
+| **Network In-Flight Drain** | N/A | **~1,813 ms** | WAN roundtrip + server queue drain before clear takes effect |
+| **Stale Audio Emitted to Speaker** | N/A | **0 bytes** | **100% clean callback severance** (zero audible leakage) |
 
 ---
 
@@ -140,7 +141,7 @@ Human perceptual Mean Opinion Score (MOS) protocol, blinded A/B test harness, an
   - RimeRx Tuned Variant: **5.0 / 5.0 Naturalness**, **4.00 / 5.0 Intelligibility**
   - Medication & Strength Comprehension: **100.0%** across both variants
 - **Non-Fabrication Statement**: In strict adherence to hackathon ethics, all recorded sessions are backed by SQLite persistence (`results/benchmark.db`) and JSON exports.
-- **Local Evaluation Harness**: Run `python scripts/mos_server.py` to launch the randomized A/B listening study and monitor submissions at `/admin`.
+- **Local Evaluation Harness**: Run `uvicorn main:app` to launch the randomized A/B listening study and access `/api/blind/session` and `/api/mos`.
 
 ---
 
