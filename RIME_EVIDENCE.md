@@ -77,7 +77,7 @@ For every evaluation pair, the following fields are preserved:
 - `per`: Phoneme Error Rate.
 - `critical_token_accuracy`: Critical Token Accuracy percentage.
 - `latency`: TTFB and Total Latency in milliseconds.
-- `provider`: TTS provider ID (`rime`, `openai`, `elevenlabs`).
+- `provider`: TTS provider ID (`rime` for submitted benchmark; `openai`, `elevenlabs` supported for future extensions).
 
 ### Audio Clip Generation & Storage
 Synthesized `.mp3` audio clips are automatically generated when executing `python run_benchmark.py`. Generated `.mp3` audio files are ignored from git version control via `.gitignore` to prevent repository bloat, while directory placeholders (`.gitkeep`) preserve the artifact hierarchy. Running the benchmark script regenerates full local audio clips for all 250 evaluation cases.

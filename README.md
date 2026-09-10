@@ -92,19 +92,20 @@ All Rime synthesis parameters are governed by a single source of truth in [`conf
                  +------------------------------------+------------------------------------+
                  |                                    |                                    |
                  v                                    v                                    v
-   +-------------+-------------+        +-------------+-------------+        +-------------+-------------+
-   |  Voice Safety Pipeline    |        | Multi-TTS (tts/providers.py)|        |  ASR Eval Engine (asr.py)   |
-   | 1. Text Input             |        | - Rime REST (mistv3/sirius) |        | - faster-whisper (small.en) |
-   | 2. Critical Entity Extr.  |        | - Rime WS (ws3 streaming)   |        | - EVAL_BEAM_SIZE = 5        |
-   | 3. Semantic Preservation  |        | - OpenAI TTS (tts-1)        |        | - jiwer (Word Error Rate)   |
-   | 4. Speech Normalization   |        | - ElevenLabs (flash v2.5)   |        | - Critical Entity Recall    |
-   | 5. Rime TTS Synthesis     |        +-------------+-------------+        +-------------+-------------+
-   | 6. Audio Generation       |                      |                                    |
-   | 7. ASR Transcription      |                      v                                    v
-   | 8. Entity Verification    |        +-------------+-------------+        +-------------+-------------+
-   | 9. Multi-Metric Scoring   |        |   Reliability & Metrics   |        |   SQLite Ratings Database   |
-   +---------------------------+        | (TTFB, Warm/Cold, Status) |        |    (results/benchmark.db)   |
-                                        +---------------------------+ <----- +-----------------------------+
+   +-------------+-------------+        +-------------------------------+        +-------------+-------------+
+   |  Voice Safety Pipeline    |        | Provider Layer(tts/providers) |        |  ASR Eval Engine (asr.py)   |
+   | 1. Text Input             |        | - Rime REST (mistv3/sirius)   |        | - faster-whisper (small.en) |
+   | 2. Critical Entity Extr.  |        | - Rime WS (ws3 streaming)     |        | - EVAL_BEAM_SIZE = 5        |
+   | 3. Semantic Preservation  |        | *Supported Future Work:       |        | - jiwer (Word Error Rate)   |
+   | 4. Speech Normalization   |        |   OpenAI & ElevenLabs         |        | - Critical Entity Recall    |
+   | 5. Rime TTS Synthesis     |        |   (not in submitted eval)     |        +-------------+-------------+
+   | 6. Audio Generation       |        +---------------+---------------+                      |
+   | 7. ASR Transcription      |                        |                                      v
+   | 8. Entity Verification    |                        v                        +-------------+-------------+
+   | 9. Multi-Metric Scoring   |        +---------------+---------------+        |   SQLite Ratings Database   |
+   +---------------------------+        |     Reliability & Metrics     |        |    (results/benchmark.db)   |
+                                        |   (TTFB, Warm/Cold, Status)   | <----- +-----------------------------+
+                                        +-------------------------------+
 ```
 
 ---
@@ -145,12 +146,12 @@ Human perceptual Mean Opinion Score (MOS) protocol, blinded A/B test harness, an
 2. **Exploratory Sample Scope**: Baseline benchmark figures reflect a 50-item synthetic healthcare and logistics corpus; production rollouts should evaluate against multi-thousand institutional formularies.
 3. **Audio Cutoff vs. WAN & Hardware Drain**: WebSocket interruption achieves 0.043ms client callback cutoff and buffer clearance at the application transport layer with 0 stale bytes emitted; WAN transit delivers in-flight frames to the client socket for ~1.8s (discarded by context-ID filtering), while hardware soundcard buffers (WASAPI/CoreAudio/ALSA) exhibit device-specific DAC drain.
 4. **2,500 Character Input Limit**: Ingestion is capped at 2,500 characters per request (`HTTP 400`) to guarantee streaming latency bounds.
+5. **Submitted Benchmark Scope (Rime Untuned vs. Rime Safety-Tuned)**: The submitted evaluation focuses specifically on evaluating Rime TTS with and without RimeRx pronunciation tuning. While the codebase includes client wrappers for other vendors in `tts/providers.py`, a full multi-vendor comparative benchmark across third-party providers was not part of the submitted evaluation.
 
 ---
 
-## Third-Party Services
+## Third-Party Services & Integrations
 
-- **Rime TTS** (`mistv3`, `sirius`): Primary low-latency speech synthesis engine via REST and WebSocket.
-- **OpenAI** (`tts-1`): Secondary comparison baseline TTS provider.
-- **ElevenLabs** (`flash v2.5`): Secondary comparison baseline TTS provider.
+- **Rime TTS** (`mistv3`, `sirius`): Primary speech synthesis engine evaluated via REST and WebSocket.
 - **SYSTRAN faster-whisper** (`small.en`): Local acoustic transcription engine for objective WER and entity recall benchmarking.
+- **OpenAI & ElevenLabs (Infrastructure / Future Work)**: Client adapters are implemented in `tts/providers.py` for future cross-provider benchmark expansion, but were not used in the submitted evaluation suite.

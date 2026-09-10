@@ -1,3 +1,13 @@
+"""TTS Providers Module for RimeRx.
+
+NOTE ON MULTI-PROVIDER ARCHITECTURE:
+Multi-provider support (OpenAI tts-1, ElevenLabs flash v2.5) is implemented
+here as modular infrastructure for future benchmarking work.
+The primary submitted hackathon evaluation specifically focuses on Rime TTS
+(untuned baseline vs. RimeRx safety-tuned prompts).
+Cross-vendor benchmark comparisons are not part of the submitted evaluation suite.
+"""
+
 import os, json, httpx, asyncio, time, logging
 from abc import ABC, abstractmethod
 from fastapi import HTTPException
