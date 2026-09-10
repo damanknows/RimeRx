@@ -62,13 +62,16 @@ All Rime synthesis parameters are governed by a single source of truth in [`conf
 
 | Configuration Field | Setting / Value | Technical Rationale |
 | :--- | :--- | :--- |
-| **Model ID** | `mistv3` | Rime's low-latency production model (~37ms P50 TTFA). |
-| **Speaker / Voice ID** | `sirius` | Clear, authoritative speaker tuned for medical instructions and dispatch. |
-| **Language / Accent** | `en-IN` | Specialized Indian English phonology and inflection. |
+| **Model ID** | `mistv3` | Rime's low-latency production model (~37ms P50 TTFA). Verified against Rime live catalog. |
+| **Speaker / Voice ID** | `sirius` | Clear, authoritative speaker tuned for medical instructions and dispatch. Verified against Rime live catalog. |
+| **Language / Accent** | `en-IN` | Specialized Indian English phonology and inflection. Verified against Rime live catalog. |
+| **Catalog Verification** | `scripts/verify_rime_config.py` | Automated preflight and app-startup check confirming model/speaker/language validity against Rime production API. |
 | **REST Endpoint** | `https://users.rime.ai/v1/rime-tts` | Official Rime HTTP REST TTS API endpoint. |
 | **WebSocket Endpoint** | `wss://users-ws.rime.ai/ws3` | Official Rime streaming WebSocket endpoint for duplex voice & interruption. |
 | **Audio Format** | `mp3` | Lightweight compressed audio for minimal network payload and fast streaming. |
 | **Transport Protocols** | `REST + WebSocket` | Hybrid transport: HTTP REST for batch evaluations and WebSocket for real-time duplex streaming. |
+
+> **Live Catalog Verification**: Run `python scripts/verify_rime_config.py` at any time to query Rime's live production catalog and confirm that the configured model, speaker, and language combination is valid. If invalid or deprecated, the verification fails loudly with `[CONFIG ERROR]`.
 
 ---
 

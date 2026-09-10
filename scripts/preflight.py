@@ -16,7 +16,7 @@ if ROOT_DIR not in sys.path:
 
 load_dotenv(os.path.join(ROOT_DIR, ".env"))
 
-from config.rime import RIME_MODEL, RIME_SPEAKER, RIME_ENDPOINT, RIME_AUDIO_FORMAT, RIME_LANGUAGE
+from config.rime import RIME_MODEL, RIME_SPEAKER, RIME_ENDPOINT, RIME_AUDIO_FORMAT, RIME_LANGUAGE, verify_rime_configuration
 
 def run_preflight() -> bool:
     print("=" * 76)
@@ -99,56 +99,38 @@ def run_preflight() -> bool:
             "details": f"Verified config value '{RIME_SPEAKER}'"
         })
 
-    # Check 4: Live Rime TTS Synthesis Call
+    # Check 4: Live Rime Production Catalog Verification
     if not api_key or api_key == "your_rime_api_key_here":
         results.append({
-            "check": "Live TTS Synthesis Call",
-            "target": "HTTP 200 + audio bytes",
+            "check": "Live Catalog Verification",
+            "target": "HTTP 200 + active in catalog",
             "status": "SKIP",
             "details": "Skipped because RIME_API_KEY is not set"
         })
         all_passed = False
     else:
-        test_payload = {
-            "speaker": RIME_SPEAKER,
-            "text": "Tablet Augmentin six two five milligram. RimeRx voice safety preflight verified.",
-            "modelId": RIME_MODEL,
-            "audioFormat": RIME_AUDIO_FORMAT
-        }
-        headers = {
-            "Authorization": f"Bearer {api_key}",
-            "Content-Type": "application/json",
-            "Accept": f"audio/{RIME_AUDIO_FORMAT}"
-        }
-
-        try:
-            start_time = time.perf_counter()
-            with httpx.Client(timeout=15.0) as client:
-                resp = client.post(RIME_ENDPOINT, json=test_payload, headers=headers)
-                latency_ms = round((time.perf_counter() - start_time) * 1000.0, 1)
-
-            if resp.status_code == 200 and len(resp.content) > 0:
-                results.append({
-                    "check": "Live TTS Synthesis Call",
-                    "target": "HTTP 200 + audio bytes",
-                    "status": "PASS",
-                    "details": f"HTTP 200 OK ({len(resp.content):,} bytes, {latency_ms} ms)"
-                })
-            else:
-                err_preview = resp.text[:100] if resp.text else "No response body"
-                results.append({
-                    "check": "Live TTS Synthesis Call",
-                    "target": "HTTP 200 + audio bytes",
-                    "status": "FAIL",
-                    "details": f"HTTP {resp.status_code}: {err_preview}"
-                })
-                all_passed = False
-        except Exception as e:
+        is_valid, v_msg = verify_rime_configuration(
+            api_key=api_key,
+            model=RIME_MODEL,
+            speaker=RIME_SPEAKER,
+            lang=RIME_LANGUAGE,
+            endpoint=RIME_ENDPOINT,
+            audio_format=RIME_AUDIO_FORMAT,
+            raise_on_failure=False,
+        )
+        if is_valid:
             results.append({
-                "check": "Live TTS Synthesis Call",
-                "target": "HTTP 200 + audio bytes",
+                "check": "Live Catalog Verification",
+                "target": f"{RIME_MODEL}/{RIME_SPEAKER}/{RIME_LANGUAGE}",
+                "status": "PASS",
+                "details": "Confirmed active in Rime production catalog"
+            })
+        else:
+            results.append({
+                "check": "Live Catalog Verification",
+                "target": f"{RIME_MODEL}/{RIME_SPEAKER}/{RIME_LANGUAGE}",
                 "status": "FAIL",
-                "details": f"Network/Connection error: {e}"
+                "details": v_msg
             })
             all_passed = False
 

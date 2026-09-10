@@ -10,7 +10,7 @@ import aiofiles
 from data import TEST_CASES, STRESS_TEST_CASES, tune_for_rime, safe_tune_for_rime, extract_critical_entities, validate_semantic_preservation, evaluate_stress_case
 from tts.providers import get_provider, PROVIDERS_CONFIG, RELIABILITY_STATS
 from db import init_db, save_mos_rating, export_mos_csv_string, save_blind_session, get_blind_session
-from config.rime import RIME_MODEL, RIME_SPEAKER, RIME_LANGUAGE
+from config.rime import RIME_MODEL, RIME_SPEAKER, RIME_LANGUAGE, verify_rime_configuration
 from dotenv import load_dotenv
 import uvicorn
 import jiwer
@@ -24,6 +24,14 @@ load_dotenv()
 RIME_API_KEY = os.getenv("RIME_API_KEY")
 if not RIME_API_KEY:
     print("[WARNING] RIME_API_KEY environment variable is missing or empty. Please configure it in Render/environment variables.", flush=True)
+else:
+    # Fail loudly on startup if configured model/speaker/language is invalid
+    try:
+        is_valid, v_msg = verify_rime_configuration(raise_on_failure=True)
+        print(f"[STARTUP PREFLIGHT] {v_msg}", flush=True)
+    except Exception as exc:
+        print(f"\n{'='*78}\n[CONFIG ERROR] Application startup halted: {exc}\n{'='*78}\n", flush=True)
+        raise exc
 
 app = FastAPI(title="RimeRx Voice Safety API")
 app.mount("/static", StaticFiles(directory="static"), name="static")
