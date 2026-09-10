@@ -9,7 +9,7 @@ import aiofiles
 
 from data import TEST_CASES, STRESS_TEST_CASES, tune_for_rime, safe_tune_for_rime, extract_critical_entities, validate_semantic_preservation, evaluate_stress_case
 from tts.providers import get_provider, PROVIDERS_CONFIG, RELIABILITY_STATS
-from db import init_db, save_mos_rating, export_mos_csv_string
+from db import init_db, save_mos_rating, export_mos_csv_string, save_blind_session, get_blind_session
 from config.rime import RIME_MODEL, RIME_SPEAKER, RIME_LANGUAGE
 from dotenv import load_dotenv
 import uvicorn
@@ -208,6 +208,19 @@ async def create_blind_session():
         "B": {"provider": "rime", "variant": variant_b, "audio_id": fname_b}
     }
 
+    # Persist session to SQLite so it survives worker reloads or restarts
+    save_blind_session(
+        session_id=session_id,
+        case_id=case["id"],
+        raw_text=case["raw_text"],
+        provider_a="rime",
+        variant_a=variant_a,
+        audio_id_a=fname_a,
+        provider_b="rime",
+        variant_b=variant_b,
+        audio_id_b=fname_b
+    )
+
     return {
         "session_id": session_id,
         "case_id": case["id"],
@@ -220,6 +233,9 @@ async def create_blind_session():
 @app.post("/api/mos")
 async def submit_mos_rating(req: MosRatingRequest):
     session = BLIND_SESSIONS.get(req.session_id)
+    if not session:
+        # Check persistent SQLite store
+        session = get_blind_session(req.session_id)
     if not session:
         raise HTTPException(404, "Invalid or expired blind evaluation session_id")
 

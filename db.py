@@ -29,6 +29,20 @@ def init_db():
             timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );
     """)
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS blind_sessions (
+            session_id TEXT PRIMARY KEY,
+            case_id TEXT,
+            raw_text TEXT,
+            provider_a TEXT,
+            variant_a TEXT,
+            audio_id_a TEXT,
+            provider_b TEXT,
+            variant_b TEXT,
+            audio_id_b TEXT,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
+    """)
     conn.commit()
 
     # Migration check for columns if table already exists
@@ -40,6 +54,36 @@ def init_db():
             conn.commit()
 
     conn.close()
+
+def save_blind_session(session_id: str, case_id: str, raw_text: str,
+                       provider_a: str, variant_a: str, audio_id_a: str,
+                       provider_b: str, variant_b: str, audio_id_b: str):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("""
+        INSERT OR REPLACE INTO blind_sessions (
+            session_id, case_id, raw_text, provider_a, variant_a, audio_id_a,
+            provider_b, variant_b, audio_id_b
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    """, (session_id, case_id, raw_text, provider_a, variant_a, audio_id_a, provider_b, variant_b, audio_id_b))
+    conn.commit()
+    conn.close()
+
+def get_blind_session(session_id: str) -> dict:
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM blind_sessions WHERE session_id = ?", (session_id,))
+    row = cursor.fetchone()
+    conn.close()
+    if not row:
+        return None
+    r = dict(row)
+    return {
+        "case_id": r["case_id"],
+        "raw_text": r["raw_text"],
+        "A": {"provider": r["provider_a"], "variant": r["variant_a"], "audio_id": r["audio_id_a"]},
+        "B": {"provider": r["provider_b"], "variant": r["variant_b"], "audio_id": r["audio_id_b"]}
+    }
 
 def save_mos_rating(session_id: str, case_id: str, provider: str, variant: str, naturalness: int, intelligibility: int,
                     medication_correct: bool = None, strength_correct: bool = None, dosage_correct: bool = None,
