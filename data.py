@@ -1,33 +1,54 @@
-import re
+import os, json, re
 
-TEST_CASES = [
-    {
-        "id": "rx_001",
-        "domain": "Pharmacy",
-        "raw_text": "Tab. Augmentin 625mg 1-0-1 x 5 days. Dr. Reddy's Lab, Hyderabad. Ph: 98765-43210",
-        # Gold standard: How it *should* sound (IPA-ish respelling for PER calc)
-        "expected_pronunciation": "Tablet Augmentin six two five milligram one zero one times five days Doctor Reddys Lab Hyderabad Phone nine eight seven six five four three two one zero"
-    },
-    {
-        "id": "addr_001",
-        "domain": "Delivery",
-        "raw_text": "Deliver to: 12/3, 2nd Cross, BTM 2nd Stage, Bengaluru - 560076. Landmark: Near Axis Bank ATM.",
-        "expected_pronunciation": "Deliver to twelve slash three second Cross B T M second Stage Bengaluru five six zero zero seven six Landmark Near Axis Bank A T M"
-    },
-    {
-        "id": "rx_002",
-        "domain": "Pharmacy",
-        "raw_text": "Syp. Azithral 200mg/5ml - 5ml BD. Mfg: Alembic. Exp: 03/26.",
-        "expected_pronunciation": "Syrup Azithral two hundred milligram per five milliliter five milliliter twice daily Manufactured by Alembic Expiry March twenty six"
-    },
-    {
-        "id": "edge_001",
-        "domain": "Pharmacy (Edge Case)",
-        "is_edge_case": True,
-        "raw_text": "Take Paracetamol 500 mg orally every 6 hours as needed for fever.",
-        "expected_pronunciation": "Take Paracetamol five hundred milligram orally every six hours as needed for fever"
-    },
-]
+def _load_corpus():
+    base_dir = os.path.dirname(__file__)
+    corpus_dir = os.path.join(base_dir, "corpus")
+    pharmacy_path = os.path.join(corpus_dir, "pharmacy.json")
+    logistics_path = os.path.join(corpus_dir, "logistics.json")
+
+    cases = []
+    if os.path.exists(pharmacy_path):
+        with open(pharmacy_path, "r", encoding="utf-8") as f:
+            cases.extend(json.load(f))
+    if os.path.exists(logistics_path):
+        with open(logistics_path, "r", encoding="utf-8") as f:
+            cases.extend(json.load(f))
+
+    if not cases:
+        cases = [
+            {
+                "id": "rx_001",
+                "domain": "Pharmacy",
+                "category": "dosages",
+                "raw_text": "Tab. Augmentin 625mg 1-0-1 x 5 days. Dr. Reddy's Lab, Hyderabad. Ph: 98765-43210",
+                "expected_pronunciation": "Tablet Augmentin six two five milligram one zero one times five days Doctor Reddys Lab Hyderabad Phone nine eight seven six five four three two one zero"
+            },
+            {
+                "id": "addr_001",
+                "domain": "Delivery",
+                "category": "street_addresses",
+                "raw_text": "Deliver to: 12/3, 2nd Cross, BTM 2nd Stage, Bengaluru - 560076. Landmark: Near Axis Bank ATM.",
+                "expected_pronunciation": "Deliver to twelve slash three second Cross B T M second Stage Bengaluru five six zero zero seven six Landmark Near Axis Bank A T M"
+            },
+            {
+                "id": "rx_002",
+                "domain": "Pharmacy",
+                "category": "quantities",
+                "raw_text": "Syp. Azithral 200mg/5ml - 5ml BD. Mfg: Alembic. Exp: 03/26.",
+                "expected_pronunciation": "Syrup Azithral two hundred milligram per five milliliter five milliliter twice daily Manufactured by Alembic Expiry March twenty six"
+            },
+            {
+                "id": "edge_001",
+                "domain": "Pharmacy (Edge Case)",
+                "category": "quantities",
+                "is_edge_case": True,
+                "raw_text": "Take Paracetamol 500 mg orally every 6 hours as needed for fever.",
+                "expected_pronunciation": "Take Paracetamol five hundred milligram orally every six hours as needed for fever"
+            },
+        ]
+    return cases
+
+TEST_CASES = _load_corpus()
 
 DIGIT_WORDS = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"]
 
@@ -89,8 +110,8 @@ def tune_for_rime(text: str) -> str:
         (r'\bExp:?\s*', 'Expiry '),
         (r'\bExp\.?\b', 'Expiry'),
         (r'\bDr\.?\b', 'Doctor'),
-        (r'\bPh:?\s*', 'Phone '),
-        (r'\bPh\.?\b', 'Phone'),
+        (r'\bPh[:.]\s*', 'Phone '),
+        (r'\bPh\b(?=\s*\d)', 'Phone '),
         (r'\bNo\.?\b', 'Number'),
         (r'\bLandmark:\s*', 'Landmark '),
         (r'\bDeliver to:\s*', 'Deliver to '),

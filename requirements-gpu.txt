@@ -1,0 +1,4 @@
+# Optional CUDA GPU Acceleration for Faster-Whisper ASR
+# To enable GPU inference with PyTorch and CUDA:
+# pip install torch --index-url https://download.pytorch.org/whl/cu121
+torch>=2.2.0

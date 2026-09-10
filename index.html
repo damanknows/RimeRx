@@ -190,10 +190,36 @@
               </div>
             </div>
 
-            <!-- Animated PER Stat Box -->
-            <div class="flex items-center justify-between bg-[#0a0a0c] px-4 py-3 rounded-xl border border-white/5">
+            <!-- HEADLINE METRIC: WORD ERROR RATE (WER) VIA ACOUSTIC CHECK -->
+            <div class="space-y-2 bg-[#0a0a0c] p-4 rounded-xl border border-white/10">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-mono uppercase font-bold text-zinc-200 flex items-center gap-1.5">
+                  <i class="fa-solid fa-microphone-lines text-teal-400"></i> Word Error Rate (WER):
+                </span>
+                <span id="werDefault" class="stat text-2xl font-black text-zinc-100 font-mono" data-suffix="%" data-decimals="1">-- %</span>
+              </div>
+              
+              <button 
+                id="werDefaultBtn" 
+                disabled 
+                class="w-full py-2 px-3 bg-zinc-800 hover:bg-zinc-700 active:bg-zinc-900 text-zinc-200 font-mono text-xs rounded-lg border border-white/10 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                <i class="fa-solid fa-waveform-lines text-teal-400"></i>
+                <span>Run Acoustic Check (WER)</span>
+              </button>
+
+              <!-- ASR Hypothesis with Highlighted Errors -->
+              <div id="werDefaultContainer" class="hidden pt-2 border-t border-white/5 space-y-1">
+                <span class="text-[11px] font-mono text-zinc-400 uppercase block">ASR Transcript (Misrecognized Words Highlighted):</span>
+                <div id="werDefaultWords" class="p-2.5 bg-[#121216] text-zinc-300 rounded-lg text-xs font-mono break-words leading-relaxed border border-white/5">
+                </div>
+              </div>
+            </div>
+
+            <!-- Phoneme Error Rate (PER) Secondary Stat Box -->
+            <div class="flex items-center justify-between bg-[#0a0a0c] px-4 py-2.5 rounded-xl border border-white/5">
               <span class="text-xs font-mono uppercase text-zinc-400">Phoneme Error Rate (PER):</span>
-              <span id="perDefault" class="stat text-xl font-bold text-zinc-200 font-mono" data-suffix="%" data-decimals="1">-- %</span>
+              <span id="perDefault" class="stat text-lg font-bold text-zinc-400 font-mono" data-suffix="%" data-decimals="1">-- %</span>
             </div>
 
             <!-- Prompt Sent to Engine -->
@@ -233,10 +259,36 @@
               </div>
             </div>
 
-            <!-- Animated PER Stat Box -->
-            <div class="flex items-center justify-between bg-teal-500/5 px-4 py-3 rounded-xl border border-teal-500/20">
+            <!-- HEADLINE METRIC: WORD ERROR RATE (WER) VIA ACOUSTIC CHECK -->
+            <div class="space-y-2 bg-teal-500/10 p-4 rounded-xl border border-teal-500/30">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-mono uppercase font-bold text-teal-300 flex items-center gap-1.5">
+                  <i class="fa-solid fa-microphone-lines text-teal-400"></i> Word Error Rate (WER):
+                </span>
+                <span id="werTuned" class="stat text-2xl font-black text-teal-400 font-mono" data-suffix="%" data-decimals="1">-- %</span>
+              </div>
+              
+              <button 
+                id="werTunedBtn" 
+                disabled 
+                class="w-full py-2 px-3 bg-teal-500/20 hover:bg-teal-500/30 active:bg-teal-500/40 text-teal-200 font-mono text-xs rounded-lg border border-teal-500/30 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                <i class="fa-solid fa-waveform-lines text-teal-400"></i>
+                <span>Run Acoustic Check (WER)</span>
+              </button>
+
+              <!-- ASR Hypothesis with Highlighted Errors -->
+              <div id="werTunedContainer" class="hidden pt-2 border-t border-teal-500/20 space-y-1">
+                <span class="text-[11px] font-mono text-teal-300/80 uppercase block">ASR Transcript (Misrecognized Words Highlighted):</span>
+                <div id="werTunedWords" class="p-2.5 bg-[#0d0d0f] text-teal-200 rounded-lg text-xs font-mono break-words leading-relaxed border border-teal-500/20">
+                </div>
+              </div>
+            </div>
+
+            <!-- Phoneme Error Rate (PER) Secondary Stat Box -->
+            <div class="flex items-center justify-between bg-teal-500/5 px-4 py-2.5 rounded-xl border border-teal-500/20">
               <span class="text-xs font-mono uppercase text-teal-300">Phoneme Error Rate (PER):</span>
-              <span id="perTuned" class="stat text-xl font-bold text-teal-400 font-mono" data-suffix="%" data-decimals="1">-- %</span>
+              <span id="perTuned" class="stat text-lg font-bold text-teal-400/80 font-mono" data-suffix="%" data-decimals="1">-- %</span>
             </div>
 
             <!-- Prompt Sent to Engine -->
@@ -351,7 +403,7 @@
       <div class="flex flex-wrap items-center justify-center gap-6 text-zinc-500">
         <span>POWERED BY <strong class="text-zinc-400">RIME TTS</strong></span>
         <span>&bull;</span>
-        <span>ASR BY <strong class="text-zinc-400">FASTER-WHISPER</strong></span>
+        <span>ASR BY <strong class="text-zinc-400">FASTER-WHISPER (small.en)</strong></span>
         <span>&bull;</span>
         <span>G2P BY <strong class="text-zinc-400">EPITRAN</strong></span>
         <span>&bull;</span>
@@ -384,13 +436,15 @@
     <span id="toastMessage">Notification message</span>
   </div>
 
-  <!-- JAVASCRIPT LOGIC (CLEAN PIPELINE WITHOUT CLAMPING OR FABRICATED VALUES) -->
+  <!-- JAVASCRIPT LOGIC (CLEAN PIPELINE WITH EXACT AUDIO_ID WER EVALUATION) -->
   <script>
     // --- CONFIGURATION STATE ---
     let PER_THRESHOLD = 5.0; // Fetched dynamically from GET /api/config
     let preloadedCases = [];
     let currentCase = null;
     let sessionLogs = [];
+    let lastAudioDefId = null;
+    let lastAudioTunedId = null;
 
     /**
      * countUpOnce — animates a number from 0 to a target, triggered once when element enters viewport.
@@ -459,9 +513,6 @@
       elements.forEach((el) => observer.observe(el));
     }
 
-    /**
-     * renderDelta — sets data-target, resets animated flag, and triggers countUpOnce for new fetch results
-     */
     function renderDelta(el, deltaValue) {
       if (!el) return;
       el.dataset.target = deltaValue;
@@ -544,6 +595,9 @@
       });
 
       document.getElementById("synthesizeBtn").addEventListener("click", runSynthesizeAndCompare);
+
+      document.getElementById("werDefaultBtn").addEventListener("click", () => runAcousticWerCheck("default"));
+      document.getElementById("werTunedBtn").addEventListener("click", () => runAcousticWerCheck("tuned"));
 
       document.getElementById("slowDefaultToggle").addEventListener("change", (e) => {
         const audio = document.getElementById("audioDefault");
@@ -652,6 +706,14 @@
       perDefEl.textContent = "-- %";
       perTunedEl.textContent = "-- %";
 
+      // Reset WER elements & containers
+      document.getElementById("werDefault").textContent = "-- %";
+      document.getElementById("werTuned").textContent = "-- %";
+      document.getElementById("werDefaultContainer").classList.add("hidden");
+      document.getElementById("werTunedContainer").classList.add("hidden");
+      document.getElementById("werDefaultBtn").disabled = true;
+      document.getElementById("werTunedBtn").disabled = true;
+
       const badge = document.getElementById("deltaBadgeContainer");
       badge.className = "w-full rounded-2xl p-8 sm:p-10 border border-white/10 text-center transition-all duration-300 bg-[#121216]";
       document.getElementById("deltaMainText").innerHTML = `<i class="fa-solid fa-spinner animate-spin text-teal-400"></i> Calculating Delta...`;
@@ -673,7 +735,10 @@
           fetchAPI("/api/evaluate", payloadTuned)
         ]);
 
-        // 1. Instant Audio Player Display
+        // 1. Instant Audio Player Display & Store Audio IDs
+        lastAudioDefId = resRenderDef.audio_id;
+        lastAudioTunedId = resRenderTuned.audio_id;
+
         const audioDef = document.getElementById("audioDefault");
         audioDef.src = resRenderDef.audio_url;
         document.getElementById("promptDefaultText").textContent = resRenderDef.prompt_used;
@@ -682,7 +747,11 @@
         audioTuned.src = resRenderTuned.audio_url;
         document.getElementById("promptTunedText").textContent = resRenderTuned.prompt_used;
 
-        // 2. Metric Scores Calculation (PURE REAL VALUES — NO CLAMPING, NO FABRICATED FALLBACKS)
+        // Enable WER Buttons
+        document.getElementById("werDefaultBtn").disabled = false;
+        document.getElementById("werTunedBtn").disabled = false;
+
+        // 2. Metric Scores Calculation (PER)
         const defaultPER = typeof resEvalDef.PER === "number" ? resEvalDef.PER : 0;
         const tunedPER = typeof resEvalTuned.PER === "number" ? resEvalTuned.PER : 0;
         const delta = Math.round((defaultPER - tunedPER) * 10) / 10;
@@ -704,7 +773,7 @@
         // 7. Append Entry to Session Audit Log
         addSessionLog(text, defaultPER, tunedPER, delta, isSafe);
 
-        showToast("Speech synthesis & evaluation completed successfully.", "success");
+        showToast("Speech synthesis completed. Click 'Run Acoustic Check (WER)' for ASR evaluation.", "success");
 
       } catch (err) {
         console.error("Synthesis error:", err);
@@ -715,6 +784,57 @@
       } finally {
         btn.disabled = false;
         btn.innerHTML = `<i class="fa-solid fa-play text-xs"></i> <span>Synthesize & Compare Pronunciation</span>`;
+      }
+    }
+
+    // --- ACOUSTIC CHECK (WER) VIA FASTER-WHISPER (small.en) ---
+    async function runAcousticWerCheck(type) {
+      const audioId = (type === "default") ? lastAudioDefId : lastAudioTunedId;
+      if (!audioId) {
+        showToast("Please synthesize audio first.", "warning");
+        return;
+      }
+
+      const btn = document.getElementById(type === "default" ? "werDefaultBtn" : "werTunedBtn");
+      const statEl = document.getElementById(type === "default" ? "werDefault" : "werTuned");
+      const container = document.getElementById(type === "default" ? "werDefaultContainer" : "werTunedContainer");
+      const wordsEl = document.getElementById(type === "default" ? "werDefaultWords" : "werTunedWords");
+
+      btn.disabled = true;
+      btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin text-xs"></i> Transcribing ASR (small.en)...`;
+
+      try {
+        const payload = (currentCase && currentCase.id && currentCase.id !== "custom")
+          ? { audio_id: audioId, case_id: currentCase.id, prompt_type: type }
+          : { audio_id: audioId, custom_text: document.getElementById("rawTextInput").value.trim(), prompt_type: type };
+
+        const resWer = await fetchAPI("/api/wer", payload);
+
+        renderDelta(statEl, resWer.WER);
+
+        // Build Highlighted Words HTML
+        if (Array.isArray(resWer.words) && resWer.words.length > 0) {
+          const wordsHtml = resWer.words.map(w => {
+            if (w.error) {
+              return `<mark class="px-1 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/40 font-bold" title="${w.type}">${escapeHtml(w.word)}</mark>`;
+            } else {
+              return `<span class="text-zinc-200">${escapeHtml(w.word)}</span>`;
+            }
+          }).join(" ");
+          wordsEl.innerHTML = wordsHtml;
+        } else {
+          wordsEl.textContent = resWer.hypothesis || "(No speech detected)";
+        }
+
+        container.classList.remove("hidden");
+        showToast(`Acoustic WER Check completed (${resWer.WER}% WER)`, "success");
+
+      } catch (err) {
+        console.error("WER error:", err);
+        showToast(`ASR Error: ${err.message}`, "error");
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<i class="fa-solid fa-waveform-lines text-teal-400"></i> <span>Run Acoustic Check (WER)</span>`;
       }
     }
 
@@ -759,11 +879,12 @@
 
     function updateTrustBadge(renderMeta) {
       const badgeText = document.getElementById("trustBadgeText");
-      const model = renderMeta.model_id || "mist/v1";
-      const voice = renderMeta.speaker || "marsh";
+      const model = renderMeta.model_id || renderMeta.model || "mist/v1";
+      const voice = renderMeta.speaker || renderMeta.voice || "marsh";
       const lang = renderMeta.language || "en-IN";
+      const provider = renderMeta.provider || "rime";
 
-      badgeText.textContent = `Speaking via: Rime · ${model} · ${voice} · ${lang}`;
+      badgeText.textContent = `Speaking via: ${provider.toUpperCase()} · ${model} · ${voice} · ${lang}`;
     }
 
     function updateTransformationDiff(raw, tuned) {

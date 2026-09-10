@@ -1,0 +1,177 @@
+[
+  {
+    "id": "addr_001",
+    "domain": "Delivery",
+    "category": "street_addresses",
+    "raw_text": "Deliver to: 12/3, 2nd Cross, BTM 2nd Stage, Bengaluru - 560076. Landmark: Near Axis Bank ATM.",
+    "expected_pronunciation": "Deliver to twelve slash three second Cross B T M second Stage Bengaluru five six zero zero seven six Landmark Near Axis Bank A T M"
+  },
+  {
+    "id": "addr_002",
+    "domain": "Delivery",
+    "category": "pin_codes",
+    "raw_text": "Deliver to: Flat 402, Sai Residency, HSR Layout Sector 1, Bengaluru - 560102. Ph: 98451-99887",
+    "expected_pronunciation": "Deliver to Flat four zero two Sai Residency HSR Layout Sector one Bengaluru five six zero one zero two Phone nine eight four five one nine nine eight eight seven"
+  },
+  {
+    "id": "addr_003",
+    "domain": "Delivery",
+    "category": "proper_nouns",
+    "raw_text": "Deliver to: Plot 88, Jubilee Hills Road No. 36, Hyderabad - 500033. Landmark: Opposite Metro Station.",
+    "expected_pronunciation": "Deliver to Plot eighty eight Jubilee Hills Road Number thirty six Hyderabad five zero zero zero three three Landmark Opposite Metro Station"
+  },
+  {
+    "id": "addr_004",
+    "domain": "Delivery",
+    "category": "street_addresses",
+    "raw_text": "Deliver to: House No. 15, 1st Main, Koramangala 4th Block, Bengaluru - 560034. Ph: 98100-22334",
+    "expected_pronunciation": "Deliver to House Number fifteen first Main Koramangala fourth Block Bengaluru five six zero zero three four Phone nine eight one zero zero two two three three four"
+  },
+  {
+    "id": "addr_005",
+    "domain": "Delivery",
+    "category": "code_switched",
+    "raw_text": "Deliver to: House 45, Near Hanuman Mandir, Connaught Place, New Delhi - 110001. Gate par call karna.",
+    "expected_pronunciation": "Deliver to House forty five Near Hanuman Mandir Connaught Place New Delhi one one zero zero zero one Gate par call karna"
+  },
+  {
+    "id": "addr_006",
+    "domain": "Delivery",
+    "category": "phone_numbers",
+    "raw_text": "Deliver to: Villa 12, Green Acres, ECR Road, Chennai - 600119. Contact security Ph: 94441-88990",
+    "expected_pronunciation": "Deliver to Villa twelve Green Acres ECR Road Chennai six zero zero one one nine Contact security Phone nine four four four one eight eight nine nine zero"
+  },
+  {
+    "id": "addr_007",
+    "domain": "Delivery",
+    "category": "pin_codes",
+    "raw_text": "Deliver to: Building 7A, Mindspace IT Park, Madhapur, Hyderabad - 500081. Landmark: Near Inorbit Mall.",
+    "expected_pronunciation": "Deliver to Building 7A Mindspace IT Park Madhapur Hyderabad five zero zero zero eight one Landmark Near Inorbit Mall"
+  },
+  {
+    "id": "addr_008",
+    "domain": "Delivery",
+    "category": "street_addresses",
+    "raw_text": "Deliver to: Shop No. 4, MG Road, Camp Area, Pune - 411001. Ph: 98220-33445",
+    "expected_pronunciation": "Deliver to Shop Number four milligram Road Camp Area Pune four one one zero zero one Phone nine eight two two zero three three four four five"
+  },
+  {
+    "id": "addr_009",
+    "domain": "Delivery",
+    "category": "code_switched",
+    "raw_text": "Deliver to: Flat 301, Sunshine Heights, Andheri West, Mumbai - 400053. Watchman ko de dena.",
+    "expected_pronunciation": "Deliver to Flat three zero one Sunshine Heights Andheri West Mumbai four zero zero zero five three Watchman ko de dena"
+  },
+  {
+    "id": "addr_010",
+    "domain": "Delivery",
+    "category": "proper_nouns",
+    "raw_text": "Deliver to: 55 Park Street, 3rd Floor, Park Circus, Kolkata - 700016. Ph: 98301-44556",
+    "expected_pronunciation": "Deliver to fifty five Park Street third Floor Park Circus Kolkata seven zero zero zero one six Phone nine eight three zero one four four five five six"
+  },
+  {
+    "id": "addr_011",
+    "domain": "Delivery",
+    "category": "pin_codes",
+    "raw_text": "Deliver to: Plot 12, Sector 18, Electronic City Phase 1, Bengaluru - 560100. Landmark: Near Infosys Gate 2.",
+    "expected_pronunciation": "Deliver to Plot twelve Sector eighteen Electronic City Phase one Bengaluru five six zero one zero zero Landmark Near Infosys Gate two"
+  },
+  {
+    "id": "addr_012",
+    "domain": "Delivery",
+    "category": "street_addresses",
+    "raw_text": "Deliver to: Door No. 8-2-293, Road No. 12, Banjara Hills, Hyderabad - 500034. Ph: 98491-77889",
+    "expected_pronunciation": "Deliver to Door Number eight two to two nine three Road Number twelve Banjara Hills Hyderabad five zero zero zero three four Phone nine eight four nine one seven seven eight eight nine"
+  },
+  {
+    "id": "addr_013",
+    "domain": "Delivery",
+    "category": "code_switched",
+    "raw_text": "Deliver to: House 102, Sector 21C, Chandigarh - 160022. Calling number par ring karna.",
+    "expected_pronunciation": "Deliver to House one zero two Sector 21C Chandigarh one six zero zero two two Calling number par ring karna"
+  },
+  {
+    "id": "addr_014",
+    "domain": "Delivery",
+    "category": "phone_numbers",
+    "raw_text": "Deliver to: Flat 504, Orchid Towers, Whitefield, Bengaluru - 560066. Ph: 99000-55667",
+    "expected_pronunciation": "Deliver to Flat five zero four Orchid Towers Whitefield Bengaluru five six zero zero six six Phone nine nine zero zero zero five five six six seven"
+  },
+  {
+    "id": "addr_015",
+    "domain": "Delivery",
+    "category": "proper_nouns",
+    "raw_text": "Deliver to: 14 Commercial Street, Tasker Town, Shivajinagar, Bengaluru - 560001. Landmark: Opposite Police Station.",
+    "expected_pronunciation": "Deliver to fourteen Commercial Street Tasker Town Shivajinagar Bengaluru five six zero zero zero one Landmark Opposite Police Station"
+  },
+  {
+    "id": "addr_016",
+    "domain": "Delivery",
+    "category": "pin_codes",
+    "raw_text": "Deliver to: Plot 45, GIDC Estate, Makarpura, Vadodara - 390010. Ph: 97240-11223",
+    "expected_pronunciation": "Deliver to Plot forty five GIDC Estate Makarpura Vadodara three nine zero zero one zero Phone nine seven two four zero one one two two three"
+  },
+  {
+    "id": "addr_017",
+    "domain": "Delivery",
+    "category": "street_addresses",
+    "raw_text": "Deliver to: Flat 101, Pearl Apartments, Anna Nagar, Chennai - 600040. Landmark: Near Tower Park.",
+    "expected_pronunciation": "Deliver to Flat one zero one Pearl Apartments Anna Nagar Chennai six zero zero zero four zero Landmark Near Tower Park"
+  },
+  {
+    "id": "addr_018",
+    "domain": "Delivery",
+    "category": "code_switched",
+    "raw_text": "Deliver to: House 23, Civil Lines, Jaipur - 302006. Lift kharab hai 2nd floor par aao.",
+    "expected_pronunciation": "Deliver to House twenty three Civil Lines Jaipur three zero two zero zero six Lift kharab hai second floor par aao"
+  },
+  {
+    "id": "addr_019",
+    "domain": "Delivery",
+    "category": "phone_numbers",
+    "raw_text": "Deliver to: Shop 12, Local Shopping Complex, Vasant Kunj, New Delhi - 110070. Ph: 98110-99887",
+    "expected_pronunciation": "Deliver to Shop twelve Local Shopping Complex Vasant Kunj New Delhi one one zero zero seven zero Phone nine eight one one zero nine nine eight eight seven"
+  },
+  {
+    "id": "addr_020",
+    "domain": "Delivery",
+    "category": "proper_nouns",
+    "raw_text": "Deliver to: 78 Marine Drive, Churchgate, Mumbai - 400020. Landmark: Near Cricket Club.",
+    "expected_pronunciation": "Deliver to seventy eight Marine Drive Churchgate Mumbai four zero zero zero two zero Landmark Near Cricket Club"
+  },
+  {
+    "id": "addr_021",
+    "domain": "Delivery",
+    "category": "pin_codes",
+    "raw_text": "Deliver to: Plot 234, Infocity, Patia, Bhubaneswar - 751024. Ph: 94370-11223",
+    "expected_pronunciation": "Deliver to Plot two three four Infocity Patia Bhubaneswar seven five one zero two four Phone nine four three seven zero one one two two three"
+  },
+  {
+    "id": "addr_022",
+    "domain": "Delivery",
+    "category": "street_addresses",
+    "raw_text": "Deliver to: Flat 602, Royal Palms, Koregaon Park, Pune - 411001. Landmark: Lane 7.",
+    "expected_pronunciation": "Deliver to Flat six zero two Royal Palms Koregaon Park Pune four one one zero zero one Landmark Lane seven"
+  },
+  {
+    "id": "addr_023",
+    "domain": "Delivery",
+    "category": "code_switched",
+    "raw_text": "Deliver to: House 88, Model Town Phase 2, Delhi - 110009. Main gate hamesha band rehta hai.",
+    "expected_pronunciation": "Deliver to House eighty eight Model Town Phase two Delhi one one zero zero zero nine Main gate hamesha band rehta hai"
+  },
+  {
+    "id": "addr_024",
+    "domain": "Delivery",
+    "category": "phone_numbers",
+    "raw_text": "Deliver to: Door 45, Beach Road, Visakhapatnam - 530003. Ph: 98480-33445",
+    "expected_pronunciation": "Deliver to Door forty five Beach Road Visakhapatnam five three zero zero zero three Phone nine eight four eight zero three three four four five"
+  },
+  {
+    "id": "addr_025",
+    "domain": "Delivery",
+    "category": "proper_nouns",
+    "raw_text": "Deliver to: Flat 203, Lakeview Apartments, Ulsoor, Bengaluru - 560008. Landmark: Near Ulsoor Lake.",
+    "expected_pronunciation": "Deliver to Flat two zero three Lakeview Apartments Ulsoor Bengaluru five six zero zero zero eight Landmark Near Ulsoor Lake"
+  }
+]

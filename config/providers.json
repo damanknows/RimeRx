@@ -1,0 +1,23 @@
+{
+  "rime": {
+    "model": "mist/v1",
+    "voice": "marsh",
+    "endpoint": "https://users.rime.ai/v1/rime-tts",
+    "language": "en-IN",
+    "notes": "Rime's provider-recommended fast speech model mist/v1 paired with the 'marsh' voice tuned for pharmacy and delivery prosody."
+  },
+  "openai": {
+    "model": "tts-1",
+    "voice": "alloy",
+    "endpoint": "https://api.openai.com/v1/audio/speech",
+    "language": "en-US",
+    "notes": "OpenAI's recommended standard low-latency synthesis model tts-1 with neutral balanced voice 'alloy' for production instruction reading."
+  },
+  "elevenlabs": {
+    "model": "eleven_flash_v2_5",
+    "voice": "21m00Tcm4TlvDq8ikWAM",
+    "endpoint": "https://api.elevenlabs.io/v1/text-to-speech/21m00Tcm4TlvDq8ikWAM",
+    "language": "en-US",
+    "notes": "ElevenLabs provider-recommended Flash v2.5 low-latency model using Rachel voice ID (21m00Tcm4TlvDq8ikWAM) formatted as 22kHz MP3."
+  }
+}

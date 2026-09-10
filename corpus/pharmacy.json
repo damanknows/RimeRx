@@ -1,0 +1,177 @@
+[
+  {
+    "id": "rx_001",
+    "domain": "Pharmacy",
+    "category": "dosages",
+    "raw_text": "Tab. Augmentin 625mg 1-0-1 x 5 days. Dr. Reddy's Lab, Hyderabad. Ph: 98765-43210",
+    "expected_pronunciation": "Tablet Augmentin six two five milligram one zero one times five days Doctor Reddys Lab Hyderabad Phone nine eight seven six five four three two one zero"
+  },
+  {
+    "id": "rx_002",
+    "domain": "Pharmacy",
+    "category": "quantities",
+    "raw_text": "Syp. Azithral 200mg/5ml - 5ml BD. Mfg: Alembic. Exp: 03/26.",
+    "expected_pronunciation": "Syrup Azithral two hundred milligram per five milliliter five milliliter twice daily Manufactured by Alembic Expiry March twenty six"
+  },
+  {
+    "id": "rx_003",
+    "domain": "Pharmacy",
+    "category": "code_switched",
+    "raw_text": "Tab. Dolo 650mg 1-1-1 x 3 days. Khane ke baad lena. Ph: 91234-56789",
+    "expected_pronunciation": "Tablet Dolo six five zero milligram one one one times three days Khane ke baad lena Phone nine one two three four five six seven eight nine"
+  },
+  {
+    "id": "rx_004",
+    "domain": "Pharmacy",
+    "category": "drug_names",
+    "raw_text": "Cap. Pantocid 40mg OD before breakfast. Mfg: Sun Pharma. Exp: 08/27.",
+    "expected_pronunciation": "Capsule Pantocid forty milligram once daily before breakfast Manufactured by Sun Pharma Expiry August twenty seven"
+  },
+  {
+    "id": "rx_005",
+    "domain": "Pharmacy",
+    "category": "dosages",
+    "raw_text": "Tab. Metformin 500mg 1-0-1 after meals. Dr. Sharma, Delhi. Ph: 99887-76655",
+    "expected_pronunciation": "Tablet Metformin five hundred milligram one zero one after meals Doctor Sharma Delhi Phone nine nine eight eight seven seven six six five five"
+  },
+  {
+    "id": "rx_006",
+    "domain": "Pharmacy",
+    "category": "quantities",
+    "raw_text": "Syp. Benadryl 100ml 1-0-1 5ml at bedtime. Exp: 11/25.",
+    "expected_pronunciation": "Syrup Benadryl one hundred milliliter one zero one five milliliter at bedtime Expiry November twenty five"
+  },
+  {
+    "id": "rx_007",
+    "domain": "Pharmacy",
+    "category": "code_switched",
+    "raw_text": "Tab. Crocin 500mg zarurat padne par lena 1-0-1. Ph: 98111-22334",
+    "expected_pronunciation": "Tablet Crocin five hundred milligram zarurat padne par lena one zero one Phone nine eight one one one two two three three four"
+  },
+  {
+    "id": "rx_008",
+    "domain": "Pharmacy",
+    "category": "drug_names",
+    "raw_text": "Tab. Telma 40mg 1-0-0 in morning. Dr. Patel Clinic, Ahmedabad. Ph: 97234-11223",
+    "expected_pronunciation": "Tablet Telma forty milligram one zero zero in morning Doctor Patel Clinic Ahmedabad Phone nine seven two three four one one two two three"
+  },
+  {
+    "id": "rx_009",
+    "domain": "Pharmacy",
+    "category": "dates",
+    "raw_text": "Tab. Montair LC 10mg OD at night. Mfg: Cipla. Exp: 05/28.",
+    "expected_pronunciation": "Tablet Montair LC ten milligram once daily at night Manufactured by Cipla Expiry May twenty eight"
+  },
+  {
+    "id": "rx_010",
+    "domain": "Pharmacy",
+    "category": "phone_numbers",
+    "raw_text": "Tab. Amlokind 5mg 1-0-0. Emergency contact Dr. Gupta. Ph: 98450-12345",
+    "expected_pronunciation": "Tablet Amlokind five milligram one zero zero Emergency contact Doctor Gupta Phone nine eight four five zero one two three four five"
+  },
+  {
+    "id": "rx_011",
+    "domain": "Pharmacy",
+    "category": "proper_nouns",
+    "raw_text": "Tab. Glycomet 850mg 1-0-1. Apollo Pharmacy, Greams Road, Chennai. Ph: 94440-55667",
+    "expected_pronunciation": "Tablet Glycomet eight five zero milligram one zero one Apollo Pharmacy Greams Road Chennai Phone nine four four four zero five five six six seven"
+  },
+  {
+    "id": "rx_012",
+    "domain": "Pharmacy",
+    "category": "dosages",
+    "raw_text": "Tab. Pan 40mg 1-0-0 x 14 days. Dr. Sen, Kolkata. Ph: 98300-99887",
+    "expected_pronunciation": "Tablet Pan forty milligram one zero zero times fourteen days Doctor Sen Kolkata Phone nine eight three zero zero nine nine eight eight seven"
+  },
+  {
+    "id": "rx_013",
+    "domain": "Pharmacy",
+    "category": "quantities",
+    "raw_text": "Syp. Ascoril LS 100ml 5ml TDS. Mfg: Glenmark. Exp: 12/26.",
+    "expected_pronunciation": "Syrup Ascoril LS one hundred milliliter five milliliter thrice daily Manufactured by Glenmark Expiry December twenty six"
+  },
+  {
+    "id": "rx_014",
+    "domain": "Pharmacy",
+    "category": "code_switched",
+    "raw_text": "Tab. Gelusil 1-1-1 khane ke baad chusna hai. Ph: 98990-11223",
+    "expected_pronunciation": "Tablet Gelusil one one one khane ke baad chusna hai Phone nine eight nine nine zero one one two two three"
+  },
+  {
+    "id": "rx_015",
+    "domain": "Pharmacy",
+    "category": "drug_names",
+    "raw_text": "Tab. Thyronorm 50mg 1-0-0 subah khali pet. Mfg: Abbott. Exp: 04/27.",
+    "expected_pronunciation": "Tablet Thyronorm fifty milligram one zero zero subah khali pet Manufactured by Abbott Expiry April twenty seven"
+  },
+  {
+    "id": "rx_016",
+    "domain": "Pharmacy",
+    "category": "dates",
+    "raw_text": "Cap. Becosules 1-0-0 x 30 days. Dr. Joshi, Pune. Exp: 09/27.",
+    "expected_pronunciation": "Capsule Becosules one zero zero times thirty days Doctor Joshi Pune Expiry September twenty seven"
+  },
+  {
+    "id": "rx_017",
+    "domain": "Pharmacy",
+    "category": "proper_nouns",
+    "raw_text": "Tab. Storvas 10mg 0-0-1. MedPlus Chemist, Banjara Hills, Hyderabad. Ph: 98490-88776",
+    "expected_pronunciation": "Tablet Storvas ten milligram zero zero one MedPlus Chemist Banjara Hills Hyderabad Phone nine eight four nine zero eight eight seven seven six"
+  },
+  {
+    "id": "rx_018",
+    "domain": "Pharmacy",
+    "category": "dosages",
+    "raw_text": "Tab. Shelcal 500mg 1-0-1 with milk x 15 days. Ph: 97110-44332",
+    "expected_pronunciation": "Tablet Shelcal five hundred milligram one zero one with milk times fifteen days Phone nine seven one one zero four four three three two"
+  },
+  {
+    "id": "rx_019",
+    "domain": "Pharmacy",
+    "category": "quantities",
+    "raw_text": "Syp. Multivitamin 200ml 10ml OD. Mfg: Mankind. Exp: 01/28.",
+    "expected_pronunciation": "Syrup Multivitamin two hundred milliliter ten milliliter once daily Manufactured by Mankind Expiry January twenty eight"
+  },
+  {
+    "id": "rx_020",
+    "domain": "Pharmacy",
+    "category": "code_switched",
+    "raw_text": "Tab. Disprin 1-0-1 paani mein ghol kar pina hai. Ph: 98200-55443",
+    "expected_pronunciation": "Tablet Disprin one zero one paani mein ghol kar pina hai Phone nine eight two zero zero five five four four three"
+  },
+  {
+    "id": "rx_021",
+    "domain": "Pharmacy",
+    "category": "drug_names",
+    "raw_text": "Cap. Omeprazole 20mg 1-0-0 before food. Dr. Verma, Lucknow. Ph: 94150-66778",
+    "expected_pronunciation": "Capsule Omeprazole twenty milligram one zero zero before food Doctor Verma Lucknow Phone nine four one five zero six six seven seven eight"
+  },
+  {
+    "id": "rx_022",
+    "domain": "Pharmacy",
+    "category": "dates",
+    "raw_text": "Tab. Zifi 200mg 1-0-1 x 5 days. Mfg: FDC. Exp: 07/26.",
+    "expected_pronunciation": "Tablet Zifi two hundred milligram one zero one times five days Manufactured by FDC Expiry July twenty six"
+  },
+  {
+    "id": "rx_023",
+    "domain": "Pharmacy",
+    "category": "phone_numbers",
+    "raw_text": "Tab. Atorva 20mg 0-0-1. Call Pharmacy helpline Ph: 98800-11223",
+    "expected_pronunciation": "Tablet Atorva twenty milligram zero zero one Call Pharmacy helpline Phone nine eight eight zero zero one one two two three"
+  },
+  {
+    "id": "rx_024",
+    "domain": "Pharmacy",
+    "category": "dosages",
+    "raw_text": "Tab. Allegra 120mg 1-0-0 for allergy x 7 days. Ph: 99100-33445",
+    "expected_pronunciation": "Tablet Allegra one two zero milligram one zero zero for allergy times seven days Phone nine nine one zero zero three three four four five"
+  },
+  {
+    "id": "rx_025",
+    "domain": "Pharmacy",
+    "category": "code_switched",
+    "raw_text": "Tab. Combiflam 1-0-1 dard hone par lena. Ph: 98310-77889",
+    "expected_pronunciation": "Tablet Combiflam one zero one dard hone par lena Phone nine eight three one zero seven seven eight eight nine"
+  }
+]
