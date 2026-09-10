@@ -95,6 +95,24 @@ def num_to_words(num_str: str) -> str:
             return f"{CARDINAL_LESS_THAN_20[hundreds_digit]} hundred"
         return " ".join(DIGIT_WORDS[int(d)] for d in num_str)
 
+def cardinal_num_to_words(num_str: str) -> str:
+    try:
+        n = int(num_str)
+        if n < 20:
+            return CARDINAL_LESS_THAN_20[n]
+        if n < 100:
+            tens = (n // 10) * 10
+            rem = n % 10
+            return TENS_WORDS[tens] if rem == 0 else f"{TENS_WORDS[tens]} {CARDINAL_LESS_THAN_20[rem]}"
+        if n < 1000:
+            h = n // 100
+            rem = n % 100
+            rem_str = f" {cardinal_num_to_words(str(rem))}" if rem > 0 else ""
+            return f"{CARDINAL_LESS_THAN_20[h]} hundred{rem_str}"
+        return " ".join(DIGIT_WORDS[int(d)] for d in num_str if d.isdigit())
+    except Exception:
+        return " ".join(DIGIT_WORDS[int(d)] for d in num_str if d.isdigit())
+
 def tune_for_rime(text: str) -> str:
     # 1. Expand Abbreviations and Labels
     abbr = [
@@ -178,67 +196,315 @@ def tune_for_rime(text: str) -> str:
 
 def extract_critical_entities(text: str) -> dict:
     """
-    Extracts critical entities from prescription/instruction text:
-    - drugs: Drug brand/generic names
-    - strengths: Dosage strengths and quantities (e.g. 625mg, 200mg/5ml, 500mg)
-    - schedules: Administration frequency/schedules (e.g. 1-0-1, BD, OD, TDS)
-    - dates: Expiration dates (e.g. 03/26)
-    - numbers: Extracted numeric digit sequences
+    Extracts structured critical entities from prescription/instruction text (Phase 2):
+    - drug: Primary medication/drug name
+    - strength: Concentration or strength with units (e.g. 625mg, 200mg/5ml)
+    - dose: Single administration dose or schedule string (e.g. 1-0-1, 5ml)
+    - frequency: Administration frequency (e.g. BD, OD, TDS, every 6 hours)
+    - schedule: Dosage schedule string (e.g. 1-0-1, 1-1-1)
+    - duration: Treatment duration (e.g. 5 days, 14 days)
+    - quantity: Dispense quantity (e.g. 10 tabs, Qty: 14 caps)
+    - date: Calendar date (e.g. 10/09/2026)
+    - expiry: Expiration date (e.g. 03/26)
+    - abbreviations: Relevant clinical abbreviations found in text (e.g. Tab, BD, Exp)
+
+    Maintains backwards compatibility with legacy list keys:
+    - drugs, strengths, schedules, dates, numbers
     """
-    entities = {
-        "drugs": [],
-        "strengths": [],
-        "schedules": [],
-        "dates": [],
-        "numbers": []
+    # 1. Abbreviations
+    abbr_pattern = r'\b(Tab|Cap|Syp|Inj|Oint|Drops|BD|OD|TDS|QID|HS|SOS|STAT|Exp|Expiry|EXP|Mfg|Qty|Dr|Ph|Rx)\.?'
+    found_abbrs = re.findall(abbr_pattern, text, re.IGNORECASE)
+    # Deduplicate preserving case formatting
+    unique_abbrs = []
+    seen_abbr_lower = set()
+    for a in found_abbrs:
+        a_clean = a.strip('.')
+        if a_clean.lower() not in seen_abbr_lower:
+            seen_abbr_lower.add(a_clean.lower())
+            unique_abbrs.append(a_clean)
+
+    # 2. Expiry Date
+    expiry_match = re.search(r'\b(?:Exp|Expiry|EXP|EXPDATE)[:.]?\s*(\d{1,2}/\d{2,4})\b', text, re.IGNORECASE)
+    expiry = expiry_match.group(1) if expiry_match else None
+
+    # 3. General Date
+    date_match = re.search(r'\b(\d{1,2}[/-]\d{1,2}[/-]\d{2,4}|\d{1,2}(?:st|nd|rd|th)?\s+(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*)\b', text, re.IGNORECASE)
+    date_val = date_match.group(1) if date_match else None
+
+    # Fallback: date string if date match was not already captured as expiry
+    if not expiry and not date_val:
+        slash_date = re.search(r'\b(\d{1,2}/\d{2,4})\b', text)
+        if slash_date:
+            if "exp" in text.lower():
+                expiry = slash_date.group(1)
+            else:
+                date_val = slash_date.group(1)
+
+    # 4. Expiry fallback from list
+    all_dates = re.findall(r'\b\d{1,2}/\d{2,4}\b', text)
+    if not expiry and all_dates and "exp" in text.lower():
+        expiry = all_dates[0]
+
+    # 5. Drug Name
+    known_drugs = [
+        "Augmentin", "Azithral", "Paracetamol", "Dolo", "Pantocid", "Amoxycillin",
+        "Cetirizine", "Metformin", "Telmisartan", "Atorvastatin", "Omeprazole",
+        "Disprin", "Crocin", "Combiflam", "Gelusil", "Digene", "Zinetac", "Pan-D",
+        "Deriphyllin", "Ibuprofen", "Aspirin", "Ciprofloxacin", "Azithromycin", "Amoxicillin"
+    ]
+    drug = None
+    for d in known_drugs:
+        if re.search(rf'\b{d}\b', text, re.IGNORECASE):
+            drug = d
+            break
+    if not drug:
+        prefix_match = re.search(r'\b(?:Tab|Cap|Syp|Inj|Oint|Drops)\.?\s+([A-Z][a-zA-Z0-9\'-]+)', text)
+        if prefix_match:
+            drug = prefix_match.group(1)
+
+    # 6. Strengths
+    strengths = re.findall(r'\b\d+(?:\.\d+)?\s*(?:mg|ml|mcg|gm|iu|%)(?:/\d+(?:\.\d+)?\s*(?:mg|ml|mcg|gm|iu|%))?\b', text, re.IGNORECASE)
+    strength = strengths[0] if strengths else None
+
+    # 7. Schedule
+    schedule_match = re.search(r'\b(\d\s*-\s*\d(?:\s*-\s*\d)?)\b', text)
+    schedule = schedule_match.group(1).replace(' ', '') if schedule_match else None
+
+    # 8. Frequency
+    freq_match = re.search(r'\b(BD|OD|TDS|QID|HS|SOS|STAT|once\s+daily|twice\s+daily|thrice\s+daily|every\s+\d+\s+(?:hours|hrs))\b', text, re.IGNORECASE)
+    frequency = freq_match.group(1) if freq_match else (schedule if schedule else None)
+
+    # 9. Dose
+    dose_match = re.search(r'\b(\d-\d(?:-\d)?|\d+\s*ml|\d+\s*tabs?|\d+\s*tablets?|\d+\s*caps?|\d+\s*puffs?|\d+\s*drops?|1/2\s*tab)\b', text, re.IGNORECASE)
+    dose = dose_match.group(1) if dose_match else (schedule if schedule else None)
+
+    # 10. Duration
+    duration_match = re.search(r'\b(?:x\s*|for\s*)?(\d+\s*(?:days?|weeks?|months?))\b', text, re.IGNORECASE)
+    duration = duration_match.group(1) if duration_match else None
+
+    # 11. Quantity
+    qty_match = re.search(r'\b(?:Qty|Quantity)[:.]?\s*(\d+\s*(?:caps?|tabs?|tablets?|capsules?|bottles?)?)\b|\b(\d+\s*(?:caps|tabs|tablets|capsules|bottles))\b', text, re.IGNORECASE)
+    quantity = None
+    if qty_match:
+        quantity = qty_match.group(1) or qty_match.group(2)
+        quantity = quantity.strip()
+
+    # Legacy List Fields
+    legacy_drugs = [drug] if drug else []
+    for d in known_drugs:
+        if d not in legacy_drugs and re.search(rf'\b{d}\b', text, re.IGNORECASE):
+            legacy_drugs.append(d)
+
+    legacy_schedules = list(set(re.findall(r'\b(?:\d-\d(?:-\d)?|BD|OD|TDS|QID|HS|SOS|STAT|every\s+\d+\s+hours)\b', text, re.IGNORECASE)))
+    legacy_dates = all_dates if all_dates else ([date_val] if date_val else [])
+    numbers = list(set(re.findall(r'\d+', text)))
+
+    return {
+        # Phase 2 Structured Entity Fields:
+        "drug": drug,
+        "strength": strength,
+        "dose": dose,
+        "frequency": frequency,
+        "schedule": schedule,
+        "duration": duration,
+        "quantity": quantity,
+        "date": date_val,
+        "expiry": expiry,
+        "abbreviations": unique_abbrs,
+
+        # Backwards-compatible legacy list fields:
+        "drugs": legacy_drugs,
+        "strengths": list(set(strengths)),
+        "schedules": legacy_schedules,
+        "dates": legacy_dates,
+        "numbers": numbers
     }
 
-    # Extract strengths (e.g., 625mg, 500mg, 200mg/5ml, 5ml)
-    strengths = re.findall(r'\b\d+(?:\.\d+)?\s*(?:mg|ml)(?:/\d+(?:\.\d+)?\s*(?:mg|ml))?\b', text, re.IGNORECASE)
-    entities["strengths"] = list(set(strengths))
+def extract_pharmacy_entities(text: str) -> dict:
+    """
+    Returns Phase 2 structured representation containing only entity scalar/list fields.
+    """
+    full = extract_critical_entities(text)
+    return {
+        "drug": full["drug"],
+        "strength": full["strength"],
+        "dose": full["dose"],
+        "frequency": full["frequency"],
+        "schedule": full["schedule"],
+        "duration": full["duration"],
+        "quantity": full["quantity"],
+        "date": full["date"],
+        "expiry": full["expiry"],
+        "abbreviations": full["abbreviations"]
+    }
 
-    # Extract dosage schedules (e.g., 1-0-1, 1-1-1, BD, OD, TDS)
-    schedules = re.findall(r'\b(?:\d-\d(?:-\d)?|BD|OD|TDS|every\s+\d+\s+hours)\b', text, re.IGNORECASE)
-    entities["schedules"] = list(set(schedules))
+def check_entity_preservation(entity_type: str, value: str, normalized_text: str) -> bool:
+    """
+    Helper function to verify whether an individual extracted entity string is preserved in normalized text.
+    """
+    if not value:
+        return True
 
-    # Extract dates (e.g., 03/26)
-    dates = re.findall(r'\b\d{1,2}/\d{2}\b', text)
-    entities["dates"] = list(set(dates))
+    norm_lower = normalized_text.lower()
+    val_lower = str(value).lower()
 
-    # Extract numbers (all digit sequences of 1+ length)
-    numbers = re.findall(r'\d+', text)
-    entities["numbers"] = list(set(numbers))
+    if entity_type == "drug":
+        return val_lower in norm_lower
 
-    # Extract drug names
-    known_drugs = ["Augmentin", "Azithral", "Paracetamol", "Dolo", "Pantocid", "Amoxycillin", "Cetirizine", "Metformin", "Telmisartan", "Atorvastatin"]
-    found_drugs = [d for d in known_drugs if re.search(rf'\b{d}\b', text, re.IGNORECASE)]
-    prefix_drugs = re.findall(r'\b(?:Tab|Cap|Syp|Inj)\.?\s+([A-Z][a-z]+)', text)
-    found_drugs.extend(prefix_drugs)
-    entities["drugs"] = list(set(found_drugs))
+    elif entity_type in ("strength", "quantity", "duration"):
+        nums = re.findall(r'\d+', val_lower)
+        norm_clean = norm_lower.replace("-", " ").replace(" and ", " ")
+        for num_str in nums:
+            word_form = num_to_words(num_str).lower().replace("-", " ").replace(" and ", " ")
+            cardinal_form = cardinal_num_to_words(num_str).lower().replace("-", " ").replace(" and ", " ")
+            digit_words = " ".join(DIGIT_WORDS[int(d)] for d in num_str if d.isdigit())
+            if num_str not in normalized_text and word_form not in norm_clean and cardinal_form not in norm_clean and digit_words not in norm_clean:
+                return False
+        units = re.findall(r'[a-zA-Z]+', val_lower)
+        for u in units:
+            if u not in ["x", "for", "qty", "exp"] and u not in norm_lower:
+                expansions = {
+                    "mg": ["milligram", "milligrams", "mg"],
+                    "ml": ["milliliter", "milliliters", "ml"],
+                    "mcg": ["microgram", "micrograms", "mcg"],
+                    "tab": ["tablet", "tablets", "tab"],
+                    "tabs": ["tablets", "tablet", "tabs"],
+                    "cap": ["capsule", "capsules", "cap"],
+                    "caps": ["capsules", "capsule", "caps"],
+                    "syp": ["syrup", "syp"],
+                    "inj": ["injection", "inj"]
+                }
+                allowed = expansions.get(u, [u])
+                if not any(a in norm_lower for a in allowed):
+                    return False
+        return True
 
-    return entities
+    elif entity_type in ("dose", "schedule"):
+        nums = re.findall(r'\d+', val_lower)
+        norm_clean = norm_lower.replace("-", " ").replace(" and ", " ")
+        for num_str in nums:
+            word_form = num_to_words(num_str).lower().replace("-", " ").replace(" and ", " ")
+            cardinal_form = cardinal_num_to_words(num_str).lower().replace("-", " ").replace(" and ", " ")
+            digit_words = " ".join(DIGIT_WORDS[int(d)] for d in num_str if d.isdigit())
+            if num_str not in normalized_text and word_form not in norm_clean and cardinal_form not in norm_clean and digit_words not in norm_clean:
+                return False
+        return True
+
+    elif entity_type == "frequency":
+        if val_lower in norm_lower:
+            return True
+        if re.search(r'\d-\d', val_lower):
+            nums = re.findall(r'\d+', val_lower)
+            digit_words = " ".join(DIGIT_WORDS[int(d)] for d in "".join(nums) if d.isdigit())
+            if all(n in norm_lower or num_to_words(n).lower() in norm_lower for n in nums) or digit_words in norm_lower:
+                return True
+        freq_expansions = {
+            "bd": ["twice daily", "twice a day", "two times a day", "bd"],
+            "od": ["once daily", "once a day", "one time a day", "od"],
+            "tds": ["thrice daily", "three times a day", "tds"],
+            "qid": ["four times daily", "four times a day", "qid"],
+            "hs": ["at bedtime", "at night", "hs"],
+            "sos": ["as needed", "sos"]
+        }
+        allowed = freq_expansions.get(val_lower, [val_lower])
+        return any(a in norm_lower for a in allowed)
+
+    elif entity_type in ("date", "expiry"):
+        nums = re.findall(r'\d+', val_lower)
+        for num_str in nums:
+            word_form = num_to_words(num_str).lower()
+            digit_words = " ".join(DIGIT_WORDS[int(d)] for d in num_str if d.isdigit())
+            if num_str not in normalized_text and word_form not in norm_lower and digit_words not in norm_lower:
+                month_names = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"]
+                if num_str.isdigit() and 1 <= int(num_str) <= 12 and month_names[int(num_str)-1] in norm_lower:
+                    continue
+                return False
+        return True
+
+    return val_lower in norm_lower
 
 def validate_semantic_preservation(raw_text: str, normalized_text: str) -> dict:
     """
-    Validates that normalized speech text preserves all critical numbers,
-    strengths, and dosage schedules from raw text without value alterations.
+    Phase 3 Semantic Preservation Validation:
+    Verifies that normalization NEVER silently changes or drops supplied medication meaning.
+    Returns is_safe=False if any critical entity (drug, strength, dose, frequency, duration, date, quantity) is altered.
     """
-    raw_entities = extract_critical_entities(raw_text)
-    raw_numbers = raw_entities["numbers"]
+    entities = extract_critical_entities(raw_text)
     
-    norm_text_lower = normalized_text.lower()
-    
+    checks = {
+        "drug": entities.get("drug"),
+        "strength": entities.get("strength"),
+        "dose": entities.get("dose"),
+        "frequency": entities.get("frequency"),
+        "schedule": entities.get("schedule"),
+        "duration": entities.get("duration"),
+        "quantity": entities.get("quantity"),
+        "date": entities.get("date"),
+        "expiry": entities.get("expiry")
+    }
+
+    unpreserved = []
+    preservation_details = {}
+
+    for etype, val in checks.items():
+        if val is not None:
+            is_preserved = check_entity_preservation(etype, val, normalized_text)
+            preservation_details[etype] = {
+                "value": val,
+                "preserved": is_preserved
+            }
+            if not is_preserved:
+                unpreserved.append(etype)
+
+    # Numeric check
+    raw_numbers = entities["numbers"]
+    norm_lower = normalized_text.lower()
     missing_numbers = []
+    month_names = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"]
     for num_str in raw_numbers:
         word_form = num_to_words(num_str).lower()
-        digit_words = " ".join(DIGIT_WORDS[int(d)] for d in num_str)
-        if num_str not in normalized_text and word_form not in norm_text_lower and digit_words not in norm_text_lower:
+        digit_words = " ".join(DIGIT_WORDS[int(d)] for d in num_str if d.isdigit())
+        if num_str not in normalized_text and word_form not in norm_lower and digit_words not in norm_lower:
+            # Check month name conversion
+            if num_str.isdigit() and 1 <= int(num_str) <= 12 and month_names[int(num_str)-1] in norm_lower:
+                continue
             missing_numbers.append(num_str)
 
-    is_valid = len(missing_numbers) == 0
+    is_safe = (len(unpreserved) == 0) and (len(missing_numbers) == 0)
+
     return {
-        "is_valid": is_valid,
-        "raw_entities": raw_entities,
-        "numeric_integrity": is_valid,
-        "missing_numbers": missing_numbers
+        "is_safe": is_safe,
+        "is_valid": is_safe,
+        "is_preserved": is_safe,
+        "status": "SEMANTICS_PRESERVED" if is_safe else "UNSAFE_TRANSFORMATION_REJECTED",
+        "unpreserved_entities": unpreserved,
+        "missing_numbers": missing_numbers,
+        "preservation_details": preservation_details,
+        "raw_entities": entities
+    }
+
+def safe_tune_for_rime(raw_text: str) -> dict:
+    """
+    Normalizes speech text with fail-closed safety check.
+    If normalization alters any critical entity meaning, the transformation is flagged UNSAFE
+    and falls back to raw_text to prevent medical instruction corruption.
+    """
+    normalized = tune_for_rime(raw_text)
+    preservation = validate_semantic_preservation(raw_text, normalized)
+
+    if not preservation["is_safe"]:
+        return {
+            "is_safe": False,
+            "prompt_used": raw_text, # Fail closed fallback
+            "normalized_text": normalized,
+            "preservation": preservation,
+            "error": f"UNSAFE_TRANSFORMATION_REJECTED: Unpreserved entities {preservation['unpreserved_entities']}"
+        }
+
+    return {
+        "is_safe": True,
+        "prompt_used": normalized,
+        "normalized_text": normalized,
+        "preservation": preservation,
+        "error": None
     }

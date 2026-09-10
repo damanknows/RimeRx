@@ -60,61 +60,62 @@ def transcribe_audio(filepath: str, beam_size: int = EVAL_BEAM_SIZE) -> str:
 
 def verify_critical_entities(raw_entities: dict, asr_transcript: str) -> dict:
     """
-    Verifies recall of extracted critical prescription entities in the ASR transcript.
+    Phase 4 Critical Token Accuracy Metric Engine:
+    Compares expected critical entities with ASR transcript and calculates:
+    - critical_token_acc: per-sample accuracy % (matched / total * 100)
+    - per_entity_results: detailed match status for drug, strength, dose, duration, date, quantity
+    - matched_entities & missed_entities
     """
     transcript_lower = asr_transcript.lower()
-    
-    target_items = []
-    if "numbers" in raw_entities:
-        target_items.extend(raw_entities["numbers"])
-    if "drugs" in raw_entities:
-        target_items.extend(raw_entities["drugs"])
-    if "schedules" in raw_entities:
-        target_items.extend(raw_entities["schedules"])
 
-    target_items = list(set(target_items))
-    if not target_items:
-        return {
-            "accuracy_pct": 100.0,
-            "total_entities": 0,
-            "matched_entities": [],
-            "missed_entities": []
-        }
+    fields_to_check = {
+        "drug": raw_entities.get("drug"),
+        "strength": raw_entities.get("strength"),
+        "dose": raw_entities.get("dose") or raw_entities.get("schedule"),
+        "frequency": raw_entities.get("frequency"),
+        "duration": raw_entities.get("duration"),
+        "date": raw_entities.get("date") or raw_entities.get("expiry"),
+        "quantity": raw_entities.get("quantity")
+    }
 
-    matched = []
-    missed = []
+    matched_dict = {}
+    total_tokens = 0
+    matched_tokens = 0
 
-    for item in target_items:
-        item_lower = item.lower()
-        if item_lower in transcript_lower:
-            matched.append(item)
-            continue
+    from data import check_entity_preservation
 
-        if item.isdigit():
-            from data import num_to_words, DIGIT_WORDS
-            w_form = num_to_words(item).lower()
-            d_form = " ".join(DIGIT_WORDS[int(d)] for d in item)
-            if w_form in transcript_lower or d_form in transcript_lower:
-                matched.append(item)
-                continue
+    for field, val in fields_to_check.items():
+        if val is not None:
+            total_tokens += 1
+            is_matched = check_entity_preservation(field, val, transcript_lower)
+            if is_matched:
+                matched_tokens += 1
+                matched_dict[field] = {"value": val, "matched": True}
+            else:
+                matched_dict[field] = {"value": val, "matched": False}
 
-        if "-" in item and item.replace("-", "").isdigit():
-            from data import DIGIT_WORDS
-            digits = item.split("-")
-            d_words = " ".join(DIGIT_WORDS[int(d)] for d in digits if d.isdigit())
-            if d_words in transcript_lower:
-                matched.append(item)
-                continue
+    # Number list check for legacy compatibility
+    numbers = raw_entities.get("numbers", [])
+    num_matched = []
+    num_missed = []
+    for num_str in numbers:
+        is_m = check_entity_preservation("strength", num_str, transcript_lower)
+        if is_m:
+            num_matched.append(num_str)
+        else:
+            num_missed.append(num_str)
 
-        missed.append(item)
-
-    accuracy_pct = round((len(matched) / len(target_items)) * 100, 1) if target_items else 100.0
+    sample_acc = round((matched_tokens / total_tokens) * 100, 1) if total_tokens > 0 else 100.0
 
     return {
-        "accuracy_pct": accuracy_pct,
-        "total_entities": len(target_items),
-        "matched_entities": matched,
-        "missed_entities": missed
+        "critical_token_acc": sample_acc,
+        "accuracy_pct": sample_acc,
+        "total_entities": total_tokens,
+        "matched_count": matched_tokens,
+        "matched_entities": [v["value"] for v in matched_dict.values() if v["matched"]],
+        "missed_entities": [v["value"] for v in matched_dict.values() if not v["matched"]],
+        "per_entity_results": matched_dict,
+        "number_recall_pct": round(len(num_matched)/len(numbers)*100, 1) if numbers else 100.0
     }
 
 if __name__ == "__main__":

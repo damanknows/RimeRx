@@ -7,7 +7,7 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 import aiofiles
 
-from data import TEST_CASES, tune_for_rime, extract_critical_entities, validate_semantic_preservation
+from data import TEST_CASES, tune_for_rime, safe_tune_for_rime, extract_critical_entities, validate_semantic_preservation
 from tts.providers import get_provider, PROVIDERS_CONFIG, RELIABILITY_STATS
 from db import init_db, save_mos_rating, export_mos_csv_string
 from dotenv import load_dotenv
@@ -116,7 +116,13 @@ async def get_cases():
 async def render_audio(req: RenderRequest):
     case = get_target_case(req)
 
-    text = case["raw_text"] if req.prompt_type == "default" else tune_for_rime(case["raw_text"])
+    if req.prompt_type == "default":
+        text = case["raw_text"]
+        safety_meta = {"is_safe": True}
+    else:
+        safety_res = safe_tune_for_rime(case["raw_text"])
+        text = safety_res["prompt_used"]
+        safety_meta = safety_res
 
     # Reject text exceeding 2500 characters
     if len(text) > 2500:
@@ -145,6 +151,7 @@ async def render_audio(req: RenderRequest):
         "ttfb_ms": meta.get("ttfb_ms"),
         "total_ms": meta.get("total_ms"),
         "cold": meta.get("cold"),
+        "safety": safety_meta,
         "notes": meta.get("notes", "")
     }
 
