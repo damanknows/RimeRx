@@ -1,10 +1,10 @@
 {
   "status": "COMPLETED_SESSIONS_LOGGED",
-  "participants_count": 26,
-  "total_ratings": 26,
+  "participants_count": 34,
+  "total_ratings": 34,
   "baseline_variant": {
     "mean_naturalness": 5.0,
-    "mean_intelligibility": 4.0,
+    "mean_intelligibility": 4.05,
     "medication_comprehension_pct": 100.0,
     "strength_comprehension_pct": 100.0,
     "dosage_comprehension_pct": 100.0

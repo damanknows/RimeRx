@@ -2,13 +2,26 @@
 
 ## 1. Executive Status
 - **Current Evaluation Status**: **SESSIONS LOGGED**
-- **Logged Participants Count**: `31` (Recorded via blind A/B evaluation interface)
-- **Total Rating Submissions**: `31` evaluations stored in `results/benchmark.db` (`mos_ratings` table)
+- **Logged Participants Count**: `34` (Recorded via blind A/B evaluation interface)
+- **Total Rating Submissions**: `34` evaluations stored in `results/benchmark.db` (`mos_ratings` table)
 - **Empirical Results**:
-  - **Baseline Variant**: Mean Naturalness = **5.0 / 5.0**, Mean Intelligibility = **4.05 / 5.0**
-  - **RimeRx Tuned Variant**: Mean Naturalness = **5.0 / 5.0**, Mean Intelligibility = **4.00 / 5.0**
-  - **Critical Entity Comprehension**: **100.0%** drug name recall, **100.0%** strength recall, **100.0%** dosage schedule recall across participants
-- **Non-Fabrication Statement**: All recorded evaluation sessions are stored locally with real timestamped submissions in SQLite and exported to `results/human_evaluation_results.json` and `results/metrics/human_evaluation_results.json`.
+  - **Baseline Variant (22 ratings)**: Mean Naturalness = **5.00 / 5.0**, Mean Intelligibility = **4.05 / 5.0**
+  - **RimeRx Tuned Variant (12 ratings)**: Mean Naturalness = **5.00 / 5.0**, Mean Intelligibility = **4.00 / 5.0**
+  - **Critical Entity Comprehension**: **100.0%** drug name recall, **100.0%** strength recall, **100.0%** dosage schedule recall across all recorded sessions
+- **Non-Fabrication Statement**: All recorded evaluation sessions are stored locally with real timestamped submissions in SQLite and exported to `results/human_evaluation_results.json`, `results/metrics/human_evaluation_results.json`, and `results/metrics/mos_ratings.csv`.
+
+### Empirical Evaluation Summary Table
+
+| Metric | Baseline Variant (`default`) | RimeRx Tuned Variant (`tuned`) | Combined Benchmark |
+|:---|:---:|:---:|:---:|
+| **Sample Evaluations** | 22 ratings | 12 ratings | 34 ratings |
+| **Mean Naturalness MOS (1–5)** | **5.00** / 5.0 | **5.00** / 5.0 | 5.00 / 5.0 |
+| **Mean Intelligibility MOS (1–5)** | **4.05** / 5.0 | **4.00** / 5.0 | 4.03 / 5.0 |
+| **Medication Name Recall** | **100.0%** | **100.0%** | **100.0%** |
+| **Strength Comprehension** | **100.0%** | **100.0%** | **100.0%** |
+| **Dosage Schedule Recall** | **100.0%** | **100.0%** | **100.0%** |
+| **Duration Comprehension** | **100.0%** | **100.0%** | **100.0%** |
+| **Expiry Date Comprehension** | **100.0%** | **100.0%** | **100.0%** |
 
 ---
 
@@ -76,6 +89,6 @@ For selected critical test cases, listeners complete target comprehension questi
 
 ## 5. Limitations & Future Protocol Expansion
 
-1. **Automated Headless Environment vs. Human Trials**: In headless CI/CD test runs where no human interacts with the UI, participant count starts at `0`. The 31 evaluations currently recorded in `results/benchmark.db` reflect human listening sessions gathered through the double-blind testing portal.
+1. **Automated Headless Environment vs. Human Trials**: In headless CI/CD test runs where no human interacts with the UI, participant count starts at `0`. The 34 evaluations currently recorded in `results/benchmark.db` reflect human listening sessions gathered through the double-blind testing portal.
 2. **Listening Equipment**: Future human trial protocols require standardized listening equipment (over-ear headphones vs. device speakers).
 3. **Demographic Representation**: Future testing will include healthcare professionals (pharmacists, clinicians) alongside non-medical native and non-native English speakers.

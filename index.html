@@ -1949,6 +1949,9 @@
       });
       if (!resp.ok) {
         const errText = await resp.text();
+        if (errText.trim().startsWith("<!DOCTYPE") || errText.includes("<html") || resp.status === 502 || resp.status === 504) {
+          throw new Error(`Server gateway error (HTTP ${resp.status}): cloud instance is waking up or timed out. Please retry.`);
+        }
         throw new Error(`HTTP ${resp.status}: ${errText.substring(0, 100)}`);
       }
       return await resp.json();

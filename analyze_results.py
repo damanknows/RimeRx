@@ -304,10 +304,12 @@ def analyze():
 
     # Process Human MOS Listening Evaluation (Phase 8)
     try:
-        from db import get_all_mos_ratings
+        from db import get_all_mos_ratings, export_mos_csv_string
         mos_rows = get_all_mos_ratings()
+        mos_csv_content = export_mos_csv_string()
     except Exception:
         mos_rows = []
+        mos_csv_content = ""
 
     if not mos_rows:
         human_eval_summary = {
@@ -362,6 +364,11 @@ def analyze():
     for p in [human_eval_json_path, metrics_human_eval_json_path]:
         with open(p, "w", encoding="utf-8") as f:
             json.dump(human_eval_summary, f, indent=2)
+
+    if mos_csv_content:
+        for p in [os.path.join(RESULTS_DIR, "mos_ratings.csv"), os.path.join(METRICS_DIR, "mos_ratings.csv")]:
+            with open(p, "w", encoding="utf-8") as f:
+                f.write(mos_csv_content)
 
     # Process Stress Test System Analysis (Phase 9)
     from data import STRESS_TEST_CASES

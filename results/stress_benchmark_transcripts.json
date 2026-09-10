@@ -1,0 +1,879 @@
+{
+  "stress_001": {
+    "baseline_hypothesis": "Tab Augmentin 625 mg. 1 to 0 1 by 5 days ex p. 0 3 slash 26.",
+    "tuned_hypothesis": "Tablet Augmentin 625.  Milligram 101x 5 days.  X-Bury March 26.",
+    "baseline_eval": {
+      "overall_matched": false,
+      "accuracy_pct": 83.3,
+      "matched_count": 5,
+      "total_count": 6,
+      "failed_fields": [
+        "date"
+      ],
+      "entities": {
+        "drug": {
+          "expected": "Augmentin",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "strength": {
+          "expected": "625mg",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "dose": {
+          "expected": "1-0-1",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "frequency": {
+          "expected": "1-0-1",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "duration": {
+          "expected": "5 days",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "date": {
+          "expected": "03/26",
+          "matched": false,
+          "status": "\u2717 MISHEARD"
+        }
+      },
+      "limitation_note": "Expiry date format '03/26' truncated or misheard"
+    },
+    "tuned_eval": {
+      "overall_matched": true,
+      "accuracy_pct": 100.0,
+      "matched_count": 6,
+      "total_count": 6,
+      "failed_fields": [],
+      "entities": {
+        "drug": {
+          "expected": "Augmentin",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "strength": {
+          "expected": "625mg",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "dose": {
+          "expected": "1-0-1",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "frequency": {
+          "expected": "1-0-1",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "duration": {
+          "expected": "5 days",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "date": {
+          "expected": "03/26",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        }
+      },
+      "limitation_note": null
+    }
+  },
+  "stress_002": {
+    "baseline_hypothesis": "Pentosa DSR 40 30th's milligrams 1 2 0 1 by 7 days",
+    "tuned_hypothesis": "Pentosa to DSR month 40-30 milligram 1-0-1 times 7 days",
+    "baseline_eval": {
+      "overall_matched": false,
+      "accuracy_pct": 83.3,
+      "matched_count": 5,
+      "total_count": 6,
+      "failed_fields": [
+        "drug"
+      ],
+      "entities": {
+        "drug": {
+          "expected": "Pantocid",
+          "matched": false,
+          "status": "\u2717 MISHEARD"
+        },
+        "strength": {
+          "expected": "30 mg",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "dose": {
+          "expected": "1-0-1",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "frequency": {
+          "expected": "1-0-1",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "duration": {
+          "expected": "7 days",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "date": {
+          "expected": "40/30",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        }
+      },
+      "limitation_note": "ASR acoustic misrecognition on brand name 'Pantocid'"
+    },
+    "tuned_eval": {
+      "overall_matched": false,
+      "accuracy_pct": 83.3,
+      "matched_count": 5,
+      "total_count": 6,
+      "failed_fields": [
+        "drug"
+      ],
+      "entities": {
+        "drug": {
+          "expected": "Pantocid",
+          "matched": false,
+          "status": "\u2717 MISHEARD"
+        },
+        "strength": {
+          "expected": "30 mg",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "dose": {
+          "expected": "1-0-1",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "frequency": {
+          "expected": "1-0-1",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "duration": {
+          "expected": "7 days",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "date": {
+          "expected": "40/30",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        }
+      },
+      "limitation_note": "ASR acoustic misrecognition on brand name 'Pantocid'"
+    }
+  },
+  "stress_003": {
+    "baseline_hypothesis": "1 half tablet 0 dash 1 dash 0",
+    "tuned_hypothesis": "1 slash 2, hablit 0 1 0",
+    "baseline_eval": {
+      "overall_matched": false,
+      "accuracy_pct": 50.0,
+      "matched_count": 1,
+      "total_count": 2,
+      "failed_fields": [
+        "dose"
+      ],
+      "entities": {
+        "drug": {
+          "expected": "N/A",
+          "matched": true,
+          "status": "\u2014 NOT IN INPUT"
+        },
+        "strength": {
+          "expected": "N/A",
+          "matched": true,
+          "status": "\u2014 NOT IN INPUT"
+        },
+        "dose": {
+          "expected": "2 tablet",
+          "matched": false,
+          "status": "\u2717 MISHEARD"
+        },
+        "frequency": {
+          "expected": "0-1-0",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "duration": {
+          "expected": "N/A",
+          "matched": true,
+          "status": "\u2014 NOT IN INPUT"
+        },
+        "date": {
+          "expected": "N/A",
+          "matched": true,
+          "status": "\u2014 NOT IN INPUT"
+        }
+      },
+      "limitation_note": "Dosage pattern '2 tablet' misrecognized in acoustic stream"
+    },
+    "tuned_eval": {
+      "overall_matched": true,
+      "accuracy_pct": 100.0,
+      "matched_count": 2,
+      "total_count": 2,
+      "failed_fields": [],
+      "entities": {
+        "drug": {
+          "expected": "N/A",
+          "matched": true,
+          "status": "\u2014 NOT IN INPUT"
+        },
+        "strength": {
+          "expected": "N/A",
+          "matched": true,
+          "status": "\u2014 NOT IN INPUT"
+        },
+        "dose": {
+          "expected": "2 tablet",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "frequency": {
+          "expected": "0-1-0",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "duration": {
+          "expected": "N/A",
+          "matched": true,
+          "status": "\u2014 NOT IN INPUT"
+        },
+        "date": {
+          "expected": "N/A",
+          "matched": true,
+          "status": "\u2014 NOT IN INPUT"
+        }
+      },
+      "limitation_note": null
+    }
+  },
+  "stress_004": {
+    "baseline_hypothesis": "SIP Azathrol 200 mg slash 5 ml  5 ml BD X3 days MFG  Alembic EXP 1127",
+    "tuned_hypothesis": "Syrup as a Thrill 200 mg per 5 milliliter, 5 milliliter twice, daily times 3 days, manufactured by  Olympic X-bury, November 27.",
+    "baseline_eval": {
+      "overall_matched": false,
+      "accuracy_pct": 83.3,
+      "matched_count": 5,
+      "total_count": 6,
+      "failed_fields": [
+        "drug"
+      ],
+      "entities": {
+        "drug": {
+          "expected": "Azithral",
+          "matched": false,
+          "status": "\u2717 MISHEARD"
+        },
+        "strength": {
+          "expected": "200mg/5ml",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "dose": {
+          "expected": "5ml",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "frequency": {
+          "expected": "BD",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "duration": {
+          "expected": "3 days",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "date": {
+          "expected": "11/27",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        }
+      },
+      "limitation_note": "ASR acoustic misrecognition on brand name 'Azithral'"
+    },
+    "tuned_eval": {
+      "overall_matched": false,
+      "accuracy_pct": 66.7,
+      "matched_count": 4,
+      "total_count": 6,
+      "failed_fields": [
+        "drug",
+        "frequency"
+      ],
+      "entities": {
+        "drug": {
+          "expected": "Azithral",
+          "matched": false,
+          "status": "\u2717 MISHEARD"
+        },
+        "strength": {
+          "expected": "200mg/5ml",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "dose": {
+          "expected": "5ml",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "frequency": {
+          "expected": "BD",
+          "matched": false,
+          "status": "\u2717 MISHEARD"
+        },
+        "duration": {
+          "expected": "3 days",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "date": {
+          "expected": "11/27",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        }
+      },
+      "limitation_note": "ASR acoustic misrecognition on brand name 'Azithral'"
+    }
+  },
+  "stress_005": {
+    "baseline_hypothesis": "Cap on my Brazil 20 mg 1-0-0 before food x14 days quayy 14 caps",
+    "tuned_hypothesis": "Capsule omeprazole 20 mg 1 0 0  Before food times 14 days  Quai-wai 14 caps",
+    "baseline_eval": {
+      "overall_matched": false,
+      "accuracy_pct": 80.0,
+      "matched_count": 4,
+      "total_count": 5,
+      "failed_fields": [
+        "drug"
+      ],
+      "entities": {
+        "drug": {
+          "expected": "Omeprazole",
+          "matched": false,
+          "status": "\u2717 MISHEARD"
+        },
+        "strength": {
+          "expected": "20mg",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "dose": {
+          "expected": "1-0-0",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "frequency": {
+          "expected": "1-0-0",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "duration": {
+          "expected": "14 days",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "date": {
+          "expected": "N/A",
+          "matched": true,
+          "status": "\u2014 NOT IN INPUT"
+        }
+      },
+      "limitation_note": "ASR acoustic misrecognition on brand name 'Omeprazole'"
+    },
+    "tuned_eval": {
+      "overall_matched": true,
+      "accuracy_pct": 100.0,
+      "matched_count": 5,
+      "total_count": 5,
+      "failed_fields": [],
+      "entities": {
+        "drug": {
+          "expected": "Omeprazole",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "strength": {
+          "expected": "20mg",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "dose": {
+          "expected": "1-0-0",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "frequency": {
+          "expected": "1-0-0",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "duration": {
+          "expected": "14 days",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "date": {
+          "expected": "N/A",
+          "matched": true,
+          "status": "\u2014 NOT IN INPUT"
+        }
+      },
+      "limitation_note": null
+    }
+  },
+  "stress_006": {
+    "baseline_hypothesis": "Tap Calpal 500 mg. 1-2-1-1-S-O-S for fever max 3 days.",
+    "tuned_hypothesis": "Tablet Calpal 500 mg. 111SOS for Fever Max 3 Days.",
+    "baseline_eval": {
+      "overall_matched": false,
+      "accuracy_pct": 60.0,
+      "matched_count": 3,
+      "total_count": 5,
+      "failed_fields": [
+        "drug",
+        "frequency"
+      ],
+      "entities": {
+        "drug": {
+          "expected": "Calpol",
+          "matched": false,
+          "status": "\u2717 MISHEARD"
+        },
+        "strength": {
+          "expected": "500mg",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "dose": {
+          "expected": "1-1-1",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "frequency": {
+          "expected": "SOS",
+          "matched": false,
+          "status": "\u2717 MISHEARD"
+        },
+        "duration": {
+          "expected": "3 days",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "date": {
+          "expected": "N/A",
+          "matched": true,
+          "status": "\u2014 NOT IN INPUT"
+        }
+      },
+      "limitation_note": "ASR acoustic misrecognition on brand name 'Calpol'"
+    },
+    "tuned_eval": {
+      "overall_matched": false,
+      "accuracy_pct": 80.0,
+      "matched_count": 4,
+      "total_count": 5,
+      "failed_fields": [
+        "drug"
+      ],
+      "entities": {
+        "drug": {
+          "expected": "Calpol",
+          "matched": false,
+          "status": "\u2717 MISHEARD"
+        },
+        "strength": {
+          "expected": "500mg",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "dose": {
+          "expected": "1-1-1",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "frequency": {
+          "expected": "SOS",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "duration": {
+          "expected": "3 days",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "date": {
+          "expected": "N/A",
+          "matched": true,
+          "status": "\u2014 NOT IN INPUT"
+        }
+      },
+      "limitation_note": "ASR acoustic misrecognition on brand name 'Calpol'"
+    }
+  },
+  "stress_007": {
+    "baseline_hypothesis": "Tab amoxiclav 1000 mg 1-0-1 after food X10 days.",
+    "tuned_hypothesis": "tablet a moxi-clav 1 0 0 0 milligram 1 0 1 after food times 10 days",
+    "baseline_eval": {
+      "overall_matched": false,
+      "accuracy_pct": 80.0,
+      "matched_count": 4,
+      "total_count": 5,
+      "failed_fields": [
+        "drug"
+      ],
+      "entities": {
+        "drug": {
+          "expected": "Amoxyclav",
+          "matched": false,
+          "status": "\u2717 MISHEARD"
+        },
+        "strength": {
+          "expected": "1000 mg",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "dose": {
+          "expected": "1-0-1",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "frequency": {
+          "expected": "1-0-1",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "duration": {
+          "expected": "10 days",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "date": {
+          "expected": "N/A",
+          "matched": true,
+          "status": "\u2014 NOT IN INPUT"
+        }
+      },
+      "limitation_note": "ASR acoustic misrecognition on brand name 'Amoxyclav'"
+    },
+    "tuned_eval": {
+      "overall_matched": false,
+      "accuracy_pct": 60.0,
+      "matched_count": 3,
+      "total_count": 5,
+      "failed_fields": [
+        "drug",
+        "strength"
+      ],
+      "entities": {
+        "drug": {
+          "expected": "Amoxyclav",
+          "matched": false,
+          "status": "\u2717 MISHEARD"
+        },
+        "strength": {
+          "expected": "1000 mg",
+          "matched": false,
+          "status": "\u2717 MISHEARD"
+        },
+        "dose": {
+          "expected": "1-0-1",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "frequency": {
+          "expected": "1-0-1",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "duration": {
+          "expected": "10 days",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "date": {
+          "expected": "N/A",
+          "matched": true,
+          "status": "\u2014 NOT IN INPUT"
+        }
+      },
+      "limitation_note": "ASR acoustic misrecognition on brand name 'Amoxyclav'; Strength specification '1000 mg' misheard by acoustic model"
+    }
+  },
+  "stress_008": {
+    "baseline_hypothesis": "Tab L-Troxen 50 MCG 1-0-0 Early Morning Empty Stomach",
+    "tuned_hypothesis": "Tablet Eltroxen 50 MCG 1 0 0 Early Morning Empty Stomach",
+    "baseline_eval": {
+      "overall_matched": false,
+      "accuracy_pct": 75.0,
+      "matched_count": 3,
+      "total_count": 4,
+      "failed_fields": [
+        "drug"
+      ],
+      "entities": {
+        "drug": {
+          "expected": "Eltroxin",
+          "matched": false,
+          "status": "\u2717 MISHEARD"
+        },
+        "strength": {
+          "expected": "50 mcg",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "dose": {
+          "expected": "1-0-0",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "frequency": {
+          "expected": "1-0-0",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "duration": {
+          "expected": "N/A",
+          "matched": true,
+          "status": "\u2014 NOT IN INPUT"
+        },
+        "date": {
+          "expected": "N/A",
+          "matched": true,
+          "status": "\u2014 NOT IN INPUT"
+        }
+      },
+      "limitation_note": "ASR acoustic misrecognition on brand name 'Eltroxin'"
+    },
+    "tuned_eval": {
+      "overall_matched": false,
+      "accuracy_pct": 75.0,
+      "matched_count": 3,
+      "total_count": 4,
+      "failed_fields": [
+        "drug"
+      ],
+      "entities": {
+        "drug": {
+          "expected": "Eltroxin",
+          "matched": false,
+          "status": "\u2717 MISHEARD"
+        },
+        "strength": {
+          "expected": "50 mcg",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "dose": {
+          "expected": "1-0-0",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "frequency": {
+          "expected": "1-0-0",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "duration": {
+          "expected": "N/A",
+          "matched": true,
+          "status": "\u2014 NOT IN INPUT"
+        },
+        "date": {
+          "expected": "N/A",
+          "matched": true,
+          "status": "\u2014 NOT IN INPUT"
+        }
+      },
+      "limitation_note": "ASR acoustic misrecognition on brand name 'Eltroxin'"
+    }
+  },
+  "stress_009": {
+    "baseline_hypothesis": "tabmonter lc 10 milligrams slash 5 milligrams 0 dash 0 dash 1 at bedtime exp September 2028",
+    "tuned_hypothesis": "tabmonter lc 10 milligrams slash 5 milligrams 0 dash 0 dash 1 at bedtime e xp september 2028",
+    "baseline_eval": {
+      "overall_matched": false,
+      "accuracy_pct": 80.0,
+      "matched_count": 4,
+      "total_count": 5,
+      "failed_fields": [
+        "drug"
+      ],
+      "entities": {
+        "drug": {
+          "expected": "Montair-LC",
+          "matched": false,
+          "status": "\u2717 MISHEARD"
+        },
+        "strength": {
+          "expected": "10mg/5mg",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "dose": {
+          "expected": "0-0-1",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "frequency": {
+          "expected": "0-0-1",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "duration": {
+          "expected": "N/A",
+          "matched": true,
+          "status": "\u2014 NOT IN INPUT"
+        },
+        "date": {
+          "expected": "09/2028",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        }
+      },
+      "limitation_note": "ASR acoustic misrecognition on brand name 'Montair-LC'"
+    },
+    "tuned_eval": {
+      "overall_matched": false,
+      "accuracy_pct": 80.0,
+      "matched_count": 4,
+      "total_count": 5,
+      "failed_fields": [
+        "drug"
+      ],
+      "entities": {
+        "drug": {
+          "expected": "Montair-LC",
+          "matched": false,
+          "status": "\u2717 MISHEARD"
+        },
+        "strength": {
+          "expected": "10mg/5mg",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "dose": {
+          "expected": "0-0-1",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "frequency": {
+          "expected": "0-0-1",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "duration": {
+          "expected": "N/A",
+          "matched": true,
+          "status": "\u2014 NOT IN INPUT"
+        },
+        "date": {
+          "expected": "09/2028",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        }
+      },
+      "limitation_note": "ASR acoustic misrecognition on brand name 'Montair-LC'"
+    }
+  },
+  "stress_010": {
+    "baseline_hypothesis": "Drop Siprofloxacin 0.3% 2 drops in right ear, TID X 5 days.",
+    "tuned_hypothesis": "Drop Siprofloxacin Xerothry  2 drops in right ear, TID times 5 days.",
+    "baseline_eval": {
+      "overall_matched": false,
+      "accuracy_pct": 66.7,
+      "matched_count": 2,
+      "total_count": 3,
+      "failed_fields": [
+        "drug"
+      ],
+      "entities": {
+        "drug": {
+          "expected": "Ciprofloxacin",
+          "matched": false,
+          "status": "\u2717 MISHEARD"
+        },
+        "strength": {
+          "expected": "N/A",
+          "matched": true,
+          "status": "\u2014 NOT IN INPUT"
+        },
+        "dose": {
+          "expected": "2 drops",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "frequency": {
+          "expected": "N/A",
+          "matched": true,
+          "status": "\u2014 NOT IN INPUT"
+        },
+        "duration": {
+          "expected": "5 days",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "date": {
+          "expected": "N/A",
+          "matched": true,
+          "status": "\u2014 NOT IN INPUT"
+        }
+      },
+      "limitation_note": "ASR acoustic misrecognition on brand name 'Ciprofloxacin'"
+    },
+    "tuned_eval": {
+      "overall_matched": false,
+      "accuracy_pct": 66.7,
+      "matched_count": 2,
+      "total_count": 3,
+      "failed_fields": [
+        "drug"
+      ],
+      "entities": {
+        "drug": {
+          "expected": "Ciprofloxacin",
+          "matched": false,
+          "status": "\u2717 MISHEARD"
+        },
+        "strength": {
+          "expected": "N/A",
+          "matched": true,
+          "status": "\u2014 NOT IN INPUT"
+        },
+        "dose": {
+          "expected": "2 drops",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "frequency": {
+          "expected": "N/A",
+          "matched": true,
+          "status": "\u2014 NOT IN INPUT"
+        },
+        "duration": {
+          "expected": "5 days",
+          "matched": true,
+          "status": "\u2713 MATCHED"
+        },
+        "date": {
+          "expected": "N/A",
+          "matched": true,
+          "status": "\u2014 NOT IN INPUT"
+        }
+      },
+      "limitation_note": "ASR acoustic misrecognition on brand name 'Ciprofloxacin'"
+    }
+  }
+}

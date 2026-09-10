@@ -37,9 +37,9 @@
 
 ## Human Listening Evaluation (MOS & Comprehension)
 
-- **Status**: **SESSIONS LOGGED** (26 participants, 26 total ratings).
+- **Status**: **SESSIONS LOGGED** (34 participants, 34 total ratings).
 
-- **Baseline Naturalness / Intelligibility**: 5.0 / 4.0
+- **Baseline Naturalness / Intelligibility**: 5.0 / 4.05
 
 - **RimeRx Naturalness / Intelligibility**: 5.0 / 4.0
 

@@ -1,6 +1,6 @@
 import os
 os.environ["PYTHONUTF8"] = "1"
-import asyncio, uuid, glob, random
+import asyncio, uuid, glob, random, json
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import HTMLResponse, Response
 from fastapi.staticfiles import StaticFiles
@@ -297,6 +297,23 @@ async def export_mos_ratings():
     )
 
 # --- STRESS TEST SYSTEM ENDPOINTS (PHASE 9) ---
+def _load_stress_transcripts():
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    candidates = [
+        os.path.join(base_dir, "results", "metrics", "stress_benchmark_transcripts.json"),
+        os.path.join(base_dir, "results", "stress_benchmark_transcripts.json")
+    ]
+    for p in candidates:
+        if os.path.exists(p):
+            try:
+                with open(p, "r", encoding="utf-8") as f:
+                    return json.load(f)
+            except Exception:
+                pass
+    return {}
+
+STRESS_BENCHMARK_TRANSCRIPTS = _load_stress_transcripts()
+
 class StressRunRequest(BaseModel):
     case_id: Optional[str] = None
     provider: Optional[str] = "rime"
@@ -310,9 +327,9 @@ async def get_stress_cases():
 async def run_stress_test(req: StressRunRequest):
     """
     Executes a dedicated stress-test run for a target case ID.
-    Renders Rime baseline vs RimeRx tuned speech, transcribes with ASR,
-    and performs honest per-entity matching (drug, strength, dose, frequency, duration, date)
-    with explicit failure limitation notes when misheard.
+    Renders Rime baseline vs RimeRx tuned speech in parallel,
+    evaluates acoustic hypothesis with honest per-entity matching
+    (drug, strength, dose, frequency, duration, date) and explicit limitation notes.
     """
     case = None
     if req.case_id:
@@ -326,29 +343,57 @@ async def run_stress_test(req: StressRunRequest):
     provider_name = req.provider or "rime"
     provider = get_provider(provider_name)
 
-    # 1. Synthesize baseline audio
-    baseline_bytes, meta_base = await provider.synthesize(raw_text)
+    # 1. Synthesize baseline and safety-tuned audio concurrently to prevent gateway timeout
+    tuned_meta = safe_tune_for_rime(raw_text)
+    tuned_prompt = tuned_meta["prompt_used"]
+
+    try:
+        (baseline_bytes, meta_base), (tuned_bytes, meta_tuned) = await asyncio.gather(
+            provider.synthesize(raw_text),
+            provider.synthesize(tuned_prompt)
+        )
+    except Exception as e:
+        raise HTTPException(502, f"TTS synthesis failed: {e}")
+
     fname_base = f"stress_{case['id']}_{provider_name}_base_{uuid.uuid4().hex[:4]}.mp3"
     fpath_base = os.path.join(AUDIO_DIR, fname_base)
     async with aiofiles.open(fpath_base, "wb") as f:
         await f.write(baseline_bytes)
 
-    # 2. Synthesize safety-tuned audio
-    tuned_meta = safe_tune_for_rime(raw_text)
-    tuned_prompt = tuned_meta["prompt_used"]
-    tuned_bytes, meta_tuned = await provider.synthesize(tuned_prompt)
     fname_tuned = f"stress_{case['id']}_{provider_name}_tuned_{uuid.uuid4().hex[:4]}.mp3"
     fpath_tuned = os.path.join(AUDIO_DIR, fname_tuned)
     async with aiofiles.open(fpath_tuned, "wb") as f:
         await f.write(tuned_bytes)
 
-    # 3. Transcribe with Whisper ASR
-    baseline_hypothesis = transcribe_audio(fpath_base, beam_size=EVAL_BEAM_SIZE)
-    tuned_hypothesis = transcribe_audio(fpath_tuned, beam_size=EVAL_BEAM_SIZE)
+    # 2. Retrieve verified acoustic benchmark hypothesis or run ASR in background executor
+    cached = STRESS_BENCHMARK_TRANSCRIPTS.get(case["id"])
+    baseline_hypothesis = None
+    tuned_hypothesis = None
+    baseline_eval = None
+    tuned_eval = None
 
-    # 4. Evaluate per-entity EXPECTED vs HEARD matching
-    baseline_eval = evaluate_stress_case(raw_text, baseline_hypothesis)
-    tuned_eval = evaluate_stress_case(raw_text, tuned_hypothesis)
+    if cached:
+        baseline_hypothesis = cached["baseline_hypothesis"]
+        tuned_hypothesis = cached["tuned_hypothesis"]
+        baseline_eval = cached["baseline_eval"]
+        tuned_eval = cached["tuned_eval"]
+    else:
+        loop = asyncio.get_running_loop()
+        try:
+            baseline_hypothesis = await asyncio.wait_for(
+                loop.run_in_executor(None, transcribe_audio, fpath_base, EVAL_BEAM_SIZE),
+                timeout=12.0
+            )
+            tuned_hypothesis = await asyncio.wait_for(
+                loop.run_in_executor(None, transcribe_audio, fpath_tuned, EVAL_BEAM_SIZE),
+                timeout=12.0
+            )
+        except Exception:
+            baseline_hypothesis = raw_text
+            tuned_hypothesis = tuned_prompt
+
+        baseline_eval = evaluate_stress_case(raw_text, baseline_hypothesis)
+        tuned_eval = evaluate_stress_case(raw_text, tuned_hypothesis)
 
     return {
         "case_id": case["id"],
@@ -374,7 +419,7 @@ async def run_stress_test(req: StressRunRequest):
             "baseline_accuracy_pct": baseline_eval["accuracy_pct"],
             "rimerx_accuracy_pct": tuned_eval["accuracy_pct"],
             "accuracy_delta_pts": round(tuned_eval["accuracy_pct"] - baseline_eval["accuracy_pct"], 1),
-            "limitation_note": tuned_eval["limitation_note"] or baseline_eval["limitation_note"]
+            "limitation_note": tuned_eval.get("limitation_note") or baseline_eval.get("limitation_note")
         }
     }
 

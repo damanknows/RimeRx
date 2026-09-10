@@ -135,12 +135,12 @@ python scripts/run_interruption_benchmark.py
 Human perceptual Mean Opinion Score (MOS) protocol, blinded A/B test harness, and rating schema are documented in:
 👉 **[HUMAN_EVALUATION.md](HUMAN_EVALUATION.md)**
 
-- **Current Evaluation Status**: **SESSIONS LOGGED** (`31` participants, `31` ratings logged via double-blind testing).
+- **Current Evaluation Status**: **SESSIONS LOGGED** (`34` participants, `34` ratings logged via double-blind testing).
 - **Blinded MOS Results**:
-  - Baseline Variant: **5.0 / 5.0 Naturalness**, **4.05 / 5.0 Intelligibility**
-  - RimeRx Tuned Variant: **5.0 / 5.0 Naturalness**, **4.00 / 5.0 Intelligibility**
-  - Medication & Strength Comprehension: **100.0%** across both variants
-- **Non-Fabrication Statement**: In strict adherence to hackathon ethics, all recorded sessions are backed by SQLite persistence (`results/benchmark.db`) and JSON exports.
+  - Baseline Variant: **5.00 / 5.0 Naturalness**, **4.05 / 5.0 Intelligibility** (22 evaluations)
+  - RimeRx Tuned Variant: **5.00 / 5.0 Naturalness**, **4.00 / 5.0 Intelligibility** (12 evaluations)
+  - Medication & Strength Comprehension: **100.0%** recall across all recorded sessions
+- **Non-Fabrication Statement**: In strict adherence to hackathon ethics, all recorded sessions are backed by SQLite persistence (`results/benchmark.db`), CSV exports (`results/metrics/mos_ratings.csv`), and JSON exports.
 - **Local Evaluation Harness**: Run `uvicorn main:app` to launch the randomized A/B listening study and access `/api/blind/session` and `/api/mos`.
 
 ---
