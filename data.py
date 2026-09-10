@@ -299,9 +299,9 @@ def extract_critical_entities(text: str) -> dict:
         if d not in legacy_drugs and re.search(rf'\b{d}\b', text, re.IGNORECASE):
             legacy_drugs.append(d)
 
-    legacy_schedules = list(set(re.findall(r'\b(?:\d-\d(?:-\d)?|BD|OD|TDS|QID|HS|SOS|STAT|every\s+\d+\s+hours)\b', text, re.IGNORECASE)))
+    legacy_schedules = sorted(list(set(re.findall(r'\b(?:\d-\d(?:-\d)?|BD|OD|TDS|QID|HS|SOS|STAT|every\s+\d+\s+hours)\b', text, re.IGNORECASE))))
     legacy_dates = all_dates if all_dates else ([date_val] if date_val else [])
-    numbers = list(set(re.findall(r'\d+', text)))
+    numbers = sorted(list(set(re.findall(r'\d+', text))))
 
     return {
         # Phase 2 Structured Entity Fields:
@@ -318,7 +318,7 @@ def extract_critical_entities(text: str) -> dict:
 
         # Backwards-compatible legacy list fields:
         "drugs": legacy_drugs,
-        "strengths": list(set(strengths)),
+        "strengths": sorted(list(set(strengths))),
         "schedules": legacy_schedules,
         "dates": legacy_dates,
         "numbers": numbers

@@ -15,30 +15,43 @@ def test_blind_session_creation_and_entity_metadata():
     assert "audio_b_url" in data
     assert "critical_entities" in data
     assert isinstance(data["critical_entities"], dict)
+    from db import get_connection
+    conn = get_connection()
+    conn.execute("DELETE FROM blind_sessions WHERE session_id = ?", (data["session_id"],))
+    conn.commit()
+    conn.close()
 
 def test_mos_rating_submission_with_comprehension_checks():
     session_resp = client.post("/api/blind/session")
     assert session_resp.status_code == 200
     session_data = session_resp.json()
-
-    rating_payload = {
-        "session_id": session_data["session_id"],
-        "target": "A",
-        "naturalness": 5,
-        "intelligibility": 4,
-        "medication_correct": True,
-        "strength_correct": True,
-        "dosage_correct": True,
-        "duration_correct": True,
-        "date_correct": True
-    }
-    rating_resp = client.post("/api/mos", json=rating_payload)
-    assert rating_resp.status_code == 200
-    res_data = rating_resp.json()
-    assert res_data["session_id"] == session_data["session_id"]
-    assert "revealed_provider" in res_data
-    assert "revealed_variant" in res_data
-    assert res_data["comprehension"]["medication_correct"] is True
+    session_id = session_data["session_id"]
+    try:
+        rating_payload = {
+            "session_id": session_id,
+            "target": "A",
+            "naturalness": 5,
+            "intelligibility": 4,
+            "medication_correct": True,
+            "strength_correct": True,
+            "dosage_correct": True,
+            "duration_correct": True,
+            "date_correct": True
+        }
+        rating_resp = client.post("/api/mos", json=rating_payload)
+        assert rating_resp.status_code == 200
+        res_data = rating_resp.json()
+        assert res_data["session_id"] == session_id
+        assert "revealed_provider" in res_data
+        assert "revealed_variant" in res_data
+        assert res_data["comprehension"]["medication_correct"] is True
+    finally:
+        from db import get_connection
+        conn = get_connection()
+        conn.execute("DELETE FROM mos_ratings WHERE session_id = ?", (session_id,))
+        conn.execute("DELETE FROM blind_sessions WHERE session_id = ?", (session_id,))
+        conn.commit()
+        conn.close()
 
 def test_mos_csv_export_headers():
     csv_str = export_mos_csv_string()

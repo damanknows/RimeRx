@@ -72,25 +72,34 @@ def test_blind_mos_session_and_rating():
     session_resp = client.post("/api/blind/session")
     assert session_resp.status_code == 200
     session_data = session_resp.json()
+    session_id = session_data["session_id"]
     assert "session_id" in session_data
     assert "audio_a_url" in session_data
     assert "audio_b_url" in session_data
 
     # Submit MOS rating for option A
-    rating_payload = {
-        "session_id": session_data["session_id"],
-        "target": "A",
-        "naturalness": 5,
-        "intelligibility": 4
-    }
-    rating_resp = client.post("/api/mos", json=rating_payload)
-    assert rating_resp.status_code == 200
-    rating_data = rating_resp.json()
-    assert rating_data["session_id"] == session_data["session_id"]
-    assert "revealed_provider" in rating_data
-    assert "revealed_variant" in rating_data
-    assert rating_data["naturalness"] == 5
-    assert rating_data["intelligibility"] == 4
+    try:
+        rating_payload = {
+            "session_id": session_id,
+            "target": "A",
+            "naturalness": 5,
+            "intelligibility": 4
+        }
+        rating_resp = client.post("/api/mos", json=rating_payload)
+        assert rating_resp.status_code == 200
+        rating_data = rating_resp.json()
+        assert rating_data["session_id"] == session_id
+        assert "revealed_provider" in rating_data
+        assert "revealed_variant" in rating_data
+        assert rating_data["naturalness"] == 5
+        assert rating_data["intelligibility"] == 4
+    finally:
+        from db import get_connection
+        conn = get_connection()
+        conn.execute("DELETE FROM mos_ratings WHERE session_id = ?", (session_id,))
+        conn.execute("DELETE FROM blind_sessions WHERE session_id = ?", (session_id,))
+        conn.commit()
+        conn.close()
 
 def test_export_mos_ratings_csv():
     """Verify exporting MOS ratings returns valid CSV formatted data."""
